@@ -43,6 +43,8 @@ One file per subject, not per source file: the reasoning crosses file boundaries
 | File | Subject |
 |---|---|
 | `00-initialization-of-the-project.md` | where the working rules came from: the request, what was read from Z's other projects, what came across and what was left behind, and Z's review of the first draft. The only note that names another of Z's projects |
+| `01-project-log.md` | **kept current**: one row for every action and decision, in the order it happened |
 | `ground-rules.md` | what each ground rule in `CLAUDE.md` is for, in Z's words where there are any, and which parts were the agent's proposals |
 | `product-brief.md` | the brief as Z first gave it, what the agent raised about it, and what Z settled the same day: the defaults for the stack, speech models, the context window calculator, and the palette |
+| `the-backbone.md` | the first part of the design: what talks to what, what a connection is, how a protocol is detected and models are found, Z's answers, and the reads the rest waits on |
 | `platform-traps.md` | **kept current**: the shell and tooling traps that produced a wrong result once |

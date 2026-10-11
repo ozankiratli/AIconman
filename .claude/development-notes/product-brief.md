@@ -52,3 +52,13 @@ WCAG asks for 4.5 for body text. The agent's point was that on a light backgroun
 **The defaults.** The agent proposed four, for Z to object to any: a Python backend on FastAPI, which matches Z's gateway and the repository's `.gitignore`; a plain HTML, CSS and JavaScript frontend with no build step; chat history kept in the browser; and an installable web app first, ahead of a native Android app. Z: *"I agree with the defaults."*
 
 **What drew no answer.** The agent also suggested that the server type default to the OpenAI-compatible protocol, with types added only where one unlocks something; that the backend be locked with one access passphrase; that Z's gateway add each model's capabilities to its own list of models; and that Z's gateway manual be cleaned of Z's network details before anything from it is published. Z did not answer these.
+
+## Added later on 2026-10-11, against `f94a72f`
+
+After the working rules were drafted, Z answered three of those points.
+
+**No protocol is the default.** Z: *"A few points I know I haven't answered defaulting to OpenAI compatible protocol. I think we should not default to any of them it should be permissive."*
+
+**Access control comes last, with options; for now a login screen that lets everyone in.** Z: *"Backend password not sure we will think about something there. I use Nextcloud to authenticate my forgejo and jupyterhub instances. We can build a few options for whoever wants what. Sounds like the last task. But at the moment we should build a permissive login screen where a button let's the user access the interface or something if you want."*
+
+**The gateway manual is not published as it is.** Z: *"The manual cannot go as it is, that's clear. We will have to rewrite the manual anyway, this is just a starting point for you to understand what I did."*

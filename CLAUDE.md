@@ -16,6 +16,7 @@ Z, 2026-10-11: *"I want to be transparent about the development process. It is o
 
 - **The record is public.** This file, `.claude/development-notes/`, `dev/READING-LOG.md` and `SOURCES.md` are tracked and published with the code. Write them for a reader outside the project who arrives skeptical and checks.
 - **Z drives.** Z calls the method human-in-the-steering-wheel development, as opposed to human-in-the-loop: the human drives, rather than approving what the agent drives. So the record says who decided what and when, in Z's words where there are any, and marks what the agent proposed as the agent's.
+- **Every action is logged.** Each decision Z makes and each action either of us takes gets a row in `.claude/development-notes/01-project-log.md` when it happens. A row is never rewritten or removed; only its Notes are filled in later, when the action turns out wrong, is reverted, or a decision changes.
 - **Mistakes are recorded, not smoothed over.** A slip, a claim that turned out wrong, a change that was reverted: each goes into the notes with what happened and how it was found.
 - **The agent never writes that Z verified, approved or cleared something.** Those lines are Z's to write, and the agent's own checks are never presented as Z's.
 - **Transparency covers the process, not Z's network or anyone's conversations.** What stays out is under *What stays out of the agent's context and the repository*.
