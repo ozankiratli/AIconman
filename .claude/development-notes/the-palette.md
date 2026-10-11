@@ -130,3 +130,17 @@ Z: *"Source Serif Pro Bold Italic, b 2 tone, Tabler."*
 The glow, and with it `#00ff66`, has left the palette. The light-background greens are derived from summer-green, and replace the placeholder of the earlier render.
 
 `derive.py` and `render.py` draw the brand this way now. Comparing the output with the previous run, value by value, showed sixteen differences, all of them the brand: in each theme, the glow brand's two values gone and the two tones added.
+
+## Added later on 2026-10-11, against `440ca41`: disabled controls
+
+The render of the account screens showed a disabled *Send* drawn as a faded orange, whose white text all but disappeared in light HC (`the-interface.md`). Z asked for this to be settled before the design closes: *"Let's do 1-3 and finish the design."*
+
+A disabled control now takes three roles the palette already has: the message background as its fill, the muted text, and the plain border, or the strong one in high contrast. Muted text is fitted against the message background, so a disabled control stays readable while looking nothing like the main button:
+
+| | Dark | Light | Dark HC | Light HC |
+|---|---|---|---|---|
+| fill | `#343c4a` | `#e7ebf4` | `#1f232c` | `#eff2f8` |
+| text, and its contrast on the fill | `#aeaeae`, 5.00:1 | `#485266`, 6.58:1 | `#eaeaea`, 13.08:1 | `#485266`, 7.00:1 |
+| border | `#485266` | `#ccd1db` | `#7c8aa4` | `#616f8c` |
+
+Comparing `derive.py`'s output with the previous run showed twelve differences, all of them these new values. `render.py` draws a disabled button beside the hovered one in `themes.png`.

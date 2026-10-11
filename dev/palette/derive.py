@@ -166,6 +166,12 @@ def theme(dark, hc):
         t["fill_hi"] = t["fill_lo"] = t["surface"]
 
     t["focus"] = t["accent"]
+    # A disabled control: the message background, muted text, and the plain border
+    # (the strong one in high contrast). Muted text already meets the text target on
+    # the message background, so a disabled control stays readable.
+    t["disabled_fill"] = t["surface2"]
+    t["disabled_text"] = t["muted"]
+    t["disabled_border"] = t["border_strong"] if hc else t["border"]
     t["brand_ai"] = fit(Z["brandblue"], grounds, text_t, lighten)
     t["brand_rest"] = fit(Z["summergreen"], grounds, text_t, lighten)
     return t
@@ -197,6 +203,8 @@ if __name__ == "__main__":
                 note = f"{cr(v, t['action']):5.2f} on action"
             elif k == "on_error":
                 note = f"{cr(v, t['error']):5.2f} on the band"
+            elif k == "disabled_text":
+                note = f"{cr(v, t['disabled_fill']):5.2f} on disabled"
             elif k == "error":
                 note = f"band vs page {min(cr(v, g) for g in grounds):5.2f}"
             else:

@@ -48,3 +48,8 @@ Rows `0001` to `0016` were written on 2026-10-11, after the fact, from `git log`
 | 001E | 2026-10-11 | 15:36 EDT | e1866f4 | Agent: adds `dev/palette/` (`derive.py`, `render.py`) with the palette as Z settled it | |
 | 001F | 2026-10-11 | 16:47 EDT | e1866f4 | Agent: performs R-010 | |
 | 0020 | 2026-10-11 | 17:28 EDT | e1866f4 | Agent: changes the brand in `dev/palette/` to two tones in Source Serif Pro Bold Italic, without the glow | |
+| 0021 | 2026-10-11 | 17:36 EDT | 440ca41 | Z: commits the design decisions so far | |
+| 0022 | 2026-10-11 | 17:38 EDT | 440ca41 | Agent: reads the sign-in and sign-up screens of Z's accounts project, at Z's go-ahead | |
+| 0023 | 2026-10-11 | 18:00 EDT | 440ca41 | Agent: performs R-013 | |
+| 0024 | 2026-10-11 | 18:32 EDT | 440ca41 | Agent: performs R-014 and R-015 | |
+| 0025 | 2026-10-11 | 18:57 EDT | 440ca41 | Agent: adds the disabled-control colors to `dev/palette/` | |

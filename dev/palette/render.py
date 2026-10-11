@@ -7,8 +7,8 @@ Reads the JSON that derive.py writes, and writes two images into the folder:
 
 - themes.png: the four themes side by side, each with a sidebar, a chat with a
   model name, reasoning, a link, an error and a warning, the context meter, an input
-  with its focus ring, the main button, a button with its hover border, and
-  labeled swatches;
+  with its focus ring, the main button, a button with its hover border, a disabled
+  button, and labeled swatches;
 - brand.png: the brand, the name in two tones set in the title font, on all four
   backgrounds, at the size of the sidebar title and at a large size;
 - depth.png: a raised card, a raised button, a pressed button and an inset input in
@@ -174,6 +174,8 @@ def themes_png(T, out):
         d.text((x0, oy + 270), "Microphone needs HTTPS.", font=R(15), fill=t["warning"])
         d.rounded_rectangle([x0 + 300, oy + 252, x0 + 470, oy + 286], radius=7, fill=t["surface"], outline=t["hover_border"], width=2)
         d.text((x0 + 318, oy + 260), "Hovered button", font=R(14), fill=t["text"])
+        d.rounded_rectangle([x0 + 486, oy + 252, x0 + 586, oy + 286], radius=7, fill=t["disabled_fill"], outline=t["disabled_border"], width=1)
+        d.text((x0 + 502, oy + 260), "Disabled", font=R(14), fill=t["disabled_text"])
         d.rectangle([ox + 201, oy + 300, ox + W, oy + 372], fill=t["surface"])
         d.rounded_rectangle([x0 - 3, oy + 313, ox + W - 123, oy + 359], radius=9, outline=t["focus"], width=2)
         d.rounded_rectangle([x0, oy + 316, ox + W - 126, oy + 356], radius=7, fill=t["bg"], outline=t["border_strong"], width=1)

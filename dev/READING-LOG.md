@@ -184,3 +184,63 @@ These four entries share a task and a method, given once here; each entry names 
 - **Source:** github.com/google/material-design-icons: `LICENSE`, and the Rounded style of each icon under `symbols/web/<name>/`, outlined and filled.
 - **Cleared:** Rejected
 - **Done:**
+
+## R-013: more Tabler icons, for the account screens
+
+- **Named:** 2026-10-11
+- **Task:** the design of the sign-in, sign-up and admin screens, `.claude/development-notes/the-interface.md`: the icons those screens need, drawn on the cards in the four themes so that Z can see the screens whole. Tabler Icons is approved by name (`CLAUDE.md`), and R-010 fetched the icons of the chat screens.
+- **Source:** github.com/tabler/tabler-icons, at the commit current on the day of the read, recorded under *Done*: `icons/outline/<name>.svg`, with `icons/filled/<name>.svg` where one exists, for these names: `cloud`, `login-2`, `lock`, `key`, `eye`, `eye-off`, `user-plus`, `users`, `circle-check`, `circle-x`. If a name does not exist, a near one is reported to Z before it is fetched.
+- **Method:** as for R-009 to R-012: the SVG files are used only to draw a comparison image in the agent's scratchpad, and none is copied into the repository.
+- **Facts sought:** whether each icon exists, and how it is drawn.
+- **Not read:** anything else in the repository.
+- **Cleared:** 2026-10-11
+- **Done:** 2026-10-11.
+  - **What was read:** at commit `a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d`, the same as R-010, the outline SVG of each of the ten names, and the filled SVG where one exists.
+  - **What was found:** all ten exist in outline, drawn as in R-010. Four have no filled version: `login-2`, `eye-off`, `user-plus` and `users`.
+  - **Where it went:** a rendering of the sign-in, sign-up, first-password and no-connection screens in the four themes, in the agent's scratchpad; `the-interface.md`; and `SOURCES.md`. No SVG file was copied into the repository.
+
+## R-014: Nextcloud's brand and trademark pages
+
+- **Named:** 2026-10-11
+- **Task:** the *Sign in with Nextcloud* button, `.claude/development-notes/the-interface.md`: Z decided that it shows Nextcloud's logo. What Nextcloud says about showing its logo, and where its own logo file is.
+- **Source:** two pages of Nextcloud's website, as they read on the day of the read: https://nextcloud.com/brand/ and https://nextcloud.com/trademarks/. Both answered HTTP 200 to a request for their headers on 2026-10-11; nothing in them was read. And the logo file the brand page offers, if it offers one.
+- **Facts sought:**
+  - which logo files Nextcloud offers, in which formats and colors;
+  - how the logo may be shown: its colors on dark and light backgrounds, the space around it, its smallest size, and changes that are not allowed;
+  - whether another project may show it to say that it signs in with Nextcloud, and on what terms.
+- **Method:** the logo file, if fetched, is used only to draw the account screens in the agent's scratchpad, and is not copied into the repository until Z decides where it comes from.
+- **Not read:** every other page of Nextcloud's website.
+- **Cleared:** 2026-10-11
+- **Done:** 2026-10-11.
+  - **What was read:** both pages as they read on the day, fetched and read as text: on the brand page, its *Nextcloud marks guide* and *Logo guide*, and the list of its colors; on the trademarks page, the passages on what the marks cover, on links and logos, and on *Apps, product and service names and compatibility references*. And the two logo files the brand page links to: `https://nextcloud.com/c/uploads/2022/11/logo_nextcloud_blue.svg` and `logo_nextcloud_white.svg`, in the same folder. The brand page's *Logo resources* link leads to the press page, which this entry does not cover, and was not followed.
+  - **What was found:**
+    - **The files:** the brand page links two SVG files, the logo in blue and in white. Both are the full logo, the mark with the word "Nextcloud" beneath it. The guide says logos without the text exist, and that the mark alone is *"Only to be used when there is no space for text due to size"*; those files are behind the press page's link.
+    - **How it may be shown:** blue `#0082C9` on white, white on blue or on images; a clear space of half the mark's height on all sides; a minimum width of 50 pixels on the web; *"Do NOT alter or overlap the logo with other logos."*
+    - **Fair use:** *"We acknowledge and support your right to make "fair use" of the Nextcloud marks, and do not mean to suggest with these guidelines that our permission is required in such cases."*
+    - **Compatibility:** under *Apps, product and service names and compatibility references*, a project must not put a Nextcloud mark in its own name, and *"We also recognize that the Nextcloud Community needs some way to identify projects, products, and services that are compatible with Nextcloud. This is only allowed for non-commercial purposes."* Elsewhere the page asks that no use imply endorsement by the Nextcloud community.
+  - **Where it went:** `the-interface.md` and `SOURCES.md`; the logo files only into a rendering in the agent's scratchpad.
+
+## R-015: Font Awesome's Nextcloud icon
+
+- **Named:** 2026-10-11
+- **Task:** the same as R-014: Z asked whether Font Awesome's drawing of the Nextcloud logo could be used instead.
+- **Source:** github.com/FortAwesome/Font-Awesome, on its default branch `7.x` at the commit current on the day of the read, recorded under *Done*: `LICENSE.txt`, and `svgs/brands/nextcloud.svg`. Both answered HTTP 200 to a request for their headers on 2026-10-11; nothing in them was read. GitHub's own reading of the repository's license is *"NOASSERTION"*, so the license file is the source for it.
+- **Facts sought:** the license that covers the icon, and what it requires, attribution among it; anything the license file says about brand icons and their owners' trademarks; and how the icon is drawn.
+- **Method:** the SVG file is used only to draw the account screens in the agent's scratchpad, and is not copied into the repository.
+- **Not read:** any other file of the repository.
+- **Cleared:** 2026-10-11
+- **Done:** 2026-10-11.
+  - **What was read:** at commit `14c65a3747d0f3b751f15831fc719236aea8729d` (committed 2026-07-15) on `7.x`, fetched raw: `LICENSE.txt`, whole, and `svgs/brands/nextcloud.svg`.
+  - **What was found:** the license file is Font Awesome Free's. Icons packaged as SVG are under CC BY 4.0, fonts under the SIL Open Font License 1.1, and the code under MIT. Attribution is required, and the files carry it in an embedded comment that Font Awesome asks not to be removed. On brand icons: *"All brand icons are trademarks of their respective owners. [...] Please do not use brand logos for any purpose except to represent the company, product, or service to which they refer."* The icon is drawn in `currentColor` on a 640 by 512 grid, carries the attribution comment for Font Awesome Free 7.3.1, and is the full logo, the mark with the word "Nextcloud", like Nextcloud's own files.
+  - **Where it went:** `the-interface.md` and `SOURCES.md`; the icon only into a rendering in the agent's scratchpad.
+
+## R-016: Nextcloud's logo resources on its press page
+
+- **Named:** 2026-10-11
+- **Task:** the *Sign in with Nextcloud* button: the logo without the word "Nextcloud", which R-014 found the brand guide mentions but does not link. At the size of a button, the full logo's word cannot be read.
+- **Source:** the logo resources section of Nextcloud's press page, https://nextcloud.com/press/#logo-resources, which the brand page's *Logo resources* link leads to, as it reads on the day of the read; and the file of the mark alone, in blue and in white, if the section offers them.
+- **Facts sought:** which logo files the section offers, the mark alone among them, and any terms it attaches to them.
+- **Method:** a file fetched is used only to draw the account screens in the agent's scratchpad, and is not copied into the repository.
+- **Not read:** the rest of the press page.
+- **Cleared:**
+- **Done:**

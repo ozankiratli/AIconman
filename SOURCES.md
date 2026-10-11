@@ -20,12 +20,17 @@ Each entry says what the source is, its license if it is software, and what was 
 
 ## Tabler Icons
 
-- **The icon library:** [github.com/tabler/tabler-icons](https://github.com/tabler/tabler-icons), MIT license, read at commit `a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d` (2026-10-05) under `dev/READING-LOG.md`, R-010: its license, and the outline and filled SVG files of the icons AIconman needs. What was learned: which of those icons exist and which have filled versions, and how they are drawn. Approved by Z on 2026-10-11 for the interface; not yet in use.
+- **The icon library:** [github.com/tabler/tabler-icons](https://github.com/tabler/tabler-icons), MIT license, read at commit `a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d` (2026-10-05) under `dev/READING-LOG.md`, R-010 and R-013: its license, and the outline and filled SVG files of the icons AIconman's chat and account screens need. What was learned: which of those icons exist and which have filled versions, and how they are drawn. Approved by Z on 2026-10-11 for the interface; not yet in use.
 
 ## Fonts
 
 - **Targa MS Hand**, by Studio Kmzero (2002): the end-user license stored in the font file itself, read 2026-10-11 from the copy installed on Z's machine. What was learned: the font is licensed for personal, non-commercial use only, and copies of it may not be distributed, alone or as part of another product. So AIconman cannot bundle or serve it.
 - **Source Serif Pro**, by Adobe: the license stored in the font file itself, read 2026-10-11 from the Bold Italic copy installed on Z's machine. What was learned: it is licensed under the SIL Open Font License 1.1, with "Source" as a Reserved Font Name. Approved by Z on 2026-10-11 for the title; not yet in use.
+
+## Nextcloud's marks
+
+- **Nextcloud's brand and trademark pages:** [nextcloud.com/brand](https://nextcloud.com/brand/) and [nextcloud.com/trademarks](https://nextcloud.com/trademarks/), and the two logo files the brand page links, read 2026-10-11 under `dev/READING-LOG.md`, R-014. What was learned: the logo's files, colors, clear space and smallest size, that it may not be altered, that fair use is acknowledged, and that identifying a project as compatible with Nextcloud is allowed for non-commercial purposes.
+- **Font Awesome's Nextcloud icon:** [github.com/FortAwesome/Font-Awesome](https://github.com/FortAwesome/Font-Awesome), Font Awesome Free (icons CC BY 4.0, fonts SIL OFL 1.1, code MIT), read at commit `14c65a3747d0f3b751f15831fc719236aea8729d` (2026-07-15) under R-015: its license file and `svgs/brands/nextcloud.svg`. What was learned: the licenses and their attribution, Font Awesome's terms for brand icons, and that its Nextcloud icon is the full logo with the word.
 
 ## The browser
 
