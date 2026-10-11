@@ -224,3 +224,6 @@ __marimo__/
 
 # Claude Code's per-machine settings
 .claude/settings.local.json
+
+# What dev/palette/ derives and renders; the scripts are tracked, their output is not
+/dev/palette/out/

@@ -59,3 +59,5 @@ The zsh trap that opens `platform-traps.md` was already recorded in PAPvault's `
 Z: *"OK. This mostly good. In ground rules md there are too many references to other projects. We can get rid of other project references in that file. If you want to keep where those decisions come from we can move all those into another file 00-initialization-of-the-project.md or something that it always shows at the top of the list too. This project has to read as its own project with its own rules."*
 
 The agent took the last sentence to cover `CLAUDE.md` and the other notes as well as `ground-rules.md`, and moved every reference to PoolSeqFlow and PAPvault into this note. To check that none is left elsewhere: `grep -rn -E 'PAPvault|PoolSeqFlow' CLAUDE.md SOURCES.md dev .claude/development-notes` should print lines from this file only.
+
+*Added 2026-10-11, against `e1866f4`.* Since `01-project-log.md` was added, that check also prints its row `0007`, which records the read of both projects. The row is the log's record of the read, and stays.

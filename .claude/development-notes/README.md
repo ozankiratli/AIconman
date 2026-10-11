@@ -47,4 +47,6 @@ One file per subject, not per source file: the reasoning crosses file boundaries
 | `ground-rules.md` | what each ground rule in `CLAUDE.md` is for, in Z's words where there are any, and which parts were the agent's proposals |
 | `product-brief.md` | the brief as Z first gave it, what the agent raised about it, and what Z settled the same day: the defaults for the stack, speech models, the context window calculator, and the palette |
 | `the-backbone.md` | the first part of the design: what talks to what, what a connection is, how a protocol is detected and models are found, Z's answers, and the reads the rest waits on |
+| `the-interface.md` | the second part of the design: the screens, the layout, what holds across them, the defaults Z accepted, the high-contrast themes, and what the accounts change |
+| `the-palette.md` | the third part of the design: how the four themes are derived from Z's colors, the first proposal, Z's changes, the values, and what was measured for Z to decide |
 | `platform-traps.md` | **kept current**: the shell and tooling traps that produced a wrong result once |

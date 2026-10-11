@@ -62,3 +62,31 @@ After the working rules were drafted, Z answered three of those points.
 **Access control comes last, with options; for now a login screen that lets everyone in.** Z: *"Backend password not sure we will think about something there. I use Nextcloud to authenticate my forgejo and jupyterhub instances. We can build a few options for whoever wants what. Sounds like the last task. But at the moment we should build a permissive login screen where a button let's the user access the interface or something if you want."*
 
 **The gateway manual is not published as it is.** Z: *"The manual cannot go as it is, that's clear. We will have to rewrite the manual anyway, this is just a starting point for you to understand what I did."*
+
+## Added later on 2026-10-11, against `e1866f4`
+
+After reading what the first reads found, Z corrected one fact and settled who AIconman is for.
+
+**Z's own servers are llama.cpp.** Z: *"I know I said ollama but I think I have llama-cpp."* This corrects Z's description of the two servers on one machine, quoted above under *Several services on one machine*. Ollama's own API is still one of the two protocols of the first version (`the-backbone.md`).
+
+**Who AIconman is for.** Z: *"I'm not sure if the target audience you and I have in mind are the same audience."* Z contrasted it with a project whose users are assumed to have no skills beyond opening a browser: *"The audience for this tool, already deployed one or more LLMs successfully in their network."* So the reader of AIconman's interface and documentation has already set up at least one model server on their own network.
+
+## Added later on 2026-10-11, against `e1866f4`
+
+**No mobile app of any kind yet.** Z: *"Oh. I think we should not even bother with the mobile application at any capacity yet. Let's make the web version work first, set up the backend, etc."* This sets aside the fourth default, an installable web app ahead of a native Android app. The web interface is still to work on a phone's screen, as the brief asks. Gap 7 in `the-backbone.md`, about installing by hand, has nothing left to decide.
+
+**The manual.** Z: *"I want to dedicate a portion on the manual to how to set up an LLM on a local machine and serve it. But it is not the key. Also focusing on Pi5 + AI hat 2 might still be right because it is still one of the most affordable setups."* So the manual has a part on setting up and serving a model on one's own machine, secondary to AIconman itself, possibly centered on a Raspberry Pi 5 with the AI HAT+ 2.
+
+## Added later on 2026-10-11, against `e1866f4`
+
+After the second part of the design (`the-interface.md`), Z changed the scope.
+
+**Accounts.** Z: *"Sorry to change the scope of the project. I am still assessing what's needed and I decided that there are multiple people in a household and people might want to keep their chats etc."* And: *"We are setting up postgres db, user can use mariadb or another. We will add those later. Each user will have to create an account. We will allow password and Nextcloud login for now."* So:
+
+- every person in a household has an account of their own, and keeps their chats;
+- the data lives in PostgreSQL, with MariaDB and other databases to be added later;
+- an account signs in with a password or through Nextcloud.
+
+This replaces *"There will not be user management for this project"* from the brief, and the login screen that lets everyone in becomes the stand-in until accounts are wired. Z said nothing to change the rest of that sentence, so AIconman is still only for a local network or a VPN.
+
+**Reused, and wired later.** Z has worked out accounts with a password and a Nextcloud login in another project of Z's own, and that work is to be reused here. Z: *"We will wire it after we confirm the interface working."* That project is Z's work, outside the rule on other people's code; reading it waits for Z, as any action does under *Ask before acting*.

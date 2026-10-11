@@ -2,7 +2,11 @@
 
 AIconman, the AI Connection Manager, is a web interface for using language models that people run on their own machines, together with a public account of how to set those machines up and connect them. Z, 2026-10-11: *"We build something that works on my network, and build the framework for everybody. Make it accessible and private. The interface we develop should be independent of what is built on user's ends. It should work as long as it is reachable from their own network."*
 
-**It is for a local network or a VPN, and nothing else.** Z, 2026-10-11: *"There will not be user management for this project, we will make it clear that this is only for LAN/VPN applications. The user should make sure that nothing is exposed to internet."*
+**It is for a local network or a VPN, and nothing else.** Z, 2026-10-11: *"we will make it clear that this is only for LAN/VPN applications. The user should make sure that nothing is exposed to internet."*
+
+**Each person has an account, and keeps their chats.** Z, 2026-10-11: *"there are multiple people in a household and people might want to keep their chats etc."* An account signs in with a password or through Nextcloud, and the data lives in PostgreSQL, with other databases to come.
+
+**It is for people who already run their own models.** Z, 2026-10-11: *"The audience for this tool, already deployed one or more LLMs successfully in their network."* The interface and the documentation are written for that reader.
 
 **A server's limits are its owner's business.** Z, 2026-10-11: *"The time is not an issue here. People running their own servers will know their own limitations. Do not raise this further."* The interface does not warn anyone about how slow or how small their server is, and the agent does not raise it in design.
 
@@ -16,7 +20,7 @@ Z, 2026-10-11: *"I want to be transparent about the development process. It is o
 
 - **The record is public.** This file, `.claude/development-notes/`, `dev/READING-LOG.md` and `SOURCES.md` are tracked and published with the code. Write them for a reader outside the project who arrives skeptical and checks.
 - **Z drives.** Z calls the method human-in-the-steering-wheel development, as opposed to human-in-the-loop: the human drives, rather than approving what the agent drives. So the record says who decided what and when, in Z's words where there are any, and marks what the agent proposed as the agent's.
-- **Every action is logged.** Each decision Z makes and each action either of us takes gets a row in `.claude/development-notes/01-project-log.md` when it happens. A row is never rewritten or removed; only its Notes are filled in later, when the action turns out wrong, is reverted, or a decision changes.
+- **Every important step is logged.** Each step either of us takes -- something built or changed, a read, a check, a commit, a correction -- gets a row in `.claude/development-notes/01-project-log.md` when it happens, so that an agent months later can recover what was done. What Z says, and the writing of it into the notes, do not get rows. Once committed, a row is never rewritten or removed; only its Notes are filled in later, when the action turns out wrong, is reverted, or a decision changes.
 - **Mistakes are recorded, not smoothed over.** A slip, a claim that turned out wrong, a change that was reverted: each goes into the notes with what happened and how it was found.
 - **The agent never writes that Z verified, approved or cleared something.** Those lines are Z's to write, and the agent's own checks are never presented as Z's.
 - **Transparency covers the process, not Z's network or anyone's conversations.** What stays out is under *What stays out of the agent's context and the repository*.
@@ -41,7 +45,7 @@ The reason is responsible use of AI agents: there is already a lot of backlash a
 
 None of what follows is relaxed for convenience, for speed, or because a fact seems small.
 
-- **No code from another person's project goes into AIconman**, whether copied, adapted or translated into another language. A library Z has approved by name, carried whole under its own license and credited, is the only exception. Approved so far: FastAPI, as the backend framework (Z, 2026-10-11, with the defaults in `product-brief.md`).
+- **No code from another person's project goes into AIconman**, whether copied, adapted or translated into another language. A library Z has approved by name, carried whole under its own license and credited, is the only exception. Approved so far: FastAPI, as the backend framework (Z, 2026-10-11, with the defaults in `product-brief.md`); Tabler Icons, MIT license, for the icons (Z, 2026-10-11); and Source Serif Pro, SIL Open Font License 1.1, for the title, shipped unmodified (Z, 2026-10-11). The last two are in `the-interface.md`.
 - **Reading another person's code is always harnessed: named, recorded, cleared and done, in that order.** This covers any file of their source: a clone, a web page that shows the code, a search result that quotes it. It binds any agent the agent starts.
   1. *Name*: the task the read serves, the source (its file or section, at a commit or a URL), and the facts it is for.
   2. *Record*: an entry in `dev/READING-LOG.md`, written before anything is opened.

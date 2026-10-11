@@ -4,13 +4,13 @@
 
 Z, 2026-10-11: *"Let's add also a 01-project-log.md. to log whole development. A very long table. Everything goes there."*
 
-Every action on AIconman gets a row, in the order it happened: what Z decided or did, and what the agent did. An action is anything a reviewer would want to find again: a decision, a file created or changed, a read, a check, a commit, a correction. The row says what was done in a few words; the reasons and the detail are in the other notes, `dev/READING-LOG.md` and the commit messages.
+The log records actions, in the order they happened, so that an agent months later can recover the important steps that were taken: something built or changed, a read, a check, a commit, a correction, a revert. It does not record conversation. What Z says does not get a row, and neither does writing what was said or decided into the notes, which are its record. Z, 2026-10-11: *"Not everything I say needs to go into the log [...] Log should demonstrate only actions. So a few months in the future another agent cen recover important steps that were taken."* A row is one task, not each step of it, and says what was done, not what came of it. Z, 2026-10-11, collapsing five rows about the first reads into one: *"Results are not important here."* The results and the reasons are in the other notes, `dev/READING-LOG.md` and the commit messages.
 
 - **No** is four hexadecimal digits, uppercase, from `0001`, and is never reused. Z: *"No field should be 5 digits numeric or 4 digits hexadecimal value (I'm leaning on hexadecimal) from 00001 or 0001."*
 - **Date** and **Time** are Z's local time when the action was taken, with the zone.
-- **Tree hash** is the commit the working tree stood at when the action was taken. A commit's own row carries the commit it made.
+- **Tree hash** is the commit the working tree stood at when the action was taken. A commit's own row carries the commit it made. Commits are Z's, and they mark the points where Z decides a task is complete, so many rows share one hash. Z, 2026-10-11: *"Commits do not align with every step. They only occur at the times when I decide we completed a task that needs committing. That's one reason I make the commits."*
 - **Action** starts with who took it: Z or Agent.
-- **Notes** is empty when a row is written, and it is the only cell that changes afterwards. Z: *"Notes can be filled later if we discover something was incorrect, we revert an action, decision etc."* A note names the row that corrected or reverted the action. No other cell is rewritten, and no row is removed.
+- **Notes** is empty when a row is written, and it is the only cell that changes afterwards. Z: *"Notes can be filled later if we discover something was incorrect, we revert an action, decision etc."* A note names the row that corrected or reverted the action. Once a row is committed, no other cell is rewritten and the row is not removed.
 
 Rows `0001` to `0016` were written on 2026-10-11, after the fact, from `git log`, the times of the agent's session record, and the time the reading log was last saved.
 
@@ -38,3 +38,13 @@ Rows `0001` to `0016` were written on 2026-10-11, after the fact, from `git log`
 | 0014 | 2026-10-11 | 10:47 EDT | f94a72f | Z: clears R-001 to R-005 | |
 | 0015 | 2026-10-11 | 10:56 EDT | f94a72f | Z: asks for `01-project-log.md` | |
 | 0016 | 2026-10-11 | 10:59 EDT | f94a72f | Agent: creates `01-project-log.md` with rows 0001 to 0016; adds it to `CLAUDE.md` and the index | |
+| 0017 | 2026-10-11 | 11:04 EDT | e1866f4 | Z: commits the project log, the backbone note, R-001 to R-005 cleared, and the product-brief addition | |
+| 0018 | 2026-10-11 | 11:05 EDT | e1866f4 | Z: go-ahead to start | |
+| 0019 | 2026-10-11 | 11:05 EDT | e1866f4 | Agent: performs R-001 to R-005 | |
+| 001A | 2026-10-11 | 11:36 EDT | e1866f4 | Z: clears R-006 to R-008 | |
+| 001B | 2026-10-11 | 11:39 EDT | e1866f4 | Agent: merges the rows for the reads into 0019, at Z's request | |
+| 001C | 2026-10-11 | 11:43 EDT | e1866f4 | Z: go-ahead for R-006 to R-008 | |
+| 001D | 2026-10-11 | 11:43 EDT | e1866f4 | Agent: performs R-006 to R-008 | |
+| 001E | 2026-10-11 | 15:36 EDT | e1866f4 | Agent: adds `dev/palette/` (`derive.py`, `render.py`) with the palette as Z settled it | |
+| 001F | 2026-10-11 | 16:47 EDT | e1866f4 | Agent: performs R-010 | |
+| 0020 | 2026-10-11 | 17:28 EDT | e1866f4 | Agent: changes the brand in `dev/palette/` to two tones in Source Serif Pro Bold Italic, without the glow | |
