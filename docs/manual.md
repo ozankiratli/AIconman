@@ -123,7 +123,7 @@ The owner's password is `db.adminpw` in `config/config.yml`, or `AICONMAN_DB_ADM
 
 `config/config.yml` explains each setting where it is set. In short:
 
-- **server:** the address and port the backend listens on, behind your reverse proxy (8642 by default); and `public_url`, the address people type to reach AIconman.
+- **server:** the address and port the backend listens on, behind your reverse proxy (8642 by default); and `public_url`, the address people type to reach AIconman. It must be exactly the address in the browser's bar, scheme, host and port: AIconman refuses a change sent from a page at any other address.
 - **db:** where PostgreSQL is, the database's name (`dbname`), the app role (`user`, `password`), and the owner (`adminuser`, `adminpw`). The owner is the database's owner, not an AIconman admin account.
 - **storage:** `root_path`, the folder where people's files are kept: attached images, recordings, transcripts and exports. Each account gets a folder inside it, named by the account's id, and the dumps `install/build_schema.sh` makes go into `db/backups/` inside it. The folder must exist, and the user AIconman runs as must be able to write to it.
 - **auth:**

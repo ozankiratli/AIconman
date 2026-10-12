@@ -96,3 +96,13 @@ Rows `0001` to `0016` were written on 2026-10-11, after the fact, from `git log`
 | 004E | 2026-10-12 | 14:21 EDT | bd9f11a | Agent: adds `aiconman/config.py`, the configuration's only reader, and makes `install/common.sh` read through it | |
 | 004F | 2026-10-12 | 14:22 EDT | bd9f11a | Agent: adds `aiconman/db.py` and `aiconman/app.py`, with the health check; checks FastAPI's documentation pages' outside sources in-process | |
 | 0050 | 2026-10-12 | 14:23 EDT | bd9f11a | Agent: adds `tests/backend/`; runs it, the install and schema tests, and two copies with a rule broken | |
+| 0051 | 2026-10-12 | 17:06 EDT | 1974f52 | Z: commits the backend's groundwork ("FastAPI backend ground work") | |
+| 0052 | 2026-10-12 | 17:09 EDT | 1974f52 | Agent: times scrypt at three costs; adds `aiconman/passwords.py`, `sessions.py`, `storage.py` and `accounts.py`, the password accounts | |
+| 0053 | 2026-10-12 | 17:11 EDT | 1974f52 | Agent: adds `tests/backend/scratch.py` and `test_accounts.py`; runs the backend's tests, and three copies with a rule broken | |
+| 0054 | 2026-10-12 | 17:14 EDT | 1974f52 | Agent: requests the headers of candidate documentation pages; writes R-018 to R-020 | |
+| 0055 | 2026-10-12 | 18:02 EDT | 1974f52 | Z: stages the password accounts without committing, with two changes; clears R-018 to R-020 (time of Z's message) | |
+| 0056 | 2026-10-12 | 18:03 EDT | 1974f52 | Agent: renames `sign_in_failed` to `wrong_credentials` by an announced `sed`; trims passwords and refuses spaces inside; adds three tests; runs the tests, and two copies with a rule broken | |
+| 0057 | 2026-10-12 | 18:04 EDT | 1974f52 | Agent: performs R-018 | |
+| 0058 | 2026-10-12 | 18:06 EDT | 1974f52 | Agent: performs R-019, with two slips: a row and a section not cleared, reported to Z | |
+| 0059 | 2026-10-12 | 18:07 EDT | 1974f52 | Agent: performs R-020 | |
+| 005A | 2026-10-12 | 18:52 EDT | 1974f52 | Agent: requests the names in Ollama's `docs/` and the headers of two of its files; writes R-021 | |

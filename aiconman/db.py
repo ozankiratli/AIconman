@@ -16,11 +16,14 @@ REFUSAL = "AI001"
 
 
 class Refused(Exception):
-    """A function of the schema refused; KEY says why, such as last_admin."""
+    """A request refused, by a function of the schema or by the backend; KEY
+    says why, such as last_admin, and DETAIL, when given, adds to the answer,
+    such as the password rules a new password does not meet."""
 
-    def __init__(self, key: str):
+    def __init__(self, key: str, detail: dict | None = None):
         super().__init__(key)
         self.key = key
+        self.detail = detail or {}
 
 
 @asynccontextmanager

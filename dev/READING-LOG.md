@@ -261,3 +261,66 @@ These four entries share a task and a method, given once here; each entry names 
     - **Left open:** neither section says whether an address with `/index.php/` still works where pretty URLs are configured. The third fact sought is not in what was cleared. It goes to Z.
     - **Also on the OAuth2 page**, for when Nextcloud sign-in is built: *"Nextcloud supports only confidential clients."* A token *"has full access to the complete account including read and write permission to the stored files"*, since scopes are not supported, and the page says: *"Without scopes and restrictable access it is not recommended to use a Nextcloud instance as a user authentication service."* Apache strips the `Authorization` header by default, so a Nextcloud behind Apache needs `mod_headers`, `mod_rewrite` and `mod_env` for a bearer token to reach it. And a trusted application can skip the confirmation shown before login, through `occ config:app:set oauth2 skipAuthPickerApplications`.
   - **Where it went:** this entry and `SOURCES.md`. The template's default addresses are unchanged until Z decides.
+
+## R-018: Ollama's documentation, for the gaps the connections and chat need
+
+- **Named:** 2026-10-12
+- **Task:** the backend's connections and chat, for Ollama's own API: gaps 1, 3 and 4 in `.claude/development-notes/the-backbone.md`, and a check of what R-002 found against the documentation Ollama now publishes, since `docs/api.md` said its API docs were moving.
+- **Source:** docs.ollama.com, as it reads on the day of the read: the API's introduction, https://docs.ollama.com/api/introduction; its pages on chat, https://docs.ollama.com/api/chat, streaming, https://docs.ollama.com/api/streaming, and errors, https://docs.ollama.com/api/errors; the page on a model's details, at the address the introduction's list of pages gives; and https://docs.ollama.com/context-length. On 2026-10-12 only the headers of these addresses were requested: each answered HTTP 200, `/api` redirected to the introduction, and `/api/show` was not found.
+- **Facts sought:** the context window a model runs with when the request does not set `num_ctx` (gap 1); how the objects of a stream are separated, and how an error is reported, in a stream and outside one (gap 3); the values a model's `capabilities` can take (gap 4); and what the chat endpoint takes for images and for the output limit, and what the model list and a model's details give, to check against R-002.
+- **Not read:** the rest of the site; Ollama's source code.
+- **Cleared:** 2026-10-12
+- **Done:** 2026-10-12.
+  - **What was read:** the introduction, chat, streaming, errors and context-length pages, fetched and turned into text. The chat page folds the parts of its request and reply under *Show child attributes*, which the text did not contain; they are in the page's own data, and were read there, for the fields named below. The introduction's list of the API's pages has no page for a model's details, so that page was not read; the model list has a page, `/api/tags`, which the entry did not name, so it was not read either.
+  - **What was found:**
+    - **Streams:** *"These responses are provided in the newline-delimited JSON format (i.e. the application/x-ndjson content type)"*, one object per line; the last has `"done": true` and a `done_reason`. With `"stream": false` the reply is one `application/json` object.
+    - **Errors:** a JSON body `{"error": "..."}`, with the status codes 400, 404 (*"model doesn't exist, etc."*), 429, 500 and 502. *"If an error occurs mid-stream, the error will be returned as an object in the application/x-ndjson format with an error property. Since the response has already started, the status code of the response will not be changed."*
+    - **The context window (gap 1):** *"Ollama defaults to the following context lengths based on VRAM: < 24 GiB VRAM: 4k context; 24-48 GiB VRAM: 32k context; >= 48 GiB VRAM: 256k context"*. The server's owner can set it with `OLLAMA_CONTEXT_LENGTH`, and `ollama ps` shows the context allocated to a loaded model. A request can set it with `options.num_ctx`, *"Context length size (number of tokens)"*. So the window in use is the server's, unknown to a client from these pages, unless the request sets it.
+    - **Chat:** roles `system`, `user`, `assistant` and `tool`; a message's `images` is *"Optional list of inline images for multimodal models"*, each *"Base64-encoded image content"*; the output limit is `options.num_predict`, *"Maximum number of tokens to generate"*. A reply's `message` has `role` (*"Always assistant"*), `content`, `thinking` (*"Optional deliberate thinking trace when think is enabled"*) and `images`; the reply carries `done`, `done_reason`, `prompt_eval_count`, `prompt_eval_cached_count`, `eval_count` and durations in nanoseconds. `think` takes true, false, null, or a name the model defines, which *"/api/show"* lists.
+    - **Also, from the introduction:** a local Ollama server also serves the OpenAI-compatible API, at `http://localhost:11434/v1`.
+    - **Left open:** the values of `capabilities` (gap 4), since no page for a model's details is listed; and what the model list gives now, since its page was not named.
+  - **Where it went:** `.claude/development-notes/the-backbone.md` and `SOURCES.md`.
+
+## R-019: llama.cpp's server README, on the context window and its slots
+
+- **Named:** 2026-10-12
+- **Task:** the backend's connections and chat, for llama.cpp: gap 2 in `.claude/development-notes/the-backbone.md`, what the `n_ctx` a server reports means for one request; and a check of the fields R-003 found, at the current commit.
+- **Source:** `tools/server/README.md` in github.com/ggml-org/llama.cpp, on `master` on the day of the read, with the commit recorded under *Done*: the rows of its table of options for the context size (`--ctx-size`), the number of slots (`--parallel`) and a unified cache (`--kv-unified`), if the table has them; and its sections on `GET /props`, `GET /slots`, `GET /v1/models` and `POST /v1/chat/completions/input_tokens`. On 2026-10-12 only the headers of the file's address were requested: HTTP 200.
+- **Facts sought:** the window one request gets, and how several slots share the context; whether `/props` or `/slots` gives the window per slot; and the fields of the model list and of `/props` that R-003 found.
+- **Not read:** the rest of the README; the server's source code.
+- **Cleared:** 2026-10-12
+- **Done:** 2026-10-12.
+  - **What was read:** `tools/server/README.md` at commit `358a420ec4ed59b6b0be08b1d1f71dd478b99a99` (committed 2026-10-12), fetched raw: its headings, to find the sections; the three option rows; and the sections on `GET /props`, `GET /slots`, `GET /v1/models` and `POST /v1/chat/completions/input_tokens`.
+  - **Two slips:** the search for the option `--kv-unified` also printed the row below it, `--kv-unified-per-slot`, which was not named; and the lines printed for `GET /slots` ran on into the next section, `GET /metrics`, its heading, its two opening sentences and its table of metrics. Neither was cleared. Both were reported to Z, and nothing in them is used until Z rules.
+  - **What was found:**
+    - **The options:** `-c, --ctx-size N`, *"size of the prompt context (default: 0, 0 = loaded from model)"*; `-np, --parallel N`, *"number of server slots (default: -1, -1 = auto)"*; `-kvu, --kv-unified`, *"use single unified KV buffer shared across all sequences (default: enabled if number of slots is auto)"*.
+    - **`GET /slots`** lists each slot with its `id`, `n_ctx`, `is_processing` and `params` (`n_predict`, `max_tokens` among them); the example has two slots of `n_ctx` 65536 each. It is on by default, `--no-slots` turns it off, and `?fail_on_no_slot=1` makes it answer 503 when no slot is free.
+    - **`GET /props`** gives `default_generation_settings`, which has a slot's fields, `id` and `n_ctx` (1024 in the example) among them, and is *"the default generation settings for the /completion endpoint"*; `total_slots`, *"defined by --parallel option"*; `modalities`, `{"vision": false}` in the example; `model_path`, `chat_template` and `is_sleeping`.
+    - **The window (gap 2):** one request runs in a slot, and each slot reports its own `n_ctx`. The sections read do not say how `--ctx-size` and `--parallel` make a slot's `n_ctx`.
+    - **`GET /v1/models`:** *"The returned list always has one single element. The meta field can be null (for example, while the model is still loading)."* `architecture.input_modalities` *"always has text, plus each media type that the model supports"*. `output_modalities` is `["text"]` by default, and *"This default is for compatibility only. It does not mean that the model can generate text."*; `decisions` in it marks *"a native decision model"*, served at `/v1/systemone`. Older servers can leave `architecture` out. The router gives the same `architecture` at `GET /models`. The `id` is the model file's path unless `--alias` sets one. `meta` has `vocab_type`, `n_vocab`, `n_ctx_train`, `n_embd`, `n_params` and `size`.
+    - **`POST /v1/chat/completions/input_tokens`** takes a chat completion's body and answers `{"object": "response.input_tokens", "input_tokens": 11}`; *"This is not an official OAI endpoint"*.
+  - **Where it went:** `.claude/development-notes/the-backbone.md` and `SOURCES.md`.
+
+## R-020: OpenAI's guide to its error codes
+
+- **Named:** 2026-10-12
+- **Task:** the backend's chat, for the OpenAI-compatible protocol: gap 5 in `.claude/development-notes/the-backbone.md`, how a server reports an error, so that the conversation can show it.
+- **Source:** the guide *Error codes*, https://developers.openai.com/api/docs/guides/error-codes, as it reads on the day of the read. Its old address, https://platform.openai.com/docs/guides/error-codes, answers with a permanent redirect (HTTP 301) to it; on 2026-10-12 only headers were requested.
+- **Facts sought:** the shape of an error response's body, and of an error that arrives within a stream, where the guide gives them.
+- **Not read:** the rest of the guide's site.
+- **Cleared:** 2026-10-12
+- **Done:** 2026-10-12.
+  - **What was read:** the page, fetched and turned into text. It carries the whole site's navigation; only the guide's own text was read, from its opening sentence to its end.
+  - **What was found:** the guide lists errors by HTTP status, 400, 401, 403, 429, 500 and 503, with causes, and refers to an error's fields by name: `error.message`, `error.type` (such as `invalid_request_error`, `rate_limit_error`, `service_unavailable_error`), `error.code` (such as `slow_down`, `server_is_overloaded`) and `error.param`. It advises following a `Retry-After` header when there is one.
+  - **Left open:** the guide does not show an error's body whole, and says nothing of an error that arrives within a stream. Gap 5 is answered only as far as the fields' names.
+  - **Where it went:** `.claude/development-notes/the-backbone.md` and `SOURCES.md`.
+
+## R-021: Ollama's API description, on models
+
+- **Named:** 2026-10-12
+- **Task:** the backend's connections, for Ollama: gap 4 in `.claude/development-notes/the-backbone.md`, the values a model's `capabilities` can take, which R-018 left open; with what the model list and the list of loaded models give, the second for the window a loaded model runs with, which bears on gap 1.
+- **Source:** `docs/openapi.yaml` in github.com/ollama/ollama at commit `04730395aff8ec47287977d50a631671d0e636d5`, `main` on 2026-10-12, the description of Ollama's API that docs.ollama.com is built from: its entries for `/api/show`, `/api/tags` and `/api/ps`, and the schemas those entries name. If it does not list the values of `capabilities`, then the section *Show Model Information* of `docs/api.md` at the same commit. On 2026-10-12 only GitHub's list of the names in `docs/` and the headers of the two files' addresses were requested; both answered HTTP 200.
+- **Facts sought:** the values of `capabilities`; where a model's context length appears in its details; the fields of the model list; and whether the list of loaded models gives the context a loaded model runs with.
+- **Not read:** the rest of `docs/openapi.yaml` and `docs/api.md`; Ollama's source code.
+- **Cleared:** 2026-10-12
+- **Done:**

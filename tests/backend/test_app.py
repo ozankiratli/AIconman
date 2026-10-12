@@ -6,25 +6,18 @@ started. Refuses to run without AICONMAN_CONFIG_DIR, or with it naming config/.
     AICONMAN_CONFIG_DIR=.tmp/scratch/config .venv/bin/python -m unittest discover -s tests/backend -p 'test_app.py'
 """
 
-import os
 import unittest
-from pathlib import Path
 
 import httpx
 
+import scratch
 from aiconman import config as configuration
 from aiconman.app import create_app, status_for
 from aiconman.db import Refused, call, connect
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-
 
 def setUpModule():
-    named = os.environ.get("AICONMAN_CONFIG_DIR")
-    if not named:
-        raise RuntimeError("AICONMAN_CONFIG_DIR must name the configuration of the database to test against")
-    if Path(named).resolve() == (ROOT / "config").resolve():
-        raise RuntimeError("refusing to test against config/")
+    scratch.require()
 
 
 class AppTest(unittest.IsolatedAsyncioTestCase):

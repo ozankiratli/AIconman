@@ -387,7 +387,7 @@ BEGIN
   SELECT * INTO v_account FROM accounts a WHERE a.username = p_username;
   IF NOT FOUND OR v_account.password_hash IS NULL
      OR v_account.password_hash IS DISTINCT FROM p_password_hash THEN
-    PERFORM _refuse('sign_in_failed');
+    PERFORM _refuse('wrong_credentials');
   END IF;
   IF NOT v_account.active THEN
     PERFORM _refuse('deactivated');

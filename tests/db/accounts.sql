@@ -90,11 +90,11 @@ SELECT pg_temp.ok('password_salt of an unknown username is NULL', password_salt(
 SELECT pg_temp.ok('signing in with the right hash',
   sign_in_password('alex', pg_temp.pw('alex'), pg_temp.t('alex2'), '1 hour', '1 day') = :'alex');
 SELECT pg_temp.refused('signing in with the wrong hash',
-  $$SELECT sign_in_password('alex', pg_temp.pw('wrong'), pg_temp.t('x'), '1 hour', '1 day')$$, 'sign_in_failed');
+  $$SELECT sign_in_password('alex', pg_temp.pw('wrong'), pg_temp.t('x'), '1 hour', '1 day')$$, 'wrong_credentials');
 SELECT pg_temp.refused('signing in with no hash',
-  $$SELECT sign_in_password('alex', NULL, pg_temp.t('x'), '1 hour', '1 day')$$, 'sign_in_failed');
+  $$SELECT sign_in_password('alex', NULL, pg_temp.t('x'), '1 hour', '1 day')$$, 'wrong_credentials');
 SELECT pg_temp.refused('signing in with an unknown username',
-  $$SELECT sign_in_password('nobody', pg_temp.pw('alex'), pg_temp.t('x'), '1 hour', '1 day')$$, 'sign_in_failed');
+  $$SELECT sign_in_password('nobody', pg_temp.pw('alex'), pg_temp.t('x'), '1 hour', '1 day')$$, 'wrong_credentials');
 SELECT pg_temp.refused('a session token hash that is not 32 bytes',
   $$SELECT sign_in_password('alex', pg_temp.pw('alex'), '\x0102', '1 hour', '1 day')$$, 'token_hash_invalid');
 SELECT pg_temp.refused('a session with no idle timeout',
@@ -233,7 +233,7 @@ SELECT pg_temp.ok('a reset password must be changed at the next sign-in',
 SELECT pg_temp.refused('  and the reset revokes the account''s sessions',
   $$SELECT session_check(pg_temp.t('kim'))$$, 'session_invalid');
 SELECT pg_temp.refused('  so the old password no longer signs in',
-  $$SELECT sign_in_password('kim', pg_temp.pw('kim2'), pg_temp.t('x'), '1 hour', '1 day')$$, 'sign_in_failed');
+  $$SELECT sign_in_password('kim', pg_temp.pw('kim2'), pg_temp.t('x'), '1 hour', '1 day')$$, 'wrong_credentials');
 SELECT pg_temp.ok('  and the new one does',
   sign_in_password('kim', pg_temp.pw('kim3'), pg_temp.t('kim2'), '1 hour', '1 day') = :'kim');
 
@@ -251,7 +251,7 @@ SELECT pg_temp.ok('  keeps the label up to date',
 SELECT pg_temp.refused('signing in through Nextcloud with no account linked',
   $$SELECT sign_in_identity('nextcloud', 'nc-nobody', 'Nobody', pg_temp.t('x'), '1 hour', '1 day')$$, 'no_account');
 SELECT pg_temp.refused('signing in with a password on an account that has none',
-  $$SELECT sign_in_password('lee', pg_temp.pw('lee'), pg_temp.t('x'), '1 hour', '1 day')$$, 'sign_in_failed');
+  $$SELECT sign_in_password('lee', pg_temp.pw('lee'), pg_temp.t('x'), '1 hour', '1 day')$$, 'wrong_credentials');
 SELECT pg_temp.refused('linking a second Nextcloud account',
   $$SELECT link_identity(pg_temp.t('lee'), 'nextcloud', 'nc-other', 'Other')$$, 'already_linked');
 SELECT pg_temp.refused('linking a Nextcloud account linked to someone else',

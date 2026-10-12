@@ -128,3 +128,29 @@ Z cleared R-006 to R-008 and said to go ahead. R-006 and R-008 were read. R-007 
 ## Added later on 2026-10-11, against `e1866f4`: accounts
 
 Z added accounts after the second part of the design (`product-brief.md`). Three points change. Point 1: the backend stores conversations, per account, and the browser no longer keeps them. Point 8: accounts with a password or a Nextcloud login replace the open access check, wired after the interface is confirmed. Point 9: the backend's data lives in PostgreSQL rather than a JSON file, with other databases later. Open: whether connections and their keys belong to the household or to each account.
+
+## Added 2026-10-12, against `1974f52`: what R-018 to R-020 found
+
+Z cleared R-018, Ollama's documentation, R-019, llama.cpp's server README at commit `358a420`, and R-020, OpenAI's guide to its error codes, written for the backend's connections and chat (`the-backend.md`). Each was read on 2026-10-12; `dev/READING-LOG.md` has what was read, the facts in their own words, and two slips in R-019.
+
+**The gaps, after these reads:**
+
+1. **Ollama's window when `num_ctx` is not set:** the server's own default, which Ollama sets by the graphics card's memory, 4k, 32k or 256k, or its owner sets with `OLLAMA_CONTEXT_LENGTH`. A client cannot learn it from the pages read. A request can set the window with `options.num_ctx`. **Open for Z:** whether AIconman sends `num_ctx`, the model's window as the admin set it or the server reported it, so that the window in use is the one the meter shows; without it, the window in use is not known.
+2. **llama.cpp's window:** a request runs in a slot, and each slot reports its own `n_ctx`, in `/slots`, which the server's owner can turn off, and in `/props`'s `default_generation_settings`. How `--ctx-size` and `--parallel` make it is not in the sections read. The slot's `n_ctx` is the number the meter needs.
+3. **Ollama's streams and errors:** answered. A stream is newline-delimited JSON; an error is `{"error": "..."}`, and one that comes mid-stream is a line of its own, with the HTTP status left as it was.
+4. **The values of Ollama's `capabilities`:** still open. Ollama's documentation lists no page for a model's details.
+5. **The OpenAI protocol's errors:** answered only as far as the names of an error's fields, `message`, `type`, `code` and `param`. Neither an error's whole body nor an error within a stream is given.
+6. **vLLM:** unchanged.
+
+**What else bears on the backend:**
+
+- **A local Ollama server also speaks the OpenAI-compatible protocol**, at `/v1`. Detection that tried the OpenAI model list first would take an Ollama server for an OpenAI-compatible one, which would work, but without Ollama's own reports of what a model can do. Ollama's version endpoint identifies it first.
+- **llama.cpp's `output_modalities` does not say whether a model chats**: *"It does not mean that the model can generate text."* Its `input_modalities` does say whether a model reads images. Whether a llama.cpp model chats stays unknown unless the admin sets it, as the database already allows.
+- **Counting a chat request's tokens before sending** is llama.cpp's `POST /v1/chat/completions/input_tokens`, which takes the chat request's own body.
+
+## Added later on 2026-10-12, against `1974f52`: Z's answers on the gaps
+
+1. **Ollama's window is decided when the model is configured.** Z, on sending `num_ctx`: *"I agree. It feels like it should be decided at the time of model configuration. However, the most common use case would still be 4k?"* The agent's answer: 4k is Ollama's default below 24 GiB of graphics memory, which most home graphics cards are, from the agent's knowledge rather than a source; the pages read do not say what Ollama does on a machine with no graphics card, and a server's owner can change the default. Sending the window the server reports, the length a model was trained for, is no default to fall back on: the context-length page warns that *"Setting a larger context length will increase the amount of memory required to run a model."* **Proposed, for Z:** AIconman sends `num_ctx` only for a window the admin has set; with none set, the meter assumes 4096 for an Ollama model and says it is an assumption. Built with the chat.
+2. **Gap 4 gets a read of its own.** Z: *"A new entry fine."* R-021 names Ollama's `docs/openapi.yaml`, the description of its API that its documentation site is built from, at commit `0473039`, for `capabilities`, the model list and the list of loaded models.
+3. **An OpenAI-compatible server's error is shown as `error.message` where it has one, and as the server sent it otherwise.** Z: *"Not sure if this is that important but fine."* No further read for gap 5.
+4. **The two slips in R-019.** Z: *"It is fine, you recorded them and it was close enough. Mishaps can happen, we still need to be careful."* Both came from printing more than the cleared lines: a search that matched a neighboring row, and a line range that ran past its section. Printing a section by its heading's own end, found first, as was done for the last two sections of that read, is the careful way.
