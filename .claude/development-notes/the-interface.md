@@ -261,3 +261,7 @@ Z: *"Let's build confirmation dialogs. We should defer last two for after everyt
 5. **Give up admin, as the only admin:** the refusal as a red band, and *Close*.
 
 **What the render showed:** in dark HC the disabled *Delete my account* carries the strong border that high contrast gives disabled controls, and looks nearly the same as an enabled outlined button. The agent proposes a line under the field saying what enables the button, such as *Type alex to enable*, in every theme, so that the state does not rest on color alone.
+
+## Added 2026-10-12, against `b2b18b1`: refreshing the models
+
+The agent pointed out, while building the connections in the database, that only an admin's session could record a check, so the model lists could not be refreshed without an admin signed in. Z: *"Let's set up a cronjob (every 30 mins), and put a button on the admin panel for faster refresh."* So the models of every connection are refreshed every 30 minutes by a job that cron runs, and the *Connections* tab of the admin panel gets a button that refreshes every connection at once, beside each connection's *Check*. Neither is built yet: both need the backend's code that talks to the model servers. The database's side is in `the-database.md`.

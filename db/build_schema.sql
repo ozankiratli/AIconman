@@ -8,6 +8,7 @@ CREATE SCHEMA public;
 GRANT USAGE ON SCHEMA public TO :"app_user";
 
 \ir accounts.sql
+\ir connections.sql
 
 -- Functions are created executable by PUBLIC; only the grants above remain.
 REVOKE ALL ON ALL FUNCTIONS IN SCHEMA public FROM PUBLIC;

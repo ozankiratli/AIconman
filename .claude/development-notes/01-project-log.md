@@ -84,3 +84,8 @@ Rows `0001` to `0016` were written on 2026-10-11, after the fact, from `git log`
 | 0042 | 2026-10-12 | 12:16 EDT | b5c2c93 | Agent: adds `tests/database.sh`, `tests/db/` and seeding cases to the rebuild's test; runs them against `aicm_scratch_db` | |
 | 0043 | 2026-10-12 | 12:19 EDT | b5c2c93 | Agent: fixes the refusal of an empty username, found by the tests; fixes a test's ordering | |
 | 0044 | 2026-10-12 | 12:20 EDT | b5c2c93 | Agent: runs the schema tests against two copies with a rule broken; adds seeding to the manual | |
+| 0045 | 2026-10-12 | 13:02 EDT | b2b18b1 | Z: commits the rebuild, the accounts schema and the tests ("schema builder, accounts tables, test suite") | |
+| 0046 | 2026-10-12 | 13:08 EDT | b2b18b1 | Agent: adds the connections part of the schema, `db/connections.sql`, and `tests/db/connections.sql` | |
+| 0047 | 2026-10-12 | 13:10 EDT | b2b18b1 | Agent: runs the schema tests against `aicm_scratch_db`, and against three copies with a rule broken | |
+| 0048 | 2026-10-12 | 13:44 EDT | b2b18b1 | Agent: adds `refresh_targets()` and `refresh_record_check()` for the scheduled refresh, with their tests; runs them, and a copy with a rule broken | |
+| 0049 | 2026-10-12 | 13:45 EDT | b2b18b1 | Agent: installs the backend's libraries into `.venv` and pins them in `install/requirements.txt`, rewriting it with Write; checks the file in a fresh environment | |

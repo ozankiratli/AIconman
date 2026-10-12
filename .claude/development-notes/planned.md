@@ -10,14 +10,13 @@ Nothing here is a commitment to build. Each item is what Z decided, with the not
 
 - **The design is done**: the backbone, the interface and the palette (`the-backbone.md`, `the-interface.md`, `the-palette.md`). Z committed it as *"Design is done"* (`85b56d4`).
 - **The database is being built**, in four stages (`the-database.md`, 2026-10-12): the rebuild, accounts, connections and models, and conversations, messages and files. Both databases exist: `aicm_db`, Z's, and `aicm_scratch_db`, the agent's for tests, configured in `.tmp/scratch/config/`.
-- **What exists**: `config.yml.template` and `.env.template` at the root; `config/config.yml` and `config/.env`, Z's, which the agent does not open; `install/common.sh`, shared by the install scripts; `install/create_database.sh`, which runs `db/create_database.sql`; `install/build_schema.sh`, which rebuilds the schema from `db/build_schema.sql` after a dump, and seeds it from `db/seed.sql`; the accounts part of the schema, `db/accounts.sql`; `tests/install/`, the tests of both scripts, and `tests/db/`, the schema's; `.venv`, with PyYAML, from `install/requirements.txt`; `dev/.venv`, with ShellCheck, from `dev/requirements.txt`; `docs/manual.md`, covering setup so far; and `dev/palette/`, the palette's scripts.
+- **What exists**: `config.yml.template` and `.env.template` at the root; `config/config.yml` and `config/.env`, Z's, which the agent does not open; `install/common.sh`, shared by the install scripts; `install/create_database.sh`, which runs `db/create_database.sql`; `install/build_schema.sh`, which rebuilds the schema from `db/build_schema.sql` after a dump, and seeds it from `db/seed.sql`; the accounts part of the schema, `db/accounts.sql`, and the connections part, `db/connections.sql`; `tests/install/`, the tests of both scripts, and `tests/db/`, the schema's; `.venv`, with PyYAML and the backend's libraries, from `install/requirements.txt`; `dev/.venv`, with ShellCheck, from `dev/requirements.txt`; `docs/manual.md`, covering setup so far; and `dev/palette/`, the palette's scripts.
 - **Nothing of the application is built** beyond that: no backend, no frontend. Building goes only as far as Z names (`CLAUDE.md`, and the agent's memory).
 
 ## Next, on Z's word
 
-1. **Connections and models**, the third stage of the database.
-2. **Conversations, messages and files**, the fourth.
-3. **The backend**, on FastAPI, which is approved. uvicorn and httpx need Z's approval by name when the backend is asked for.
+1. **Conversations, messages and files**, the fourth stage of the database.
+2. **The backend**, on FastAPI. Its libraries are in `install/requirements.txt` and `.venv`, added at Z's word and under Z's review (`SOURCES.md`, `the-database.md`, 2026-10-12).
 
 ## Deferred by Z to the polishing
 
@@ -37,6 +36,7 @@ Nothing here is a commitment to build. Each item is what Z decided, with the not
 - **Choosing an earlier version of a message**, which the database keeps as a tree (`the-database.md`). How the conversation shows it is not designed.
 - **The approved assets enter the repository when the frontend is built**: Tabler Icons whole; Font Awesome's Nextcloud icon cropped to the mark by its frame, with a comment beside Font Awesome's saying so and an entry in `SOURCES.md`; and Source Serif Pro Bold Italic unmodified, whose file needs a source of its own through the reading log.
 - **No mobile app of any kind** for now (`product-brief.md`).
+- **The scheduled refresh**: a job cron runs every 30 minutes, checking every connection through `refresh_targets()` and `refresh_record_check()`, which exist; and a button on the admin panel's *Connections* tab that refreshes every connection at once. The manual gives the cron line when the job exists (`the-interface.md`, `the-database.md`, 2026-10-12).
 
 ## Raised by the agent, and not taken up
 

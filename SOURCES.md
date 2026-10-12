@@ -41,6 +41,16 @@ Each entry says what the source is, its license if it is software, and what was 
 - **PyYAML** 6.0.3, MIT license (as its package metadata states), [pyyaml.org](https://pyyaml.org/): reads `config/config.yml`. Approved by Z on 2026-10-11, installed into `.venv` from `install/requirements.txt`.
 - **ShellCheck** 0.11.0, GNU General Public License version 3 (as `shellcheck --version` states), [shellcheck.net](https://www.shellcheck.net): lints the shell scripts in `install/`; a development tool, not part of what AIconman runs. It is installed as the binary inside **shellcheck-py** 0.11.0.1, MIT license (as its package metadata states), [github.com/ryanrhee/shellcheck-py](https://github.com/ryanrhee/shellcheck-py). Approved by Z on 2026-10-12, installed into `dev/.venv` from `dev/requirements.txt`.
 
+Added on 2026-10-12 for the backend, at Z's word and for Z's review, and installed into `.venv` from `install/requirements.txt`. Each license is as the package's own metadata states it, and each address is the one that metadata gives.
+
+- **FastAPI** 0.143.0, MIT license, [github.com/fastapi/fastapi](https://github.com/fastapi/fastapi): the web framework. Approved by Z on 2026-10-11.
+- **Uvicorn** 0.54.0, BSD-3-Clause, [uvicorn.dev](https://uvicorn.dev/): the server that runs it.
+- **python-multipart** 0.0.32, Apache-2.0, [github.com/Kludex/python-multipart](https://github.com/Kludex/python-multipart): form fields and uploaded files, for FastAPI.
+- **HTTPX** 0.28.1, BSD license, [python-httpx.org](https://www.python-httpx.org): requests to the model servers.
+- **psycopg** 3.3.6, with **psycopg-binary** 3.3.6, LGPL-3.0-only, [psycopg.org](https://psycopg.org/): PostgreSQL.
+- **cryptography** 50.0.2, Apache-2.0 OR BSD-3-Clause, [cryptography.io](https://cryptography.io/): encrypts the connections' keys.
+- **What they bring with them:** annotated-doc 0.0.5, annotated-types 0.8.0, anyio 4.15.1, cffi 2.1.1 (MIT-0), h11 0.16.0, pydantic 2.14.1, pydantic_core 2.50.1 and typing-inspection 0.4.4, MIT; click 8.5.0, httpcore 1.0.9, idna 3.20, pycparser 3.11 and starlette 1.7.0, BSD-3-Clause; certifi 2026.7.22, MPL-2.0; typing_extensions 4.16.0, PSF-2.0; and opentelemetry-api 1.45.1, Apache-2.0, [github.com/open-telemetry/opentelemetry-python](https://github.com/open-telemetry/opentelemetry-python/tree/main/opentelemetry-api), which FastAPI requires.
+
 ## The browser
 
 - **MDN Web Docs:** *Features restricted to secure contexts* and *Secure contexts*, both now under [developer.mozilla.org/en-US/docs/Web/Security/Defenses/Secure_Contexts](https://developer.mozilla.org/en-US/docs/Web/Security/Defenses/Secure_Contexts), and [*Making PWAs installable*](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Making_PWAs_installable), read 2026-10-11 under `dev/READING-LOG.md`, R-008. What was learned: that the microphone and service workers need a secure context, what counts as one, and what a browser needs before it offers to install a web app.

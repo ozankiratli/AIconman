@@ -31,12 +31,18 @@ $$;
 DO $$
 DECLARE
   v_expected text[] := ARRAY[
+    -- accounts
     'admin_accounts', 'admin_create_account', 'admin_delete_account', 'admin_make_admin',
     'admin_reset_password', 'admin_set_active', 'admin_set_setting', 'admin_settings',
     'delete_own_account', 'give_up_admin', 'link_identity', 'password_salt', 'session_check',
     'set_display_name', 'set_password', 'set_theme', 'set_username', 'sign_in_identity',
     'sign_in_password', 'sign_out', 'sign_out_others', 'sign_up_identity', 'sign_up_open',
-    'sign_up_password', 'unlink_identity'];
+    'sign_up_password', 'unlink_identity',
+    -- connections
+    'admin_connection_access', 'admin_connections', 'admin_create_connection',
+    'admin_delete_connection', 'admin_models', 'admin_record_check', 'admin_set_connection_key',
+    'admin_set_model', 'admin_update_connection', 'model_access', 'models',
+    'refresh_record_check', 'refresh_targets'];
   v_granted text[];
 BEGIN
   SELECT coalesce(array_agg(p.proname::text), '{}') INTO v_granted

@@ -176,3 +176,36 @@ Z: *"OK! Go ahead."* Built: `db/accounts.sql`, included by `db/build_schema.sql`
 **What the tests found.** An empty username was refused as `display_name_invalid`: the display name defaults to the username, and PostgreSQL checks constraints in alphabetical order, so the display name's check came first. The username's rule is now one function, used by the table's constraint and checked first when an account is made. And the listing's order was tested wrongly: inside one transaction every account is made at the same moment, so the test now sets an earlier time on one account.
 
 **Not checked:** two sign-ups at once on an empty database, and two admins giving up the role at once. The functions lock for both, but the tests run in one session and cannot show it. And PostgreSQL 16, as above.
+
+## Added later on 2026-10-12, against `b2b18b1`: the third stage, connections and models
+
+Z committed the accounts stage as `b2b18b1`: *"Looks good so far. Committed. Connections and models next."* Built: `db/connections.sql`, included by `db/build_schema.sql` after `db/accounts.sql`, and its tests in `tests/db/connections.sql`.
+
+**From the design:** connections belong to the household, and only an admin adds, changes, checks or removes one (`the-interface.md`); a connection is a name, a base URL, an optional key, and a protocol that is detected when left empty or chosen, OpenAI-compatible or Ollama (`the-backbone.md`); a key can be replaced and never read back in the interface; each model has what it can do, chat, images and speech, and a context window, as the server reports them and as the admin sets them, and the admin's value wins; removing a connection removes its models.
+
+**What the agent decided, for Z to keep or change:**
+
+- **A connection's name** is unique, 1 to 100 characters with no control characters, and trimmed. **Its base URL** starts with `http://` or `https://`, has no spaces, and is at most 2000 characters; it is stored as typed.
+- **The protocols are `openai` and `ollama`.** llama.cpp speaks the first. The protocol the admin chose wins over the one detected; with neither, a model cannot be used yet.
+- **The key** is stored as the bytes the backend encrypted, and comes back out only through two functions the backend calls to reach a server: `model_access`, for any signed-in account using a model, and `admin_connection_access`, for the admin's check. The admin's listing says only whether there is one. The admin can remove a key.
+- **A model the last check did not find is kept, marked not found,** with its id and the admin's values, so that it comes back as it was when a check finds it again. Members see only the models found; nothing deletes a model but removing its connection.
+- **Unknown stays unknown.** What a model can do and its window are NULL when neither the server nor the admin gave them. Whether the model picker shows a model whose chat is unknown is the interface's decision, not the database's.
+- **The window stored is whatever number the backend reports.** Which number that is for Ollama and for llama.cpp is still gaps 1 and 2 in `the-backbone.md`.
+- **A failed check records its error only,** and leaves the models and the protocol detected as they were.
+- **Only an admin's session can record a check.** Under (a), every function acts for a person, so the backend cannot refresh the model lists on its own, at startup or on a timer, without an admin signed in.
+
+**Raised for the backend:** the Python standard library has no cipher, so encrypting the keys will take a library Z approves by name.
+
+**How it was checked.** `tests/db/connections.sql` has 57 checks: the admin adds a connection and members cannot; each refusal of a name, a URL, a protocol and a key; a check records the protocol, the result and the models; members see the models with what each can do; the admin's values win and both are kept; a model the next check does not find disappears for members and comes back with its id and the admin's values; a failed check changes only the error; nine malformed checks are refused and change nothing; `model_access` gives what the backend needs, takes the chosen protocol over the detected one, and refuses a model not found, an unknown one, and one with no protocol; keys are replaced and removed; and removing a connection removes its models. `tests/db/app_role.sql` now expects 36 functions. Three copies of the schema with a rule broken each fail the check for that rule: models not found shown to members, the server's window winning over the admin's, and a member recording a check. Every check passed on the first run.
+
+## Added later on 2026-10-12, against `b2b18b1`: the scheduled refresh, and the backend's libraries
+
+**The refresh.** Z, on the consequence of (a) above: *"Let's set up a cronjob (every 30 mins), and put a button on the admin panel for faster refresh."* (`the-interface.md`). The job runs with no session, so the database gained the only two functions of the connections that act for no one: `refresh_targets()`, every connection with its base URL, protocols and key, still encrypted; and `refresh_record_check()`, which records a check exactly as the admin's does. Both now go through one helper, `_record_check`. The job itself and the admin's button wait for the backend. A broken backend could now record checks and read every connection's encrypted key without a session; it could already read keys through `model_access` with any member's session, and they are useless without `connections.encryption_key`, which the backend holds anyway.
+
+**Checked:** five more checks in `tests/db/connections.sql`, 62 in all, and `tests/db/app_role.sql` now expects 38 functions; 176 checks pass. A copy whose `refresh_targets` gives no key fails the check for it.
+
+**The libraries.** Z: *"Add libraries that are needed to requirements.txt I will review and raise questions if I have them. This should not be a blocker for the work."* The agent added the backend's: FastAPI, approved on 2026-10-11; Uvicorn, to run it; python-multipart, which FastAPI needs for form fields and uploaded files, the audio and images among them; HTTPX, for the requests to the model servers; psycopg, for PostgreSQL; and cryptography, for the connections' keys. Each was pinned to its newest version on the day, and `install/requirements.txt` pins every package they bring with them too, so that an installation gets exactly the versions tested. A fresh environment built from the file matched `.venv` package for package, and every one imports. The licenses, from each package's own metadata, are in `SOURCES.md`; none conflicts with GPL-3.0, as the agent reads them, psycopg's LGPL-3.0 and certifi's MPL-2.0 included.
+
+**Raised for Z's review:** FastAPI 0.143.0 requires `opentelemetry-api`, a library for recording telemetry. From the agent's knowledge, not from a read, the API package alone records and sends nothing unless an OpenTelemetry SDK and an exporter are installed and set up, and neither is. Confirming that would be a read for the reading log.
+
+**A slip.** The agent rewrote `install/requirements.txt` whole with the Write tool instead of changing it with Edit.
