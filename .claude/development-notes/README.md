@@ -51,4 +51,5 @@ One file per subject, not per source file: the reasoning crosses file boundaries
 | `the-interface.md` | the second part of the design: the screens, the layout, what holds across them, the defaults Z accepted, the high-contrast themes, and what the accounts change |
 | `the-palette.md` | the third part of the design: how the four themes are derived from Z's colors, the first proposal, Z's changes, the values, and what was measured for Z to decide |
 | `the-database.md` | the fourth part of the design: what the database holds and the rules it enforces, Z's answers, what was read of Z's other project's accounts schema, and the draft |
+| `the-backend.md` | the fifth part: the backend, how it is built and tested, and what Z decided for it |
 | `platform-traps.md` | **kept current**: the shell and tooling traps that produced a wrong result once |

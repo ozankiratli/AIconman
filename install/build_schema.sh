@@ -46,7 +46,6 @@ done
 read_settings db_host=db.host db_port=db.port db_name=db.dbname \
   admin_user=db.adminuser app_user=db.user admin_password=db.adminpw \
   storage_root=storage.root_path allow_auto_signup=auth.allow_auto_signup
-[[ -n $admin_password ]] || fill_from_env admin_password=AICONMAN_DB_ADMINPW
 require \
   "db_host=db.host in $config" \
   "db_port=db.port in $config" \

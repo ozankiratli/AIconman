@@ -65,6 +65,8 @@ Run it once for each of these in `config/.env`, and paste each result after the 
 - `AICONMAN_STATE_SECRET`, which signs the cookies used while someone signs in;
 - `AICONMAN_CONNECTION_KEY`, which encrypts your model connections' keys.
 
+`config/.env` takes one `KEY=value` per line, with no spaces around the `=`. Quotes around a value are removed, and nothing else in the file is interpreted; lines starting with `#` are comments.
+
 `AICONMAN_NEXTCLOUD_CLIENT_ID` and `AICONMAN_NEXTCLOUD_CLIENT_SECRET` stay empty until you set up Nextcloud sign-in; Nextcloud gives you both. In production, the same four secrets go in `config/config.yml` instead, as `db.password`, `db.adminpw`, `auth.state_secret` and `connections.encryption_key`, and Nextcloud's two as `nextcloud.client_id` and `nextcloud.client_secret`.
 
 Never use the same secret twice, and never paste one anywhere but its file.

@@ -19,7 +19,6 @@ set -uo pipefail
 read_settings db_host=db.host db_port=db.port db_name=db.dbname \
   admin_user=db.adminuser app_user=db.user \
   admin_password=db.adminpw app_password=db.password
-fill_from_env admin_password=AICONMAN_DB_ADMINPW app_password=AICONMAN_DB_PASSWORD
 
 # as ROLE ARGS...: runs psql on the database as the owner or the app role.
 as() {

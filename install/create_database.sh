@@ -19,9 +19,6 @@ set -euo pipefail
 
 read_settings db_name=db.dbname admin_user=db.adminuser app_user=db.user \
   admin_password=db.adminpw app_password=db.password
-if [[ -z $admin_password || -z $app_password ]]; then
-  fill_from_env admin_password=AICONMAN_DB_ADMINPW app_password=AICONMAN_DB_PASSWORD
-fi
 require \
   "db_name=db.dbname in $config" \
   "admin_user=db.adminuser in $config" \

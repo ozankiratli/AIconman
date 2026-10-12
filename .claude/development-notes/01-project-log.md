@@ -92,3 +92,7 @@ Rows `0001` to `0016` were written on 2026-10-11, after the fact, from `git log`
 | 004A | 2026-10-12 | 13:50 EDT | 3d1cca2 | Z: commits the connections schema, the refresh functions and the backend's libraries ("connections tables, virtual environment packages") | |
 | 004B | 2026-10-12 | 13:54 EDT | 3d1cca2 | Agent: adds the conversations part of the schema, `db/conversations.sql`; fixes its model-name check before the first run | |
 | 004C | 2026-10-12 | 13:56 EDT | 3d1cca2 | Agent: adds `tests/db/conversations.sql`; runs the schema tests, and four copies with a rule broken, one rerun after its change did not land | |
+| 004D | 2026-10-12 | 14:18 EDT | bd9f11a | Z: commits the conversations schema ("conversations tables done, initial database stage complete") | |
+| 004E | 2026-10-12 | 14:21 EDT | bd9f11a | Agent: adds `aiconman/config.py`, the configuration's only reader, and makes `install/common.sh` read through it | |
+| 004F | 2026-10-12 | 14:22 EDT | bd9f11a | Agent: adds `aiconman/db.py` and `aiconman/app.py`, with the health check; checks FastAPI's documentation pages' outside sources in-process | |
+| 0050 | 2026-10-12 | 14:23 EDT | bd9f11a | Agent: adds `tests/backend/`; runs it, the install and schema tests, and two copies with a rule broken | |

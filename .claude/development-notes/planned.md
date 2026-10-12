@@ -11,11 +11,12 @@ Nothing here is a commitment to build. Each item is what Z decided, with the not
 - **The design is done**: the backbone, the interface and the palette (`the-backbone.md`, `the-interface.md`, `the-palette.md`). Z committed it as *"Design is done"* (`85b56d4`).
 - **The database is built**, in four stages (`the-database.md`, 2026-10-12): the rebuild, accounts, connections and models, and conversations, messages and files. Both databases exist: `aicm_db`, Z's, and `aicm_scratch_db`, the agent's for tests, configured in `.tmp/scratch/config/`.
 - **What exists**: `config.yml.template` and `.env.template` at the root; `config/config.yml` and `config/.env`, Z's, which the agent does not open; `install/common.sh`, shared by the install scripts; `install/create_database.sh`, which runs `db/create_database.sql`; `install/build_schema.sh`, which rebuilds the schema from `db/build_schema.sql` after a dump, and seeds it from `db/seed.sql`; the schema's three parts, `db/accounts.sql`, `db/connections.sql` and `db/conversations.sql`; `tests/install/`, the tests of both scripts, and `tests/db/`, the schema's; `.venv`, with PyYAML and the backend's libraries, from `install/requirements.txt`; `dev/.venv`, with ShellCheck, from `dev/requirements.txt`; `docs/manual.md`, covering setup so far; and `dev/palette/`, the palette's scripts.
-- **Nothing of the application is built** beyond that: no backend, no frontend. Building goes only as far as Z names (`CLAUDE.md`, and the agent's memory).
+- **The backend's groundwork is built** (`the-backend.md`): `aiconman/`, with the configuration's only reader, the database access, refusals as HTTP answers and a health check; and `tests/backend/`.
+- **Nothing else of the application is built**: no endpoints beyond the health check, no frontend. Building goes only as far as Z names (`CLAUDE.md`, and the agent's memory).
 
 ## Next, on Z's word
 
-1. **The backend**, on FastAPI. Its libraries are in `install/requirements.txt` and `.venv`, added at Z's word and under Z's review (`SOURCES.md`, `the-database.md`, 2026-10-12).
+1. **The rest of the backend**, on FastAPI, in stages the agent proposed to Z on 2026-10-12, with the order of accounts to settle. Its libraries are in `install/requirements.txt` and `.venv`, added at Z's word and under Z's review (`SOURCES.md`, `the-database.md`, 2026-10-12).
 
 ## Deferred by Z to the polishing
 

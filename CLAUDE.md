@@ -138,7 +138,7 @@ Before calling a file done, grep for `on purpose | deliberately | rather than | 
 
 ## How to know a change works
 
-- **The tests are in `tests/`**: `tests/install/` for the install scripts, and `tests/db/` for the schema, in plain SQL (Z, 2026-10-12). `tests/install/test_create_database.sh` needs no database; `tests/install/test_build_schema.sh` and `tests/db/run.sh` run against the scratch database, with `AICONMAN_CONFIG_DIR=.tmp/scratch/config`, and refuse to run without it.
+- **The tests are in `tests/`**: `tests/install/` for the install scripts, and `tests/db/` for the schema, in plain SQL (Z, 2026-10-12). `tests/install/test_create_database.sh` needs no database; `tests/install/test_build_schema.sh` and `tests/db/run.sh` run against the scratch database, with `AICONMAN_CONFIG_DIR=.tmp/scratch/config`, and refuse to run without it. The backend's tests are in `tests/backend/`, run with `.venv/bin/python -m unittest discover -s tests/backend` from the repository's root; `test_app.py` needs the scratch database the same way, and starts no server.
 - **Render it, don't read it.** Reasoning about what code produces has repeatedly produced confident wrong answers.
 - **Name the suite that would fail if the change were wrong, and run that one.** If there is none, that is the finding. If there is one and it cannot run, say so out loud rather than reporting the rest as green.
 - **A check that cannot fail is not a check.** When a check passes, ask what it would have taken for it to fail.
