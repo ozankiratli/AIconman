@@ -45,7 +45,7 @@ The reason is responsible use of AI agents: there is already a lot of backlash a
 
 None of what follows is relaxed for convenience, for speed, or because a fact seems small.
 
-- **No code from another person's project goes into AIconman**, whether copied, adapted or translated into another language. A library Z has approved by name, carried whole under its own license and credited, is the only exception. Approved so far: FastAPI, as the backend framework (Z, 2026-10-11, with the defaults in `product-brief.md`); Tabler Icons, MIT license, for the icons (Z, 2026-10-11); and Source Serif Pro, SIL Open Font License 1.1, for the title, shipped unmodified (Z, 2026-10-11); and Font Awesome Free's Nextcloud icon, CC BY 4.0, for the *Sign in with Nextcloud* button, cropped to the mark by its frame alone, which its license allows with the attribution kept and the change stated (Z, 2026-10-11). The icon is one file adapted rather than a library carried whole, and is listed here because Z decided it. The last three are in `the-interface.md`.
+- **No code from another person's project goes into AIconman**, whether copied, adapted or translated into another language. A library Z has approved by name, carried whole under its own license and credited, is the only exception. Approved so far: FastAPI, as the backend framework (Z, 2026-10-11, with the defaults in `product-brief.md`); Tabler Icons, MIT license, for the icons (Z, 2026-10-11); and Source Serif Pro, SIL Open Font License 1.1, for the title, shipped unmodified (Z, 2026-10-11); and Font Awesome Free's Nextcloud icon, CC BY 4.0, for the *Sign in with Nextcloud* button, cropped to the mark by its frame alone, which its license allows with the attribution kept and the change stated (Z, 2026-10-11). The icon is one file adapted rather than a library carried whole, and is listed here because Z decided it. The last three are in `the-interface.md`. And PyYAML, MIT license, for reading `config/config.yml` (Z, 2026-10-11). And ShellCheck, GPL-3.0, as a development tool that lints the shell scripts, installed through the `shellcheck-py` package, MIT license, which carries its binary (Z, 2026-10-12). Python packages AIconman needs are installed into `.venv` from `install/requirements.txt`, and development tools into `dev/.venv` from `dev/requirements.txt` (Z, 2026-10-12), each pinned to the version tested.
 - **Reading another person's code is always harnessed: named, recorded, cleared and done, in that order.** This covers any file of their source: a clone, a web page that shows the code, a search result that quotes it. It binds any agent the agent starts.
   1. *Name*: the task the read serves, the source (its file or section, at a commit or a URL), and the facts it is for.
   2. *Record*: an entry in `dev/READING-LOG.md`, written before anything is opened.
@@ -53,13 +53,14 @@ None of what follows is relaxed for convenience, for speed, or because a fact se
   4. *Do*: read only what was cleared, for the facts named, then add to the entry what was found.
 - **Only facts come out of it**, never the design and never the decisions.
 - **No other project is an authority on AIconman.** How AIconman behaves is Z's decision. That another project does something differently is not an argument, and its way of doing it is not a default.
-- **A published specification is the source wherever one exists**: the OpenAI API reference for the protocol most servers speak, and each server's own API documentation. Documentation a project publishes for its users is read without a log entry; the harness is for code. It is still listed in `SOURCES.md`, with what was learned from it.
+- **A published specification is the source wherever one exists**: the OpenAI API reference for the protocol most servers speak, and each server's own API documentation. Documentation a project publishes for its users goes through the reading log too: the agent proposes the read as an entry in `dev/READING-LOG.md`, and Z decides (Z, 2026-10-11: *"Create reading log for me to edit and clear."*; 2026-10-12: *"You can always propose the reads there and I can decide."*). It is listed in `SOURCES.md`, with what was learned from it.
 - **A gap goes to Z, not to the nearest source.** When the sources already cleared leave a fact open, the agent stops and names the gap. Z decides where the fact comes from, or that it is left out.
 - **Facts cross over in writing.** A fact from another person's code is written into a note under `dev/facts/` first: what it is, where it sits, in what order and in what units. The note cites its log entry and quotes no code. Code is then written from that note, in a new session whose context has never held the other implementation. A compacted session is not a new one.
 - **Every source is listed in `SOURCES.md`**, with what was learned from it.
 - **A project with no license is read for facts only**, and none of its text is reproduced.
 - **A slip is stopped and recorded.** A slip is a read that skipped a step or went beyond what was cleared. The agent stops, tells Z exactly what was read, and records it in the log. Nothing learned from it is used until Z has ruled on it.
 - **Z's own work is outside this rule.** Z's other projects, and the files Z brings into this repository, are Z's to reuse here. Reading one of Z's other projects still waits for Z to ask for it or agree, as any action does under *Ask before acting*.
+- **AIconman reads as its own project, so Z's other projects are not named in it**, outside `.claude/development-notes/00-initialization-of-the-project.md` and the project log's row of the read it records. When a quotation of Z names one, the name is replaced in the quotation by a bracketed description, such as *[Z's other project]*. Before handing over a note, search it for the names.
 
 ### Ask before acting
 
@@ -70,6 +71,8 @@ The rule is about control over Z's machines and Z's time, not about danger, so "
 - **Never terminate a process that was not started in this session.** No `pkill` or `pgrep` by name: both match across the whole machine. Record the PID when starting something, and stop only that PID.
 - **Never SSH to a host without permission.**
 - **Never drive the instance Z is working in.** Verification gets its own server on its own port.
+- **This project's ports on Z's machine** (Z, 2026-10-11): 8642 is AIconman itself, and 8643 serves the manual's website while it is written. Z develops many projects on this machine, so no other port is used without asking.
+- **This project's databases on Z's machine** (Z, 2026-10-11), in the PostgreSQL that runs here: `aicm_db` is Z's, and the agent runs nothing destructive against it, and nothing else without asking; `aicm_scratch_db` is where the agent tests, and may be destroyed and rebuilt. The scratch database has roles of its own, `aicm_scratch_db_admin` and `aicm_scratch_db_app`, and its configuration is in `.tmp/scratch/config/`, which is treated like `config/` (Z, 2026-10-12).
 - **Confirm before anything destructive or outward-facing**: a wipe, a deploy, a restart of a live service, a push.
 
 ### What stays out of the agent's context and the repository
@@ -77,6 +80,7 @@ The rule is about control over Z's machines and Z's time, not about danger, so "
 **The agent's context is not local.** Reading a file sends its contents to Anthropic's servers, and the repository is public.
 
 - **No real secret is read into the conversation**: an API key, a token, a password, or the configuration file that holds one. Development and checks use keys made up for the purpose. A check that needs a real key is run by Z.
+- **`config/.env` and `config/config.yml` hold real secrets.** No value in them ever reaches the conversation: never print, show or quote them, and never open them with `Read`. A script may look inside only to report what reveals no value -- which keys are present, whether a value is empty, how long it is. A secret the agent makes is written straight into its file by a command that does not print it. Z may have either file open; change it by adding to it, never by regenerating it, unless Z agrees.
 - **Z's network stays out of the repository**: host names, addresses, domain names, firewall rules, and which machine runs what. Not in code, documentation, notes, commit messages or screenshots. Examples use placeholders. `.tmp/` is ignored by git and holds Z's private material; nothing from it is copied into a tracked file without Z's approval of that item.
 - **What anyone says to their models stays theirs.** No conversation with a real model, Z's included, goes into the repository, a note or a screenshot unless Z approves that item by name.
 
@@ -110,10 +114,12 @@ Before calling a file done, grep for `on purpose | deliberately | rather than | 
 | Where | What |
 |---|---|
 | the source | what the code below does, what it returns, a coupling or constraint invisible from here |
-| the user documentation | what a person setting up or using AIconman needs. It is authoritative, and nothing in it is repeated in the source. Where it lives is decided with the design. |
+| the user documentation | what a person setting up or using AIconman needs. It is authoritative, and nothing in it is repeated in the source. It is the manual, `docs/manual.md`, which the README points to and a website is later built from. |
 | `.claude/development-notes/` | how it got here: design churn, alternatives dropped, measurements, who decided what and when |
 
 **No source file references the notes.** A note is dated and not updated to follow the code, so a pointer to one imports a description of the code as it used to be.
+
+**The templates are not source.** `config.yml.template` and `.env.template` are copied and filled in by the person setting AIconman up, and their comments are the only help at the point of use, so the comment rule does not apply to them. Do not cut them without asking.
 
 **Mid-feature is not the deadline, but the feature has one.** A comment may carry more than the code needs while a stage is open; every stage ends with a pass over the comments it added. Put that pass in the stage's checklist when the stage starts, or it is the thing that gets skipped.
 

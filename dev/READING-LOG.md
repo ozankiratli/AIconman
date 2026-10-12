@@ -1,6 +1,6 @@
 # Reading log
 
-Every read of another person's code is made the same way: named, recorded, cleared and done, in that order. The rule, and what it covers, are in `CLAUDE.md` under *Other people's code*.
+Every read of another person's code, or of documentation published outside the project, is made the same way: named, recorded, cleared and done, in that order. The rule, and what it covers, are in `CLAUDE.md` under *Other people's code*.
 
 This file is where the second and third steps happen:
 - An entry is written **before** anything in it is opened.
@@ -242,5 +242,22 @@ These four entries share a task and a method, given once here; each entry names 
 - **Facts sought:** which logo files the section offers, the mark alone among them, and any terms it attaches to them.
 - **Method:** a file fetched is used only to draw the account screens in the agent's scratchpad, and is not copied into the repository.
 - **Not read:** the rest of the press page.
-- **Cleared:**
+- **Cleared:** Not cleared. Not necessary.
 - **Done:**
+
+## R-017: Nextcloud's OAuth2 addresses, and `/index.php/`
+
+- **Named:** 2026-10-12
+- **Task:** the default sign-in addresses in `config.yml.template`, which are made from `nextcloud.instance_address`. Do the authorize and token paths need `/index.php/` in front of `/apps/oauth2/...` to work on every Nextcloud, or only on one whose web server does not rewrite addresses? The paths in the template came from Z's other project, where they work against Z's Nextcloud. The agent's belief that `/index.php/` matters is from memory, not from a read.
+- **Source:** Nextcloud's administration manual, as it reads on the day of the read: the OAuth2 page, https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/oauth2.html, and the section on pretty URLs, https://docs.nextcloud.com/server/latest/admin_manual/installation/source_installation.html#pretty-urls. If either has moved, the new address is reported to Z before anything is read.
+- **Facts sought:** the authorize and token addresses as the OAuth2 page gives them; whether an address without `/index.php/` works only where pretty URLs are set up; and whether an address with it works either way.
+- **Not read:** the rest of the manual; Nextcloud's source code; anything on the profile address, `/ocs/v2.php/cloud/user`, which has its own entry point and waits until Nextcloud sign-in is built.
+- **Cleared:** 2026-10-12
+- **Done:** 2026-10-12.
+  - **What was read:** both addresses answered HTTP 200 to a request for their headers, so neither had moved. Both pages were fetched and turned into text. The OAuth2 page was read whole; its title names the *Nextcloud 36 Administration Manual*. Of the installation page, its headings were listed to find the section, and only *Pretty URLs* was read.
+  - **What was found:**
+    - **The addresses:** the OAuth2 page gives *"Authorization endpoint: https://cloud.example.org/apps/oauth2/authorize"* and *"Token endpoint: https://cloud.example.org/apps/oauth2/api/v1/token"*, without `/index.php/`, and then: *"Note that you must include index.php if pretty URL is not configured - i.e. https://cloud.example.org/index.php/apps/oauth2/api/v1/token."* The agent had remembered the page as giving the addresses with `/index.php/`; it gives them without, and the note covers the other case.
+    - **Pretty URLs:** *"Pretty URLs remove the index.php-part in all Nextcloud URLs"*. They need the web server's `mod_env` and `mod_rewrite`, two settings in Nextcloud's `config.php` (`overwrite.cli.url` and `htaccess.RewriteBase`), and an `occ` command that updates `.htaccess`.
+    - **Left open:** neither section says whether an address with `/index.php/` still works where pretty URLs are configured. The third fact sought is not in what was cleared. It goes to Z.
+    - **Also on the OAuth2 page**, for when Nextcloud sign-in is built: *"Nextcloud supports only confidential clients."* A token *"has full access to the complete account including read and write permission to the stored files"*, since scopes are not supported, and the page says: *"Without scopes and restrictable access it is not recommended to use a Nextcloud instance as a user authentication service."* Apache strips the `Authorization` header by default, so a Nextcloud behind Apache needs `mod_headers`, `mod_rewrite` and `mod_env` for a bearer token to reach it. And a trusted application can skip the confirmation shown before login, through `occ config:app:set oauth2 skipAuthPickerApplications`.
+  - **Where it went:** this entry and `SOURCES.md`. The template's default addresses are unchanged until Z decides.

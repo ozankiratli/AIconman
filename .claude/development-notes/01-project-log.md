@@ -7,7 +7,7 @@ Z, 2026-10-11: *"Let's add also a 01-project-log.md. to log whole development. A
 The log records actions, in the order they happened, so that an agent months later can recover the important steps that were taken: something built or changed, a read, a check, a commit, a correction, a revert. It does not record conversation. What Z says does not get a row, and neither does writing what was said or decided into the notes, which are its record. Z, 2026-10-11: *"Not everything I say needs to go into the log [...] Log should demonstrate only actions. So a few months in the future another agent cen recover important steps that were taken."* A row is one task, not each step of it, and says what was done, not what came of it. Z, 2026-10-11, collapsing five rows about the first reads into one: *"Results are not important here."* The results and the reasons are in the other notes, `dev/READING-LOG.md` and the commit messages.
 
 - **No** is four hexadecimal digits, uppercase, from `0001`, and is never reused. Z: *"No field should be 5 digits numeric or 4 digits hexadecimal value (I'm leaning on hexadecimal) from 00001 or 0001."*
-- **Date** and **Time** are Z's local time when the action was taken, with the zone.
+- **Date** and **Time** are Z's local time when the action was taken, with the zone. They are taken from `git log` or the agent's session record, never written from memory: twice on 2026-10-11 a time written from memory was wrong.
 - **Tree hash** is the commit the working tree stood at when the action was taken. A commit's own row carries the commit it made. Commits are Z's, and they mark the points where Z decides a task is complete, so many rows share one hash. Z, 2026-10-11: *"Commits do not align with every step. They only occur at the times when I decide we completed a task that needs committing. That's one reason I make the commits."*
 - **Action** starts with who took it: Z or Agent.
 - **Notes** is empty when a row is written, and it is the only cell that changes afterwards. Z: *"Notes can be filled later if we discover something was incorrect, we revert an action, decision etc."* A note names the row that corrected or reverted the action. Once a row is committed, no other cell is rewritten and the row is not removed.
@@ -53,3 +53,24 @@ Rows `0001` to `0016` were written on 2026-10-11, after the fact, from `git log`
 | 0023 | 2026-10-11 | 18:00 EDT | 440ca41 | Agent: performs R-013 | |
 | 0024 | 2026-10-11 | 18:32 EDT | 440ca41 | Agent: performs R-014 and R-015 | |
 | 0025 | 2026-10-11 | 18:57 EDT | 440ca41 | Agent: adds the disabled-control colors to `dev/palette/` | |
+| 0026 | 2026-10-11 | 19:10 EDT | 85b56d4 | Z: commits the finished design ("Design is done") | |
+| 0027 | 2026-10-11 | 19:24 EDT | 85b56d4 | Agent: reads the accounts notebook of Z's accounts project, scoped, at Z's go-ahead | |
+| 0028 | 2026-10-11 | 19:39 EDT | 85b56d4 | Agent: reads the account table, roles, settings and admin functions of Z's accounts project's schema, scoped, at Z's go-ahead | |
+| 0029 | 2026-10-11 | 20:25 EDT | 85b56d4 | Agent: adds `config.yml.template`, `.env.template` and `db/create_database.sql`; ignores `config/`; generates the development `.env`, its passwords unprinted | 2026-10-12: the empty-password guard in `db/create_database.sql` stopped Z's first run with the message for an empty `AICONMAN_DB_ADMINPW`, which Z had set. The script had not been run before it was handed over. The check moved into `install/create_database.sh` in 0033. |
+| 002A | 2026-10-11 | 20:26 EDT | 85b56d4 | Agent: starts `docs/manual.md`; points the README to it; adds the manual, template and secrets rules to `CLAUDE.md` | |
+| 002B | 2026-10-11 | 20:55 EDT | 85b56d4 | Agent: reads the destructive-rebuild parts of Z's accounts project's schema builder, at Z's pointer | |
+| 002C | 2026-10-11 | 20:56 EDT | 85b56d4 | Agent: moves every development secret into `.env` and regenerates it, unprinted; sets the port to 8642; records the ports and databases in `CLAUDE.md` | |
+| 002D | 2026-10-11 | 22:33 EDT | 85b56d4 | Agent: applies the merged configuration shape to `config.yml.template`, `.env.template` and `db/create_database.sql`; regenerates `.env`, unprinted; rewrites the manual's setup | |
+| 002E | 2026-10-11 | 22:33 EDT | 85b56d4 | Agent: creates `.venv` with Python 3.14.7 and installs PyYAML 6.0.3; adds `install/requirements.txt` | |
+| 002F | 2026-10-11 | 22:59 EDT | 85b56d4 | Agent: renames the default database and roles to `aicm_db`, `aicm_db_admin`, `aicm_db_app`; moves `auth` above `nextcloud`; moves `.env` to `config/.env` and regenerates it, unprinted; reorders the manual's setup | |
+| 0030 | 2026-10-12 | 08:32 EDT | 85b56d4 | Agent: adds the Nextcloud client id to `config/.env`, appended unprinted, and to the templates and the manual | |
+| 0031 | 2026-10-12 | 09:10 EDT | 85b56d4 | Agent: comments out the three Nextcloud sign-in addresses in `config.yml.template`; corrects which address `instance_address` is; updates the manual | |
+| 0032 | 2026-10-12 | 10:07 EDT | 85b56d4 | Agent: makes `redirect_uri` follow `server.public_url`, commented out in `config.yml.template`; updates the manual | |
+| 0033 | 2026-10-12 | 10:08 EDT | 85b56d4 | Agent: adds `install/create_database.sh`; takes the password check and the default names out of `db/create_database.sql`; checks the script against a stand-in `psql`; rewrites the manual's database step | |
+| 0034 | 2026-10-12 | 10:10 EDT | 85b56d4 | Agent: installs ShellCheck into `.venv` through `shellcheck-py` 0.11.0.1, pinned in `install/requirements.txt`; lints `install/create_database.sh`, clean | Moved to `dev/.venv` and `dev/requirements.txt` in 003A, at Z's word. |
+| 0035 | 2026-10-12 | 10:31 EDT | 85b56d4 | Agent: makes `install/create_database.sh` name the user who cannot read `config/config.yml`, after it reported the file missing on Z's run | |
+| 0036 | 2026-10-12 | 10:32 EDT | 85b56d4 | Agent: writes R-017; brings `CLAUDE.md` and the reading log's header in line with documentation reads going through the log | |
+| 0037 | 2026-10-12 | 10:47 EDT | 85b56d4 | Z: clears R-017; creates `aicm_db`; prepares `.tmp/scratch` for the scratch database (time of Z's message) | |
+| 0038 | 2026-10-12 | 10:48 EDT | 85b56d4 | Agent: performs R-017 | |
+| 0039 | 2026-10-12 | 11:24 EDT | 85b56d4 | Agent: adds the manual's note on `index.php` | |
+| 003A | 2026-10-12 | 11:24 EDT | 85b56d4 | Agent: adds `dev/requirements.txt` and creates `dev/.venv` with ShellCheck; removes ShellCheck from `.venv` and `install/requirements.txt`; lints `install/create_database.sh`, clean | |

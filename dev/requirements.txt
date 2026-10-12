@@ -1,0 +1,9 @@
+# The tools used to develop AIconman, each approved by name and pinned to the
+# version tested. AIconman itself does not need them. Install them into their
+# own virtual environment:
+#
+#   python3 -m venv dev/.venv
+#   dev/.venv/bin/pip install -r dev/requirements.txt
+
+# ShellCheck, the shell script linter, as the shellcheck command in dev/.venv/bin.
+shellcheck-py==0.11.0.1

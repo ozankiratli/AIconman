@@ -227,3 +227,6 @@ __marimo__/
 
 # What dev/palette/ derives and renders; the scripts are tracked, their output is not
 /dev/palette/out/
+
+# The configuration, which holds secrets; config.yml.template is the tracked copy
+config/

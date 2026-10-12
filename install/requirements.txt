@@ -1,0 +1,7 @@
+# The Python packages AIconman's server needs, each approved by name and pinned
+# to the version tested. Install them into the project's virtual environment:
+#
+#   python3 -m venv .venv
+#   .venv/bin/pip install -r install/requirements.txt
+
+PyYAML==6.0.3

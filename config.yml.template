@@ -1,0 +1,77 @@
+# AIconman configuration.
+#
+# Copy this file to config/config.yml and fill it in. The config/ folder is
+# ignored by git, because what is in it holds secrets: never commit it, and never
+# paste it anywhere.
+#
+# Secrets: in production, write them here. While developing, leave every secret
+# below empty, and AIconman reads it from config/.env instead, under the name its
+# comment gives.
+#
+# The manual, docs/manual.md, explains every setting below.
+
+server:
+  # The address and port the backend listens on.
+  host: 127.0.0.1
+  port: 8642
+  # The address people type to reach AIconman, as the reverse proxy serves it.
+  public_url: https://aiconman.example.lan
+
+db:
+  host: 127.0.0.1
+  port: 5432
+  dbname: aicm_db
+  # The role that owns the schema, and builds and updates it.
+  adminuser: aicm_db_admin
+  # While developing: AICONMAN_DB_ADMINPW in config/.env.
+  adminpw: ""
+  # The role the running backend connects as.
+  user: aicm_db_app
+  # While developing: AICONMAN_DB_PASSWORD in config/.env.
+  password: ""
+
+storage:
+  # Where all files are kept.
+  root_path: /var/lib/aiconman/storage
+
+auth:
+  # The ways people can sign in. 
+  # If both are turned off, password sign-in is on by default.
+  # password sign-in can be turned off if another sign-in method is enabled.
+  password_login: true
+  nextcloud_login: false
+  # Whether people may create their own accounts. Leave this on for first user. 
+  allow_auto_signup: true
+  # Signs the short-lived cookies used while someone signs in. See also "Making a secret" in the manual.
+  # While developing: AICONMAN_STATE_SECRET in config/.env.
+  state_secret: ""
+  cookie_name: aiconman_session
+  # true when AIconman is served over HTTPS, which it should be.
+  cookie_secure: true
+  # A session ends after this many minutes without use (43200 is 30 days)...
+  idle_minutes: 43200
+  # ...and after this many hours in any case (2160 is 90 days).
+  absolute_hours: 2160
+
+nextcloud:
+  # Your Nextcloud's address, as people's browsers reach it.
+  instance_address: https://nextcloud.example.lan
+  # The three sign-in addresses below are made from instance_address. 
+  # To change one, uncomment and to set those if it reaches your Nextcloud at a different address.
+  # authorize_url: https://nextcloud.example.lan/apps/oauth2/authorize
+  # token_url: https://nextcloud.example.lan/apps/oauth2/api/v1/token
+  # profile_url: https://nextcloud.example.lan/ocs/v2.php/cloud/user?format=json
+  # Both from registering AIconman as an OAuth 2.0 client in your Nextcloud.
+  # While developing: AICONMAN_NEXTCLOUD_CLIENT_ID in config/.env.
+  client_id: ""
+  # While developing: AICONMAN_NEXTCLOUD_CLIENT_SECRET in config/.env.
+  client_secret: ""
+  # The address Nextcloud sends people back to after they sign in, made from
+  # server.public_url. Register this address for the client in Nextcloud. To
+  # change it, uncomment it; it must match the registered address exactly.
+  # redirect_uri: https://aiconman.example.lan/auth/nextcloud/callback
+
+connections:
+  # Encrypts the keys of model connections in the database. See also "Making a secret" in the manual.
+  # While developing: AICONMAN_CONNECTION_KEY in config/.env.
+  encryption_key: ""

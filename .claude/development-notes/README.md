@@ -43,10 +43,12 @@ One file per subject, not per source file: the reasoning crosses file boundaries
 | File | Subject |
 |---|---|
 | `00-initialization-of-the-project.md` | where the working rules came from: the request, what was read from Z's other projects, what came across and what was left behind, and Z's review of the first draft. The only note that names another of Z's projects |
-| `01-project-log.md` | **kept current**: one row for every action and decision, in the order it happened |
+| `01-project-log.md` | **kept current**: one row for every important step, in the order it happened |
+| `planned.md` | **kept current**: where the work stands, what is next on Z's word, what Z deferred, what is decided and not built, and what the agent raised that was not taken up |
 | `ground-rules.md` | what each ground rule in `CLAUDE.md` is for, in Z's words where there are any, and which parts were the agent's proposals |
 | `product-brief.md` | the brief as Z first gave it, what the agent raised about it, and what Z settled the same day: the defaults for the stack, speech models, the context window calculator, and the palette |
 | `the-backbone.md` | the first part of the design: what talks to what, what a connection is, how a protocol is detected and models are found, Z's answers, and the reads the rest waits on |
 | `the-interface.md` | the second part of the design: the screens, the layout, what holds across them, the defaults Z accepted, the high-contrast themes, and what the accounts change |
 | `the-palette.md` | the third part of the design: how the four themes are derived from Z's colors, the first proposal, Z's changes, the values, and what was measured for Z to decide |
+| `the-database.md` | the fourth part of the design: what the database holds and the rules it enforces, Z's answers, what was read of Z's other project's accounts schema, and the draft |
 | `platform-traps.md` | **kept current**: the shell and tooling traps that produced a wrong result once |
