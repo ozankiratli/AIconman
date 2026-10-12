@@ -4,13 +4,13 @@ AIconman, the AI Connection Manager, is a web interface for the language models 
 
 **AIconman is for a local network or a VPN, and nothing else.** Do not expose it, or the model servers it talks to, to the internet.
 
-This manual grows with AIconman. So far it covers setting up the Python environment, the configuration and the database; installing and running AIconman come when there is something to run.
+This manual grows with AIconman. So far it covers setting up the Python environment, the configuration, the database and its schema; installing and running AIconman come when there is something to run.
 
 ## What you need
 
 - **A machine on your network** to run AIconman, which can reach your model servers. The people using AIconman reach AIconman; only AIconman needs to reach the model servers.
 - **Python 3**, with its `venv` module.
-- **PostgreSQL.** The script that creates the database needs the `psql` client from PostgreSQL 15 or newer.
+- **PostgreSQL 16 or newer**, with its `psql` and `pg_dump` clients.
 - **A reverse proxy serving HTTPS**, recommended. Browsers allow the microphone only on pages served over HTTPS or from `localhost`, so without it, speaking to a model is not available; uploading a recording still works.
 
 ## Setting up
@@ -42,6 +42,7 @@ chmod 600 config/config.yml config/.env
 - `config/config.yml` holds the settings. *Configuration* below explains each one.
 - `config/.env` holds the secrets while you develop AIconman, so that `config/config.yml` holds none and can be read and shared safely. Leave the secret fields in `config/config.yml` empty, and AIconman reads each one from `config/.env`, under the name the template's comment gives.
 - **In production, write the secrets in `config/config.yml`, and do not use `config/.env`.**
+- **To keep the configuration somewhere else,** set the environment variable `AICONMAN_CONFIG_DIR` to that folder. AIconman and the scripts in `install/` then read `config.yml` and `.env` from there instead of from `config/`.
 
 ### 3. Making a secret
 
@@ -97,13 +98,32 @@ psql -h localhost -U aicm_db_app -d aicm_db -c 'SELECT current_user;'
 
 It asks for the app role's password, and answers `aicm_db_app`.
 
+### 5. The schema
+
+**Build the schema** in the new database with `install/build_schema.sh`, which connects as the owner role, to `db.host` and `db.port`:
+
+```
+install/build_schema.sh --rebuild
+```
+
+It destroys everything in the database's schema before building it again, so it never does anything without `--rebuild`, and it asks first:
+
+1. It says which database it is about to change, and how many tables it has.
+2. It dumps the whole database into the folder `db/backups/` inside `storage.root_path`, readable by you alone, and stops if the dump fails. A dump can be restored with `pg_restore`.
+3. It asks you to type the database's name, and stops unless it matches. In a script, give the name with `--confirm-db NAME` instead.
+4. It builds the schema and seeds it in one transaction, so if anything fails, the schema stays as it was.
+
+Seeding adds what an installation needs: Nextcloud as a way to sign in, and the switch for self sign-up, starting from `auth.allow_auto_signup`. To add what is missing without rebuilding, run `install/build_schema.sh --seed`; it leaves everything already there as it is, so a setting the admin has changed keeps its value.
+
+The owner's password is `db.adminpw` in `config/config.yml`, or `AICONMAN_DB_ADMINPW` in `config/.env`.
+
 ## Configuration
 
 `config/config.yml` explains each setting where it is set. In short:
 
 - **server:** the address and port the backend listens on, behind your reverse proxy (8642 by default); and `public_url`, the address people type to reach AIconman.
 - **db:** where PostgreSQL is, the database's name (`dbname`), the app role (`user`, `password`), and the owner (`adminuser`, `adminpw`). The owner is the database's owner, not an AIconman admin account.
-- **storage:** `root_path`, the folder where people's files are kept: attached images, recordings, transcripts and exports. Each account gets a folder inside it, named by the account's id. The folder must exist, and the user AIconman runs as must be able to write to it.
+- **storage:** `root_path`, the folder where people's files are kept: attached images, recordings, transcripts and exports. Each account gets a folder inside it, named by the account's id, and the dumps `install/build_schema.sh` makes go into `db/backups/` inside it. The folder must exist, and the user AIconman runs as must be able to write to it.
 - **auth:**
   - `password_login` and `nextcloud_login` turn each way of signing in on or off. If both are off, password sign-in is turned on anyway, so that nobody is locked out. With Nextcloud sign-in on, password sign-in may be turned off.
   - `allow_auto_signup` is whether people may create their own accounts. It is only the starting value: once AIconman runs, the admin changes it in Administration.

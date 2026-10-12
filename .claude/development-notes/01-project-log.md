@@ -74,3 +74,13 @@ Rows `0001` to `0016` were written on 2026-10-11, after the fact, from `git log`
 | 0038 | 2026-10-12 | 10:48 EDT | 85b56d4 | Agent: performs R-017 | |
 | 0039 | 2026-10-12 | 11:24 EDT | 85b56d4 | Agent: adds the manual's note on `index.php` | |
 | 003A | 2026-10-12 | 11:24 EDT | 85b56d4 | Agent: adds `dev/requirements.txt` and creates `dev/.venv` with ShellCheck; removes ShellCheck from `.venv` and `install/requirements.txt`; lints `install/create_database.sh`, clean | |
+| 003B | 2026-10-12 | 11:28 EDT | b5c2c93 | Z: commits the database script, the configuration, the manual and the development environment ("Database, install scripts, development venv created") | |
+| 003C | 2026-10-12 | 11:32 EDT | b5c2c93 | Z: links `.venv` into `.tmp/scratch` and creates `aicm_scratch_db` (time of Z's message) | |
+| 003D | 2026-10-12 | 11:46 EDT | b5c2c93 | Agent: adds `install/common.sh`, which reads `AICONMAN_CONFIG_DIR`, and uses it in `install/create_database.sh`; adds `tests/install/test_create_database.sh` | |
+| 003E | 2026-10-12 | 11:47 EDT | b5c2c93 | Agent: adds `install/build_schema.sh` and `db/build_schema.sql`, the empty schema; adds `tests/install/test_build_schema.sh` and runs it against `aicm_scratch_db` | |
+| 003F | 2026-10-12 | 11:50 EDT | b5c2c93 | Agent: makes each dump's name unique, after the test found a dump overwritten; runs a no-op `sed -i` on `install/build_schema.sh` | |
+| 0040 | 2026-10-12 | 11:50 EDT | b5c2c93 | Agent: adds `AICONMAN_CONFIG_DIR` to both templates; adds PostgreSQL 16, the configuration folder and the schema step to the manual | |
+| 0041 | 2026-10-12 | 12:14 EDT | b5c2c93 | Agent: adds the accounts part of the schema, `db/accounts.sql`, and `db/seed.sql`; adds `--seed` to `install/build_schema.sh` | |
+| 0042 | 2026-10-12 | 12:16 EDT | b5c2c93 | Agent: adds `tests/database.sh`, `tests/db/` and seeding cases to the rebuild's test; runs them against `aicm_scratch_db` | |
+| 0043 | 2026-10-12 | 12:19 EDT | b5c2c93 | Agent: fixes the refusal of an empty username, found by the tests; fixes a test's ordering | |
+| 0044 | 2026-10-12 | 12:20 EDT | b5c2c93 | Agent: runs the schema tests against two copies with a rule broken; adds seeding to the manual | |

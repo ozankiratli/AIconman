@@ -9,16 +9,15 @@ Nothing here is a commitment to build. Each item is what Z decided, with the not
 *As of 2026-10-12.*
 
 - **The design is done**: the backbone, the interface and the palette (`the-backbone.md`, `the-interface.md`, `the-palette.md`). Z committed it as *"Design is done"* (`85b56d4`).
-- **The database is designed, not built**: the draft and every decision so far are in `the-database.md`.
-- **What exists**: `config.yml.template` and `.env.template` at the root; `config/config.yml` and `config/.env`, Z's, which the agent does not open; `install/create_database.sh`, which runs `db/create_database.sql` with the names and passwords from the configuration; `.venv`, with PyYAML, from `install/requirements.txt`; `dev/.venv`, with ShellCheck, from `dev/requirements.txt`; `docs/manual.md`, covering setup so far; and `dev/palette/`, the palette's scripts.
-- **Nothing of the application is built**: no schema SQL, no backend, no frontend. Building goes only as far as Z names (`CLAUDE.md`, and the agent's memory).
+- **The database is being built**, in four stages (`the-database.md`, 2026-10-12): the rebuild, accounts, connections and models, and conversations, messages and files. Both databases exist: `aicm_db`, Z's, and `aicm_scratch_db`, the agent's for tests, configured in `.tmp/scratch/config/`.
+- **What exists**: `config.yml.template` and `.env.template` at the root; `config/config.yml` and `config/.env`, Z's, which the agent does not open; `install/common.sh`, shared by the install scripts; `install/create_database.sh`, which runs `db/create_database.sql`; `install/build_schema.sh`, which rebuilds the schema from `db/build_schema.sql` after a dump, and seeds it from `db/seed.sql`; the accounts part of the schema, `db/accounts.sql`; `tests/install/`, the tests of both scripts, and `tests/db/`, the schema's; `.venv`, with PyYAML, from `install/requirements.txt`; `dev/.venv`, with ShellCheck, from `dev/requirements.txt`; `docs/manual.md`, covering setup so far; and `dev/palette/`, the palette's scripts.
+- **Nothing of the application is built** beyond that: no backend, no frontend. Building goes only as far as Z names (`CLAUDE.md`, and the agent's memory).
 
 ## Next, on Z's word
 
-1. **Z creates the two databases** with `install/create_database.sh` (`the-database.md`, 2026-10-12). `aicm_db`, Z's, was created on 2026-10-12. The scratch database, `aicm_scratch_db`, the agent's for tests, with roles of its own, is next, from its own configuration under `.tmp/scratch/`, which git ignores.
-2. **The rest of the database pipeline**: rebuilding the schema destructively from `db/build_schema.sql`, with a dump first and the database's name required, after the pattern recorded in `the-database.md`; then seeding what an installation needs, a step safe to repeat.
-3. **`db/build_schema.sql`**, from the draft in `the-database.md`.
-4. **The backend**, on FastAPI, which is approved. uvicorn and httpx need Z's approval by name when the backend is asked for.
+1. **Connections and models**, the third stage of the database.
+2. **Conversations, messages and files**, the fourth.
+3. **The backend**, on FastAPI, which is approved. uvicorn and httpx need Z's approval by name when the backend is asked for.
 
 ## Deferred by Z to the polishing
 

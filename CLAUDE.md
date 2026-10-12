@@ -72,7 +72,8 @@ The rule is about control over Z's machines and Z's time, not about danger, so "
 - **Never SSH to a host without permission.**
 - **Never drive the instance Z is working in.** Verification gets its own server on its own port.
 - **This project's ports on Z's machine** (Z, 2026-10-11): 8642 is AIconman itself, and 8643 serves the manual's website while it is written. Z develops many projects on this machine, so no other port is used without asking.
-- **This project's databases on Z's machine** (Z, 2026-10-11), in the PostgreSQL that runs here: `aicm_db` is Z's, and the agent runs nothing destructive against it, and nothing else without asking; `aicm_scratch_db` is where the agent tests, and may be destroyed and rebuilt. The scratch database has roles of its own, `aicm_scratch_db_admin` and `aicm_scratch_db_app`, and its configuration is in `.tmp/scratch/config/`, which is treated like `config/` (Z, 2026-10-12).
+- **This project's databases on Z's machine** (Z, 2026-10-11), in the PostgreSQL that runs here: `aicm_db` is Z's, and the agent runs nothing destructive against it, and nothing else without asking; `aicm_scratch_db` is where the agent tests, and may be destroyed and rebuilt. The scratch database has roles of its own, `aicm_scratch_db_admin` and `aicm_scratch_db_app`, and its configuration is in `.tmp/scratch/config/`, which is treated like `config/` (Z, 2026-10-12). Every script the agent runs against a database is given `AICONMAN_CONFIG_DIR=.tmp/scratch/config`, never left to default to `config/`, which is Z's.
+- **AIconman supports PostgreSQL 16 and newer** (Z, 2026-10-12: *"We should try to make it PostgreSQL 16+ compatible at least"*). This machine runs 18, so nothing added after 16 is used, and that stays unproven until the schema has run on a 16 server.
 - **Confirm before anything destructive or outward-facing**: a wipe, a deploy, a restart of a live service, a push.
 
 ### What stays out of the agent's context and the repository
@@ -137,6 +138,7 @@ Before calling a file done, grep for `on purpose | deliberately | rather than | 
 
 ## How to know a change works
 
+- **The tests are in `tests/`**: `tests/install/` for the install scripts, and `tests/db/` for the schema, in plain SQL (Z, 2026-10-12). `tests/install/test_create_database.sh` needs no database; `tests/install/test_build_schema.sh` and `tests/db/run.sh` run against the scratch database, with `AICONMAN_CONFIG_DIR=.tmp/scratch/config`, and refuse to run without it.
 - **Render it, don't read it.** Reasoning about what code produces has repeatedly produced confident wrong answers.
 - **Name the suite that would fail if the change were wrong, and run that one.** If there is none, that is the finding. If there is one and it cannot run, say so out loud rather than reporting the rest as green.
 - **A check that cannot fail is not a check.** When a check passes, ask what it would have taken for it to fail.

@@ -2,7 +2,9 @@
 #
 # Copy this file to config/config.yml and fill it in. The config/ folder is
 # ignored by git, because what is in it holds secrets: never commit it, and never
-# paste it anywhere.
+# paste it anywhere. To keep the configuration in another folder, set the
+# environment variable AICONMAN_CONFIG_DIR to that folder, and AIconman and its
+# install scripts look for config.yml and .env there instead.
 #
 # Secrets: in production, write them here. While developing, leave every secret
 # below empty, and AIconman reads it from config/.env instead, under the name its
