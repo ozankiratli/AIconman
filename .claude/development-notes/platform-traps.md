@@ -20,4 +20,10 @@ Read a check's status from the command itself, with no pipe after it, or from zs
 
 *Found 2026-10-12*, when Z ran `db/create_database.sql` for the first time. The script stopped a run when a password was empty with `SELECT 'AICONMAN_DB_ADMINPW is empty or not set'::int WHERE :'admin_password' = '';`, expecting the cast to fail only when the `WHERE` held. It failed on Z's run with the password set. The agent's explanation, from how PostgreSQL types a quoted literal: the literal is converted to the cast's type when the statement is read, before any row is considered, so the error comes whatever the `WHERE` says. The script had never been run before it was handed over. The check now lives in `install/create_database.sh`, in bash, before `psql` starts.
 
-To fail on a condition in SQL, make the error depend on a row, or decide in the calling script. To see the trap, in any `psql` session: `SELECT 'x'::int WHERE false;` fails with *invalid input syntax for type integer*. The agent has not run this; if it returns no rows instead, the explanation above is wrong and this entry is to be corrected.
+To fail on a condition in SQL, make the error depend on a row, or decide in the calling script.
+
+## A broken copy whose change did not land proves nothing
+
+*Found 2026-10-12*, showing that the schema's tests can fail. Each test is run against a copy of the schema with one rule broken by `sed`, and is expected to fail. For one copy the `sed` pattern, a regular expression with escaped slashes and dots, matched nothing: the copy was the schema unchanged, its tests passed, and the pass looked like a check that could not catch the rule. It was caught only because the run printed how many lines differed, and that count was 0.
+
+Print the `diff` between the copy and the original before reading the test's result, and treat an empty diff as a failed setup, not a result. Prefer the simplest pattern that matches the line, such as `sed '/AND path !~/d'`. To see the trap: `sed 's/no such text/x/' file | diff -q file - && echo "identical: this copy tests nothing"`. To see the trap, in any `psql` session: `SELECT 'x'::int WHERE false;` fails with *invalid input syntax for type integer*. The agent has not run this; if it returns no rows instead, the explanation above is wrong and this entry is to be corrected.

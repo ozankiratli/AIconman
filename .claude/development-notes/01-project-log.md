@@ -89,3 +89,6 @@ Rows `0001` to `0016` were written on 2026-10-11, after the fact, from `git log`
 | 0047 | 2026-10-12 | 13:10 EDT | b2b18b1 | Agent: runs the schema tests against `aicm_scratch_db`, and against three copies with a rule broken | |
 | 0048 | 2026-10-12 | 13:44 EDT | b2b18b1 | Agent: adds `refresh_targets()` and `refresh_record_check()` for the scheduled refresh, with their tests; runs them, and a copy with a rule broken | |
 | 0049 | 2026-10-12 | 13:45 EDT | b2b18b1 | Agent: installs the backend's libraries into `.venv` and pins them in `install/requirements.txt`, rewriting it with Write; checks the file in a fresh environment | |
+| 004A | 2026-10-12 | 13:50 EDT | 3d1cca2 | Z: commits the connections schema, the refresh functions and the backend's libraries ("connections tables, virtual environment packages") | |
+| 004B | 2026-10-12 | 13:54 EDT | 3d1cca2 | Agent: adds the conversations part of the schema, `db/conversations.sql`; fixes its model-name check before the first run | |
+| 004C | 2026-10-12 | 13:56 EDT | 3d1cca2 | Agent: adds `tests/db/conversations.sql`; runs the schema tests, and four copies with a rule broken, one rerun after its change did not land | |

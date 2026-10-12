@@ -42,7 +42,11 @@ DECLARE
     'admin_connection_access', 'admin_connections', 'admin_create_connection',
     'admin_delete_connection', 'admin_models', 'admin_record_check', 'admin_set_connection_key',
     'admin_set_model', 'admin_update_connection', 'model_access', 'models',
-    'refresh_record_check', 'refresh_targets'];
+    'refresh_record_check', 'refresh_targets',
+    -- conversations
+    'add_file', 'add_reply', 'add_user_message', 'choose_version', 'conversation', 'conversations',
+    'create_conversation', 'delete_conversation', 'delete_file', 'file_access', 'files', 'messages',
+    'rename_conversation', 'set_conversation_model', 'set_conversation_settings'];
   v_granted text[];
 BEGIN
   SELECT coalesce(array_agg(p.proname::text), '{}') INTO v_granted
