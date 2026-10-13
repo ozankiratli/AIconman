@@ -1,7 +1,7 @@
 """The backend's access to the database: a connection as the app role, through
 which it calls the schema's functions, the only thing the app role may do.
 
-A function's refusal, SQLSTATE AI001, comes back as Refused, carrying its key.
+A function's refusal, SQLSTATE LM001, comes back as Refused, carrying its key.
 """
 
 from contextlib import asynccontextmanager
@@ -10,9 +10,9 @@ import psycopg
 from psycopg import sql
 from psycopg.rows import dict_row
 
-from aiconman.config import Db
+from lmconman.config import Db
 
-REFUSAL = "AI001"
+REFUSAL = "LM001"
 
 
 class Refused(Exception):

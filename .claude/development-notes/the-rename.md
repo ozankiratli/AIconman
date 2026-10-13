@@ -47,3 +47,47 @@ Rendered on 2026-10-13 in the agent's scratchpad, with the palette scripts' valu
 2. **The databases:** rename `aicm_db`, `aicm_scratch_db` and their four roles to `lmcm_`, or keep the names, which are configuration and work as they are? The agent proposes renaming, so the short form means one thing.
 3. **The gray:** each theme's text color, as proposed, or another value?
 4. **The folder:** is the local folder to be renamed too?
+
+## Added later on 2026-10-13, against `50e7558`: the rename, done in the working tree
+
+Z committed the preparation as `50e7558`, *"llama-serve work prep, project name change prep"*, pushed it, and renamed the repository: *"OK. Pushed. Changed the name of the repo. It is now LMconman.git"*. While the work ran: *"Don't create commits."* None was made; everything below is in the working tree.
+
+The agent read *"OK."* as accepting its proposals for questions 1 and 3: the long name is *LMconman, the Language Model Connection Manager*, and "man" takes each theme's text color (`the-palette.md`). Questions 2 and 4 ask for Z's own actions, and wait.
+
+**Done, on 2026-10-13:**
+
+- The remote points at `git@github.com:ozankiratli/LMconman.git`, set locally; nothing was fetched or pushed.
+- The script made its 282 replacements in 43 files, as its dry run had counted, leaving the history, Z's quotations and the line in `keys.py`; the package moved by `git mv aiconman lmconman`, which stages the move and nothing else. Outside the history, the old name is left only on that line, which now carries a comment saying that changing it leaves every stored key unreadable.
+- The one line the longer name made overlong, in `lmconman/__init__.py`, was wrapped again by hand.
+- The brand is drawn in three tones in `dev/palette/` (`the-palette.md`).
+- The index of these notes says the notes before the rename keep the old name.
+- The six variables' names in `.tmp/scratch/config/.env` were renamed by a command that changed names only; a hash of the values, the same before and after, showed the values untouched, without printing them.
+
+**Checked:** the schema's 270 checks, both install tests, the backend's 95 tests, and ShellCheck pass, run with `LMCONMAN_CONFIG_DIR`. With only the old `AICONMAN_CONFIG_DIR` set, the schema's tests and the backend's both refuse to run, so nothing reads the old name. To find what is left:
+
+    git grep -n -i -E "aiconman|AI001|AI Connection Manager"
+
+which, outside the history listed above, finds only the line in `keys.py` and the index's sentence naming the old name.
+
+**Left:**
+
+- **Z's `config/.env`:** its six variables still have the old names, so Z's configuration gives the renamed code no secrets until they are renamed, by Z or by the same command at Z's word.
+- **Z's `config/config.yml`:** seven values hold the old name, among them the cookie's name and the address; they are Z's, and the code works with them as they are.
+- **The databases** (question 2) and **the folder** (question 4).
+- The comments of the scratch configuration's `config.yml` still say AIconman; its values work as they are.
+
+## Added later on 2026-10-13, against `50e7558`: the databases and the folder
+
+Z: *"1. Done. 2. Prepare SQL. give me the command, I'll run it. 3. Let's do the renaming"*. Z renamed the six variables in `config/.env`; the file on disk still had the old names when the agent looked, and Z: *"Forgot to save it."* Saved, it has the six new names, read by name only.
+
+**The databases.** The SQL that renames `aicm_db`, `aicm_scratch_db` and their four roles to `lmcm_` is in the agent's scratchpad, for Z to run as PostgreSQL's superuser. It runs in one transaction, and first stops if any of the four roles is missing or its password is not stored as SCRAM: a role's password follows it through a rename unless it is stored as MD5, which a rename clears. That is the agent's knowledge of PostgreSQL, not something read for this project. Ownership and grants follow a renamed role or database. Run against the scratch database as its admin, which may not read `pg_authid`, the check was refused there, psql stopped, and nothing was renamed: its block parses, and an error stops the script before any rename. The renames themselves were not run; they need the superuser. Once they are, the three database settings in Z's `config/config.yml` and in the scratch configuration take the new names.
+
+In the current files, the database names changed by the same script, `aicm_` to `lmcm_` only: 19 replacements in six files, `CLAUDE.md`, `planned.md`, the configuration template, the manual and two tests. `CLAUDE.md` and `planned.md` name `lmcm_db` and `lmcm_scratch_db` from now on, which holds once Z's SQL has run.
+
+**A near miss, caught by the dry run.** The script kept the line in `keys.py` by its path, `aiconman/keys.py`; after `git mv` the file is `lmconman/keys.py`, and a second run with every rule would have changed the line, and with it every stored key. The dry run before this run showed it, together with the index's sentence naming the old name, which it would also have rewritten. The script now keeps the line by its content wherever it is, and this run applied only `aicm_` to `lmcm_`. Nothing was changed before the dry run showed it.
+
+**The folder.** A script in the agent's scratchpad, for Z to run from outside the folder with VS Code closed: it renames `AIconman` to `LMconman`, points the scratch configuration's storage path, which lies inside the folder, at the new one, makes both virtual environments again from their pinned requirements with the Python that made them and compares their packages with the old ones, and copies the folder in which Claude Code keeps the agent's memory and sessions to the one named after the new path. It stops before changing anything if the old folder is missing, the new one exists, or it is run from inside the old one. ShellCheck passes it. Rehearsed in a sandbox, a copy pointing at a made-up folder with real but empty environments: run from inside, it refused and moved nothing; run from outside, every step ran, the storage path moved, the packages matched, and the memory was copied.
+
+**Added later on 2026-10-13:** Z: *"I did 1 and 2."* Z ran the SQL and renamed the three database settings in `config/config.yml`; read by their first letters only, all three begin with `lmcm_`. The agent renamed the same three in the scratch configuration, by a command that changed only `aicm_scratch_db` to `lmcm_scratch_db`, on three lines. The server's catalogs, which any role may read, now name `lmcm_db`, `lmcm_scratch_db` and their four roles, and nothing beginning with `aicm`. Against the renamed scratch database, signing in under the new names with the passwords it had before, the schema's 270 checks, both install tests, the backend's 95 tests and ShellCheck pass. Left: the folder.
+
+**Added later on 2026-10-13:** Z ran the folder's script at 16:54, by the times of the package lists it wrote, and: *"Everything complete. Confirm."* What the agent checked, from the new folder: the old folder is gone; both virtual environments were made again at the new path, by `/usr/bin/python3`, and `pip freeze` lists the same packages at the same versions as before the rename, 24 in `.venv`; the scratch configuration's storage path is under the new folder, and no line of either configuration names the old one; the agent's memory in the folder named after the new path is identical to the old one; no tracked file names the old path; the remote names `LMconman.git`. The schema's 270 checks, both install tests, the backend's 95 tests and ShellCheck pass. The rename is complete, and uncommitted.

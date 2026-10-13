@@ -19,7 +19,7 @@ from typing import Any
 
 import httpx
 
-from aiconman import servers
+from lmconman import servers
 
 DETAIL_LENGTH = 1000
 

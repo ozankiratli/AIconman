@@ -144,3 +144,19 @@ A disabled control now takes three roles the palette already has: the message ba
 | border | `#485266` | `#ccd1db` | `#7c8aa4` | `#616f8c` |
 
 Comparing `derive.py`'s output with the previous run showed twelve differences, all of them these new values. `render.py` draws a disabled button beside the hovered one in `themes.png`.
+
+## Added 2026-10-13, against `50e7558`: the brand in three tones
+
+The project is LMconman now (`the-rename.md`). Z: *"The logo design will change to "man" part becoming (very dark gray for light theme and a very light gray for dark theme)."* The agent proposed each theme's own text color for "man", the very dark and very light grays the themes already have, which meet the text target by construction and follow any change to the themes; Z answered the proposal with *"OK."* So the brand is the name in three tones, in Source Serif Pro Bold Italic, without a glow:
+
+| | Dark | Light | Dark HC | Light HC |
+|---|---|---|---|---|
+| "LM" | `#66aaed` | `#145da6` | `#75b2ee` | `#125293` |
+| "con" | `#89d652` | `#42771c` | `#89d652` | `#325b16` |
+| "man" | `#eaeaea` | `#252a34` | `#ffffff` | `#0f1115` |
+
+"LM" and "con" keep the two tones "AI" and "conman" had. In the high-contrast themes, "man" is white and near black, the strongest grays there are. The light themes' text is a slightly blue gray; a neutral gray of the same lightness, rendered beside it, was hard to tell apart.
+
+`derive.py` names the roles `brand_lm`, `brand_con` and `brand_man`, the last taken from the theme's text, and `render.py` draws the three parts. Comparing the output with the run before the change showed twenty differences, all of them the brand: in each theme, `brand_ai` and `brand_rest` gone, `brand_lm` and `brand_con` with their values, and `brand_man` equal to the text. Rendered, at the sidebar title's size and at a large one, the three parts read as three on all four backgrounds. To see it:
+
+    python3 dev/palette/derive.py dev/palette/out/themes.json && python3 dev/palette/render.py dev/palette/out/themes.json dev/palette/out

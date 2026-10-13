@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2154  # the settings' variables are set by read_settings
 # Tests install/build_schema.sh against a real database: the one named by the
-# configuration in AICONMAN_CONFIG_DIR, whose schema it destroys. It refuses to
-# run without AICONMAN_CONFIG_DIR, or with it naming config/.
+# configuration in LMCONMAN_CONFIG_DIR, whose schema it destroys. It refuses to
+# run without LMCONMAN_CONFIG_DIR, or with it naming config/.
 #
-#   AICONMAN_CONFIG_DIR=.tmp/scratch/config tests/install/test_build_schema.sh
+#   LMCONMAN_CONFIG_DIR=.tmp/scratch/config tests/install/test_build_schema.sh
 #
 # A marker table, made as the owner role, shows whether a case changed the
 # schema. The dumps the cases make stay in the backups folder.

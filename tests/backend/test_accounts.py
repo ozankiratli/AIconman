@@ -1,5 +1,5 @@
 """Tests of the account endpoints, against the database the configuration in
-AICONMAN_CONFIG_DIR names, rebuilt before each test. The application runs in
+LMCONMAN_CONFIG_DIR names, rebuilt before each test. The application runs in
 the test's own process, reached at server.public_url, with that site's Origin
 header; each person is a client of their own, keeping their own cookie. Every
 password is made up.
@@ -8,7 +8,7 @@ Most tests lower scrypt's cost to keep the run short: a salt string carries the
 cost it was made with, so hashing and checking go the same way.
 test_the_database_keeps_only_a_scrypt_hash runs at the real cost.
 
-    AICONMAN_CONFIG_DIR=.tmp/scratch/config .venv/bin/python -m unittest discover -s tests/backend -p 'test_accounts.py'
+    LMCONMAN_CONFIG_DIR=.tmp/scratch/config .venv/bin/python -m unittest discover -s tests/backend -p 'test_accounts.py'
 """
 
 import asyncio
@@ -21,9 +21,9 @@ from urllib.parse import urlsplit
 import httpx
 
 import scratch
-from aiconman import config as configuration
-from aiconman import passwords
-from aiconman.app import create_app
+from lmconman import config as configuration
+from lmconman import passwords
+from lmconman.app import create_app
 
 STRONG = "Correct-Horse-42-Battery!"
 OTHER = "Another-Pass-77-Word!!"

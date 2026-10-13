@@ -20,7 +20,7 @@ BEGIN
   BEGIN
     EXECUTE p_statement;
   EXCEPTION
-    WHEN SQLSTATE 'AI001' THEN
+    WHEN SQLSTATE 'LM001' THEN
       IF SQLERRM = p_key THEN
         RAISE NOTICE 'ok    %', p_label;
         RETURN;

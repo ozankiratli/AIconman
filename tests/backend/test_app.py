@@ -1,9 +1,9 @@
-"""Tests of aiconman/app.py and aiconman/db.py against a real database: the
-one the configuration in AICONMAN_CONFIG_DIR names, built and seeded, as the
+"""Tests of lmconman/app.py and lmconman/db.py against a real database: the
+one the configuration in LMCONMAN_CONFIG_DIR names, built and seeded, as the
 app role. The application runs in the test's own process; no server is
-started. Refuses to run without AICONMAN_CONFIG_DIR, or with it naming config/.
+started. Refuses to run without LMCONMAN_CONFIG_DIR, or with it naming config/.
 
-    AICONMAN_CONFIG_DIR=.tmp/scratch/config .venv/bin/python -m unittest discover -s tests/backend -p 'test_app.py'
+    LMCONMAN_CONFIG_DIR=.tmp/scratch/config .venv/bin/python -m unittest discover -s tests/backend -p 'test_app.py'
 """
 
 import unittest
@@ -11,9 +11,9 @@ import unittest
 import httpx
 
 import scratch
-from aiconman import config as configuration
-from aiconman.app import create_app, status_for
-from aiconman.db import Refused, call, connect
+from lmconman import config as configuration
+from lmconman.app import create_app, status_for
+from lmconman.db import Refused, call, connect
 
 
 def setUpModule():

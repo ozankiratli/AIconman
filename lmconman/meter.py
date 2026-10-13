@@ -11,7 +11,7 @@ ASSUMED_WINDOW is assumed.
 
 import httpx
 
-from aiconman import keys, relay
+from lmconman import keys, relay
 
 BYTES_PER_TOKEN = 4
 ASSUMED_WINDOW = 4096

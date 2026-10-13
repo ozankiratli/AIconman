@@ -4,7 +4,7 @@ import re
 import shutil
 from pathlib import Path
 
-from aiconman.config import Config
+from lmconman.config import Config
 
 ACCOUNT_ID = re.compile(r"[a-z0-9]{8}")
 

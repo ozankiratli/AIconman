@@ -1,8 +1,8 @@
-"""The AIconman web application.
+"""The LMconman web application.
 
 Run with Uvicorn, which calls create_app:
 
-    .venv/bin/uvicorn --factory aiconman.app:create_app --host 127.0.0.1 --port 8642
+    .venv/bin/uvicorn --factory lmconman.app:create_app --host 127.0.0.1 --port 8642
 """
 
 from urllib.parse import urlsplit
@@ -11,9 +11,9 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
-from aiconman import accounts, connections, conversations
-from aiconman import config as configuration
-from aiconman.db import Refused, call, connect
+from lmconman import accounts, connections, conversations
+from lmconman import config as configuration
+from lmconman.db import Refused, call, connect
 
 # The HTTP status of a refusal, by its key; any other key is 400. A key naming
 # something that does not exist is 404, and one naming something already taken
@@ -50,7 +50,7 @@ def create_app(config: configuration.Config | None = None) -> FastAPI:
     configuration.load() reads. FastAPI's own documentation pages are off:
     they load their scripts from outside the household's network."""
     config = config or configuration.load()
-    app = FastAPI(title="AIconman", docs_url=None, redoc_url=None, openapi_url=None)
+    app = FastAPI(title="LMconman", docs_url=None, redoc_url=None, openapi_url=None)
     app.state.config = config
     public = urlsplit(config.server.public_url)
     own_origin = f"{public.scheme}://{public.netloc}"

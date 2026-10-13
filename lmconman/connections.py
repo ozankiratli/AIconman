@@ -13,10 +13,10 @@ from fastapi import APIRouter, Depends, Request
 from psycopg.types.json import Jsonb
 from pydantic import BaseModel
 
-from aiconman import keys, servers, sessions
-from aiconman.accounts import db
-from aiconman.config import Config
-from aiconman.db import Refused, call
+from lmconman import keys, servers, sessions
+from lmconman.accounts import db
+from lmconman.config import Config
+from lmconman.db import Refused, call
 
 router = APIRouter(prefix="/api")
 

@@ -125,3 +125,12 @@ Rows `0001` to `0016` were written on 2026-10-11, after the fact, from `git log`
 | 006B | 2026-10-12 | 21:47 EDT | 4915cd3 | Agent: requests the headers of llama.cpp's server README at `f072b1037`; writes R-023 | |
 | 006C | 2026-10-13 | 16:13 EDT | 4915cd3 | Z: renames the project LMconman, LMcm for short, with "man" in the brand a very dark gray in the light themes and a very light gray in the dark ones; asks for the rename to be prepared | |
 | 006D | 2026-10-13 | 16:13 EDT | 4915cd3 | Agent: lists where the name is, counting the configurations' keys without printing a value; renders the brand in three tones in its scratchpad; writes a rename script there and runs it dry, changing nothing | |
+| 006E | 2026-10-13 | 16:21 EDT | 50e7558 | Z: commits the preparations ("llama-serve work prep, project name change prep") | |
+| 006F | 2026-10-13 | 16:26 EDT | 50e7558 | Z: pushes, and renames the repository on GitHub to LMconman | |
+| 0070 | 2026-10-13 | 16:26 EDT | 50e7558 | Agent: points the remote at the renamed repository; renames the project in the current files by the announced script and the package by `git mv`; comments the line kept in `keys.py`; draws the brand in three tones in `dev/palette/`; renames the scratch configuration's variables; runs every test and ShellCheck | |
+| 0071 | 2026-10-13 | 16:41 EDT | 50e7558 | Z: renames the six variables in `config/.env` | |
+| 0072 | 2026-10-13 | 16:42 EDT | 50e7558 | Agent: writes the SQL that renames the databases and their roles, and runs it against the scratch database as its admin, where its check is refused before any rename; renames the database names in the current files by the announced script; writes the folder's rename script, and rehearses it in a sandbox | |
+| 0073 | 2026-10-13 | 16:51 EDT | 50e7558 | Z: runs the SQL that renames the databases and their roles, and renames the database settings in `config/config.yml` | |
+| 0074 | 2026-10-13 | 16:51 EDT | 50e7558 | Agent: renames the database settings in the scratch configuration; runs every test and ShellCheck against the renamed scratch database | |
+| 0075 | 2026-10-13 | 16:54 EDT | 50e7558 | Z: runs the script that renames the folder to `LMconman`, makes both virtual environments again, and copies the agent's memory | |
+| 0076 | 2026-10-13 | 16:59 EDT | 50e7558 | Agent: checks the folder's rename -- the old folder gone, both environments' packages as before, the scratch storage path, the memory's copy, nothing tracked naming the old path -- and runs every test and ShellCheck from the new folder | |

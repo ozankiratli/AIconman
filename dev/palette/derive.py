@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Derive AIconman's four color themes from Z's colors, and measure them.
+"""Derive LMconman's four color themes from Z's colors, and measure them.
 
     python3 dev/palette/derive.py dev/palette/out/themes.json
 
@@ -18,8 +18,9 @@ given (0.44 of the way from the page color to grayblue).
 
 Writes the themes as JSON and prints every role with its worst contrast over the
 three backgrounds, marking the values that are Z's as given. The brand is the name
-in two tones, "AI" in the brand blue and "conman" in summer-green, set in the title
-font; both tones are fitted to the text target like any other text.
+in three tones, set in the title font: "LM" in the brand blue and "con" in
+summer-green, both fitted to the text target like any other text, and "man" in the
+theme's text color.
 """
 import colorsys
 import json
@@ -172,8 +173,9 @@ def theme(dark, hc):
     t["disabled_fill"] = t["surface2"]
     t["disabled_text"] = t["muted"]
     t["disabled_border"] = t["border_strong"] if hc else t["border"]
-    t["brand_ai"] = fit(Z["brandblue"], grounds, text_t, lighten)
-    t["brand_rest"] = fit(Z["summergreen"], grounds, text_t, lighten)
+    t["brand_lm"] = fit(Z["brandblue"], grounds, text_t, lighten)
+    t["brand_con"] = fit(Z["summergreen"], grounds, text_t, lighten)
+    t["brand_man"] = t["text"]
     return t
 
 

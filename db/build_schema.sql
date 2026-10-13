@@ -1,4 +1,4 @@
--- Builds AIconman's schema in the schema public of the database it is run
+-- Builds LMconman's schema in the schema public of the database it is run
 -- against, after dropping everything in it. Run by install/build_schema.sh as
 -- the owner role, in one transaction, with the app role's name as the psql
 -- variable app_user.

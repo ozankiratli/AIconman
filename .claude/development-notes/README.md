@@ -2,9 +2,9 @@
 
 **This file is kept current.** It is the index, and an exception to the dating rule below.
 
-These notes record why AIconman is built the way it is: decisions and who made them, what was tried and dropped, what a choice was measured against, and the traps that produced a wrong answer once already. They are not user documentation, and they do not explain what the code does -- that stays in the code. They are the reasoning a person needs before they *change* something.
+These notes record why LMconman is built the way it is: decisions and who made them, what was tried and dropped, what a choice was measured against, and the traps that produced a wrong answer once already. They are not user documentation, and they do not explain what the code does -- that stays in the code. They are the reasoning a person needs before they *change* something.
 
-They are public, and so is `CLAUDE.md` at the repository root, the file the agent reads at the start of every session. Z, 2026-10-11: *"I want to be transparent about the development process. It is one of the core values all my projects share."* How AIconman is built should be as readable as what it does.
+They are public, and so is `CLAUDE.md` at the repository root, the file the agent reads at the start of every session. Z, 2026-10-11: *"I want to be transparent about the development process. It is one of the core values all my projects share."* How LMconman is built should be as readable as what it does.
 
 ## These notes are dated
 
@@ -15,6 +15,8 @@ They are public, and so is `CLAUDE.md` at the repository root, the file the agen
 ```
 
 A note is never rewritten to follow the code. It may gain a new finding at the end, dated; an old description is never corrected to match today's code, because a note that has been kept in step can no longer be dated. So a present-tense sentence inside a note describes the code at that note's date. Where a note and the user documentation disagree, the documentation is right and the note is history.
+
+**The project was called AIconman until 2026-10-13** (`the-rename.md`). The notes written before then, the project log's rows and the reading log's entries use that name, with `aiconman` for the package and `AICONMAN_` for the variables, and keep it.
 
 **A file that is kept current says so in its first line**, and the table below marks it. That is the only exception to the dating rule.
 
@@ -33,7 +35,7 @@ The rule lives in `CLAUDE.md`, which loads into every session; this file does no
 | Where | What |
 |---|---|
 | **the source** | what the code below does, what it returns, a coupling or constraint invisible from where it is read |
-| **the user documentation** | what a person setting up or using AIconman needs |
+| **the user documentation** | what a person setting up or using LMconman needs |
 | **here** | how it got here: design churn, alternatives tried and dropped, measurements, who decided what and when |
 
 ## Layout
@@ -52,6 +54,6 @@ One file per subject, not per source file: the reasoning crosses file boundaries
 | `the-palette.md` | the third part of the design: how the four themes are derived from Z's colors, the first proposal, Z's changes, the values, and what was measured for Z to decide |
 | `the-database.md` | the fourth part of the design: what the database holds and the rules it enforces, Z's answers, what was read of Z's other project's accounts schema, and the draft |
 | `the-backend.md` | the fifth part: the backend, how it is built and tested, and what Z decided for it |
-| `llama-serve.md` | the framework that runs a llama.cpp server as a service for the network, built before AIconman continues: Z's decision, what was read of Z's Hailo gateway, and the agent's proposal |
+| `llama-serve.md` | the framework that runs a llama.cpp server as a service for the network, built before LMconman continues: Z's decision, what was read of Z's Hailo gateway, and the agent's proposal |
 | `the-rename.md` | the project's new name, LMconman: Z's decision, where the old name was, what changes and what stays as history, the brand in three tones, and the order of the steps |
 | `platform-traps.md` | **kept current**: the shell and tooling traps that produced a wrong result once |

@@ -7,8 +7,8 @@ from datetime import timedelta
 
 from fastapi import Request, Response
 
-from aiconman.config import Config
-from aiconman.db import Refused
+from lmconman.config import Config
+from lmconman.db import Refused
 
 
 def new_token() -> str:

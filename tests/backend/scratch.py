@@ -1,6 +1,6 @@
 """Shared by the backend's tests that run against a real database: the one the
-configuration in AICONMAN_CONFIG_DIR names. They refuse to run without
-AICONMAN_CONFIG_DIR, or with it naming config/. They can rebuild and seed that
+configuration in LMCONMAN_CONFIG_DIR names. They refuse to run without
+LMCONMAN_CONFIG_DIR, or with it naming config/. They can rebuild and seed that
 database's schema, with no dump, and query it as the owner role to see what was
 stored."""
 
@@ -10,16 +10,16 @@ from pathlib import Path
 
 import psycopg
 
-from aiconman import config as configuration
+from lmconman import config as configuration
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 
 
 def require() -> None:
-    """Refuses to go on without AICONMAN_CONFIG_DIR, or with it naming config/."""
-    named = os.environ.get("AICONMAN_CONFIG_DIR")
+    """Refuses to go on without LMCONMAN_CONFIG_DIR, or with it naming config/."""
+    named = os.environ.get("LMCONMAN_CONFIG_DIR")
     if not named:
-        raise RuntimeError("AICONMAN_CONFIG_DIR must name the configuration of the database to test against")
+        raise RuntimeError("LMCONMAN_CONFIG_DIR must name the configuration of the database to test against")
     if Path(named).resolve() == (ROOT / "config").resolve():
         raise RuntimeError("refusing to test against config/")
 

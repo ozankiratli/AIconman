@@ -23,9 +23,9 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
-from aiconman import keys, meter, relay, servers, sessions
-from aiconman.accounts import db
-from aiconman.db import Refused, call, connect
+from lmconman import keys, meter, relay, servers, sessions
+from lmconman.accounts import db
+from lmconman.db import Refused, call, connect
 
 router = APIRouter(prefix="/api")
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render AIconman's themes to images, to look at rather than read.
+"""Render LMconman's themes to images, to look at rather than read.
 
     python3 dev/palette/render.py dev/palette/out/themes.json dev/palette/out
 
@@ -9,7 +9,7 @@ Reads the JSON that derive.py writes, and writes two images into the folder:
   model name, reasoning, a link, an error and a warning, the context meter, an input
   with its focus ring, the main button, a button with its hover border, a disabled
   button, and labeled swatches;
-- brand.png: the brand, the name in two tones set in the title font, on all four
+- brand.png: the brand, the name in three tones set in the title font, on all four
   backgrounds, at the size of the sidebar title and at a large size;
 - depth.png: a raised card, a raised button, a pressed button and an inset input in
   each theme, drawn at twice the size, as a high-density screen shows 1 px shadows.
@@ -41,11 +41,14 @@ def M(s): return font("DejaVuSansMono.ttf", s)
 
 
 def brand(img, xy, size, t):
-    """The name in two tones: "AI" in brand_ai, "conman" in brand_rest, in the title font."""
+    """The name in three tones: "LM" in brand_lm, "con" in brand_con and "man" in
+    brand_man, in the title font."""
     f = font(TITLE["file"], size)
     d = ImageDraw.Draw(img)
-    d.text(xy, "AI", font=f, fill=t["brand_ai"])
-    d.text((xy[0] + d.textlength("AI", font=f), xy[1]), "conman", font=f, fill=t["brand_rest"])
+    x = xy[0]
+    for part, role in (("LM", "brand_lm"), ("con", "brand_con"), ("man", "brand_man")):
+        d.text((x, xy[1]), part, font=f, fill=t[role])
+        x += d.textlength(part, font=f)
 
 
 def rgb(h):

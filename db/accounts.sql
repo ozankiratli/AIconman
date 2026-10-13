@@ -5,7 +5,7 @@
 -- The app role has no access to these tables. It calls the functions granted
 -- to it below, which run as the owner role; every one that acts for a person
 -- takes the SHA-256 of that person's session token. A refusal is raised with
--- SQLSTATE AI001 and a key as its message, such as last_admin; where a
+-- SQLSTATE LM001 and a key as its message, such as last_admin; where a
 -- constraint refuses, the key is the constraint's name.
 --
 -- A password reaches the database only as the backend's hash of it, together
@@ -88,7 +88,7 @@ CREATE INDEX sessions_account_id ON sessions (account_id);
 CREATE FUNCTION _refuse(p_key text) RETURNS void
 LANGUAGE plpgsql SET search_path = public, pg_temp AS $$
 BEGIN
-  RAISE EXCEPTION USING ERRCODE = 'AI001', MESSAGE = p_key;
+  RAISE EXCEPTION USING ERRCODE = 'LM001', MESSAGE = p_key;
 END
 $$;
 

@@ -1,5 +1,5 @@
-# The tools used to develop AIconman, each approved by name and pinned to the
-# version tested. AIconman itself does not need them. Install them into their
+# The tools used to develop LMconman, each approved by name and pinned to the
+# version tested. LMconman itself does not need them. Install them into their
 # own virtual environment:
 #
 #   python3 -m venv dev/.venv

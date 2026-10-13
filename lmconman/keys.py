@@ -14,6 +14,8 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 
 VERSION = b"\x01"
+# Part of every stored key's encryption, in the project's former name; changed,
+# it leaves every key already stored unreadable.
 PURPOSE = b"aiconman connection key"
 NONCE = 12
 TAG = 16

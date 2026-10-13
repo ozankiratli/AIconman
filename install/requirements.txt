@@ -1,4 +1,4 @@
-# The Python packages AIconman's server needs, and the packages they bring with
+# The Python packages LMconman's server needs, and the packages they bring with
 # them, each pinned to the version tested. Install them into the project's
 # virtual environment:
 #

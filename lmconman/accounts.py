@@ -14,8 +14,8 @@ from fastapi import APIRouter, Depends, Request, Response
 from psycopg.types.json import Jsonb
 from pydantic import BaseModel, Field
 
-from aiconman import passwords, sessions, storage
-from aiconman.db import Refused, call, connect
+from lmconman import passwords, sessions, storage
+from lmconman.db import Refused, call, connect
 
 log = logging.getLogger(__name__)
 

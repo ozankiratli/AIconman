@@ -2,9 +2,9 @@
 endpoints, and the scheduled refresh. The model servers are the made-up ones
 of fake_servers.py, in the test's own process; no request leaves it. KeysTest
 and ServersTest need no database; the rest run against the database the
-configuration in AICONMAN_CONFIG_DIR names, rebuilt before each test.
+configuration in LMCONMAN_CONFIG_DIR names, rebuilt before each test.
 
-    AICONMAN_CONFIG_DIR=.tmp/scratch/config .venv/bin/python -m unittest discover -s tests/backend -p 'test_connections.py'
+    LMCONMAN_CONFIG_DIR=.tmp/scratch/config .venv/bin/python -m unittest discover -s tests/backend -p 'test_connections.py'
 """
 
 import dataclasses
@@ -17,10 +17,10 @@ from urllib.parse import urlsplit
 import httpx
 
 import scratch
-from aiconman import config as configuration
-from aiconman import keys, passwords, servers
-from aiconman.app import create_app
-from aiconman.refresh import refresh
+from lmconman import config as configuration
+from lmconman import keys, passwords, servers
+from lmconman.app import create_app
+from lmconman.refresh import refresh
 from fake_servers import KEY, FakeServers
 
 STRONG = "Correct-Horse-42-Battery!"

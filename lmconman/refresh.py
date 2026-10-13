@@ -2,7 +2,7 @@
 acting for no one. cron runs it every 30 minutes, through
 install/refresh_models.sh, from the repository's root:
 
-    .venv/bin/python -m aiconman.refresh
+    .venv/bin/python -m lmconman.refresh
 
 It prints nothing when it finishes. A check that fails is recorded as that
 connection's error, as the admin's check is; only a failure of the refresh
@@ -14,10 +14,10 @@ import sys
 
 import httpx
 
-from aiconman import config as configuration
-from aiconman import servers
-from aiconman.connections import check_connection, recorded
-from aiconman.db import Refused, call, connect
+from lmconman import config as configuration
+from lmconman import servers
+from lmconman.connections import check_connection, recorded
+from lmconman.db import Refused, call, connect
 
 
 async def refresh(config: configuration.Config, transport: httpx.AsyncBaseTransport | None = None) -> int:

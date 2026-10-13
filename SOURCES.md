@@ -1,8 +1,8 @@
 # Sources
 
-Everything AIconman knows about the servers it talks to, the protocols they speak and the platform it runs on came from somewhere, and this file says where.
+Everything LMconman knows about the servers it talks to, the protocols they speak and the platform it runs on came from somewhere, and this file says where.
 
-**No code from another person's project is in AIconman.** What is taken is knowledge. The rules for that are in `CLAUDE.md`, under *Other people's code*. Libraries Z has approved by name are the one exception: other people's code, carried whole under their own licenses, and each is listed here with its license once it is in use.
+**No code from another person's project is in LMconman.** What is taken is knowledge. The rules for that are in `CLAUDE.md`, under *Other people's code*. Libraries Z has approved by name are the one exception: other people's code, carried whole under their own licenses, and each is listed here with its license once it is in use.
 
 Each entry says what the source is, its license if it is software, and what was learned from it. A read of another person's code also has an entry in `dev/READING-LOG.md`, which the source here cites.
 
@@ -25,11 +25,11 @@ Each entry says what the source is, its license if it is software, and what was 
 
 ## Tabler Icons
 
-- **The icon library:** [github.com/tabler/tabler-icons](https://github.com/tabler/tabler-icons), MIT license, read at commit `a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d` (2026-10-05) under `dev/READING-LOG.md`, R-010 and R-013: its license, and the outline and filled SVG files of the icons AIconman's chat and account screens need. What was learned: which of those icons exist and which have filled versions, and how they are drawn. Approved by Z on 2026-10-11 for the interface; not yet in use.
+- **The icon library:** [github.com/tabler/tabler-icons](https://github.com/tabler/tabler-icons), MIT license, read at commit `a4ce1404bc6d24d3c365afe7b258d6bf6f48d62d` (2026-10-05) under `dev/READING-LOG.md`, R-010 and R-013: its license, and the outline and filled SVG files of the icons LMconman's chat and account screens need. What was learned: which of those icons exist and which have filled versions, and how they are drawn. Approved by Z on 2026-10-11 for the interface; not yet in use.
 
 ## Fonts
 
-- **Targa MS Hand**, by Studio Kmzero (2002): the end-user license stored in the font file itself, read 2026-10-11 from the copy installed on Z's machine. What was learned: the font is licensed for personal, non-commercial use only, and copies of it may not be distributed, alone or as part of another product. So AIconman cannot bundle or serve it.
+- **Targa MS Hand**, by Studio Kmzero (2002): the end-user license stored in the font file itself, read 2026-10-11 from the copy installed on Z's machine. What was learned: the font is licensed for personal, non-commercial use only, and copies of it may not be distributed, alone or as part of another product. So LMconman cannot bundle or serve it.
 - **Source Serif Pro**, by Adobe: the license stored in the font file itself, read 2026-10-11 from the Bold Italic copy installed on Z's machine. What was learned: it is licensed under the SIL Open Font License 1.1, with "Source" as a Reserved Font Name. Approved by Z on 2026-10-11 for the title; not yet in use.
 
 ## Nextcloud's marks
@@ -44,7 +44,7 @@ Each entry says what the source is, its license if it is software, and what was 
 ## Libraries in use
 
 - **PyYAML** 6.0.3, MIT license (as its package metadata states), [pyyaml.org](https://pyyaml.org/): reads `config/config.yml`. Approved by Z on 2026-10-11, installed into `.venv` from `install/requirements.txt`.
-- **ShellCheck** 0.11.0, GNU General Public License version 3 (as `shellcheck --version` states), [shellcheck.net](https://www.shellcheck.net): lints the shell scripts in `install/`; a development tool, not part of what AIconman runs. It is installed as the binary inside **shellcheck-py** 0.11.0.1, MIT license (as its package metadata states), [github.com/ryanrhee/shellcheck-py](https://github.com/ryanrhee/shellcheck-py). Approved by Z on 2026-10-12, installed into `dev/.venv` from `dev/requirements.txt`.
+- **ShellCheck** 0.11.0, GNU General Public License version 3 (as `shellcheck --version` states), [shellcheck.net](https://www.shellcheck.net): lints the shell scripts in `install/`; a development tool, not part of what LMconman runs. It is installed as the binary inside **shellcheck-py** 0.11.0.1, MIT license (as its package metadata states), [github.com/ryanrhee/shellcheck-py](https://github.com/ryanrhee/shellcheck-py). Approved by Z on 2026-10-12, installed into `dev/.venv` from `dev/requirements.txt`.
 
 Added on 2026-10-12 for the backend, at Z's word and for Z's review, and installed into `.venv` from `install/requirements.txt`. Each license is as the package's own metadata states it, and each address is the one that metadata gives.
 

@@ -1,13 +1,13 @@
-"""AIconman's configuration.
+"""LMconman's configuration.
 
 The configuration is config.yml in config/, or in the folder the environment
-variable AICONMAN_CONFIG_DIR names. A secret left empty there is taken from
+variable LMCONMAN_CONFIG_DIR names. A secret left empty there is taken from
 .env in the same folder, under the name in SECRETS.
 
 Run as a script, this prints settings as shell assignments, for the scripts in
 install/, with the secrets filled in the same way:
 
-    python -I aiconman/config.py VAR=section.key ...
+    python -I lmconman/config.py VAR=section.key ...
 """
 
 import os
@@ -21,12 +21,12 @@ import yaml
 ROOT = Path(__file__).resolve().parent.parent
 
 SECRETS = {
-    ("db", "password"): "AICONMAN_DB_PASSWORD",
-    ("db", "adminpw"): "AICONMAN_DB_ADMINPW",
-    ("auth", "state_secret"): "AICONMAN_STATE_SECRET",
-    ("connections", "encryption_key"): "AICONMAN_CONNECTION_KEY",
-    ("nextcloud", "client_id"): "AICONMAN_NEXTCLOUD_CLIENT_ID",
-    ("nextcloud", "client_secret"): "AICONMAN_NEXTCLOUD_CLIENT_SECRET",
+    ("db", "password"): "LMCONMAN_DB_PASSWORD",
+    ("db", "adminpw"): "LMCONMAN_DB_ADMINPW",
+    ("auth", "state_secret"): "LMCONMAN_STATE_SECRET",
+    ("connections", "encryption_key"): "LMCONMAN_CONNECTION_KEY",
+    ("nextcloud", "client_id"): "LMCONMAN_NEXTCLOUD_CLIENT_ID",
+    ("nextcloud", "client_secret"): "LMCONMAN_NEXTCLOUD_CLIENT_SECRET",
 }
 
 
@@ -35,8 +35,8 @@ class ConfigError(Exception):
 
 
 def config_dir() -> Path:
-    """The configuration folder: AICONMAN_CONFIG_DIR, or config/."""
-    named = os.environ.get("AICONMAN_CONFIG_DIR")
+    """The configuration folder: LMCONMAN_CONFIG_DIR, or config/."""
+    named = os.environ.get("LMCONMAN_CONFIG_DIR")
     return Path(named) if named else ROOT / "config"
 
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2154  # the settings' variables are set by read_settings
-# Builds AIconman's schema and seeds it, as the owner role.
+# Builds LMconman's schema and seeds it, as the owner role.
 #
 #   install/build_schema.sh --rebuild [--confirm-db NAME]
-#       Drops everything in the schema public of AIconman's database, builds it
+#       Drops everything in the schema public of LMconman's database, builds it
 #       again from db/build_schema.sql, and seeds it from db/seed.sql.
 #   install/build_schema.sh --seed
 #       Seeds the schema from db/seed.sql, leaving every row already there as it
@@ -15,9 +15,9 @@
 # matches. The build and the seeding run in one transaction, so a failure leaves
 # the schema as it was.
 #
-# The configuration is config/, or the folder AICONMAN_CONFIG_DIR names. It
+# The configuration is config/, or the folder LMCONMAN_CONFIG_DIR names. It
 # connects to db.host and db.port, to db.dbname, as db.adminuser, whose password
-# is db.adminpw, or AICONMAN_DB_ADMINPW in the configuration's .env. Seeding
+# is db.adminpw, or LMCONMAN_DB_ADMINPW in the configuration's .env. Seeding
 # takes the starting value of self sign-up from auth.allow_auto_signup.
 
 set -euo pipefail
@@ -52,7 +52,7 @@ require \
   "db_name=db.dbname in $config" \
   "admin_user=db.adminuser in $config" \
   "app_user=db.user in $config" \
-  "admin_password=db.adminpw in $config, or AICONMAN_DB_ADMINPW in $env_file" \
+  "admin_password=db.adminpw in $config, or LMCONMAN_DB_ADMINPW in $env_file" \
   "storage_root=storage.root_path in $config" \
   "allow_auto_signup=auth.allow_auto_signup in $config"
 [[ $allow_auto_signup == true || $allow_auto_signup == false ]] ||

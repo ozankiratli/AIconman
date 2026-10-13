@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Tests install/create_database.sh without PostgreSQL. Each case writes a
 # configuration into a temporary folder, runs the script on it through
-# AICONMAN_CONFIG_DIR with a stand-in psql that records its arguments and the
+# LMCONMAN_CONFIG_DIR with a stand-in psql that records its arguments and the
 # two password variables, and checks what reached psql or why the script
 # stopped. Every password is made up.
 #
@@ -17,8 +17,8 @@ cat > "$work/bin/psql" <<'EOF'
 #!/usr/bin/env bash
 {
   printf 'ARG %s\n' "$@"
-  printf 'ADMINPW %s\n' "${AICONMAN_DB_ADMINPW-UNSET}"
-  printf 'APPPW %s\n' "${AICONMAN_DB_PASSWORD-UNSET}"
+  printf 'ADMINPW %s\n' "${LMCONMAN_DB_ADMINPW-UNSET}"
+  printf 'APPPW %s\n' "${LMCONMAN_DB_PASSWORD-UNSET}"
 } > "$PSQL_RECORD"
 EOF
 chmod +x "$work/bin/psql"
@@ -47,7 +47,7 @@ EOF
 # run NAME: runs the script on case NAME's folder.
 run() {
   rm -f "$work/record"
-  PATH="$work/bin:$PATH" PSQL_RECORD="$work/record" AICONMAN_CONFIG_DIR="$work/$1" \
+  PATH="$work/bin:$PATH" PSQL_RECORD="$work/record" LMCONMAN_CONFIG_DIR="$work/$1" \
     "$root/install/create_database.sh" -U postgres 2> "$work/stderr" > /dev/null
   status=$?
   record=$(cat "$work/record" 2> /dev/null || true)
@@ -81,13 +81,13 @@ check "  names passed" has_line "$record" 'ARG admin_user=test_admin'
 check "  psql's own options passed on" has_line "$record" 'ARG postgres'
 
 config env_fill test_db '""' '""'
-printf 'AICONMAN_DB_ADMINPW=env-admin\nAICONMAN_DB_PASSWORD=env-app\n' > "$work/env_fill/.env"
+printf 'LMCONMAN_DB_ADMINPW=env-admin\nLMCONMAN_DB_PASSWORD=env-app\n' > "$work/env_fill/.env"
 run env_fill
 check "passwords from .env" called
 check "  both from .env" has_line "$record" 'ADMINPW env-admin'
 
 config mixed test_db yml-admin '""'
-printf 'AICONMAN_DB_ADMINPW=env-admin\nAICONMAN_DB_PASSWORD=env-app\n' > "$work/mixed/.env"
+printf 'LMCONMAN_DB_ADMINPW=env-admin\nLMCONMAN_DB_PASSWORD=env-app\n' > "$work/mixed/.env"
 run mixed
 check "a password set in config.yml wins over .env" has_line "$record" 'ADMINPW yml-admin'
 check "  the empty one comes from .env" has_line "$record" 'APPPW env-app'
@@ -99,7 +99,7 @@ check "  names the admin password" has_text "$stderr" 'db.adminpw'
 check "  names the app password" has_text "$stderr" 'db.password'
 
 config partial test_db '""' '""'
-printf 'AICONMAN_DB_ADMINPW=env-admin\nAICONMAN_DB_PASSWORD=\n' > "$work/partial/.env"
+printf 'LMCONMAN_DB_ADMINPW=env-admin\nLMCONMAN_DB_PASSWORD=\n' > "$work/partial/.env"
 run partial
 check ".env lacks one password: stops" stopped
 only_app_password_named() { ! has_text "$stderr" db.adminpw && has_text "$stderr" db.password; }
@@ -121,17 +121,17 @@ run badyaml
 check "config.yml that is not YAML: stops" stopped
 
 config shellenv test_db '""' '""'
-AICONMAN_DB_ADMINPW=shell-admin AICONMAN_DB_PASSWORD=shell-app run shellenv
+LMCONMAN_DB_ADMINPW=shell-admin LMCONMAN_DB_PASSWORD=shell-app run shellenv
 check "passwords only in the calling shell: stops" stopped
 
 mkdir -p "$work/template"
 cp "$root/config.yml.template" "$work/template/config.yml"
-sed -e 's/^AICONMAN_DB_ADMINPW=$/AICONMAN_DB_ADMINPW=tpl-admin/' \
-  -e 's/^AICONMAN_DB_PASSWORD=$/AICONMAN_DB_PASSWORD=tpl-app/' \
+sed -e 's/^LMCONMAN_DB_ADMINPW=$/LMCONMAN_DB_ADMINPW=tpl-admin/' \
+  -e 's/^LMCONMAN_DB_PASSWORD=$/LMCONMAN_DB_PASSWORD=tpl-app/' \
   "$root/.env.template" > "$work/template/.env"
 run template
 check "the templates, filled: psql is called" called
-check "  with the default names" has_line "$record" 'ARG db_name=aicm_db'
+check "  with the default names" has_line "$record" 'ARG db_name=lmcm_db'
 check "  and the passwords from .env" has_line "$record" 'ADMINPW tpl-admin'
 
 printf '%d failed\n' "$failures"

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2154  # the settings' variables are set by read_settings
 # Runs the schema's tests, the .sql files beside this script, against a real
-# database: the one named by the configuration in AICONMAN_CONFIG_DIR, whose
+# database: the one named by the configuration in LMCONMAN_CONFIG_DIR, whose
 # schema it first rebuilds and seeds, with no dump. It refuses to run without
-# AICONMAN_CONFIG_DIR, or with it naming config/.
+# LMCONMAN_CONFIG_DIR, or with it naming config/.
 #
-#   AICONMAN_CONFIG_DIR=.tmp/scratch/config tests/db/run.sh
+#   LMCONMAN_CONFIG_DIR=.tmp/scratch/config tests/db/run.sh
 #
 # A file whose name starts with app_ runs as the app role, every other file as
 # the owner role; helpers.sql is included by the files, not run. Each check

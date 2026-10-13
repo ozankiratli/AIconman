@@ -1,12 +1,12 @@
 # shellcheck shell=bash
 # Shared by the scripts in install/, which source it: finds the configuration
-# and reads settings from it through aiconman/config.py. Sets root, config_dir,
+# and reads settings from it through lmconman/config.py. Sets root, config_dir,
 # config, env_file and python.
 #
-# The configuration folder is config/, or the folder AICONMAN_CONFIG_DIR names.
+# The configuration folder is config/, or the folder LMCONMAN_CONFIG_DIR names.
 
 root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
-config_dir=${AICONMAN_CONFIG_DIR:-$root/config}
+config_dir=${LMCONMAN_CONFIG_DIR:-$root/config}
 config=$config_dir/config.yml
 # shellcheck disable=SC2034  # used by the scripts that source this file
 env_file=$config_dir/.env
@@ -22,11 +22,11 @@ fail() {
 [[ -x $python ]] || fail "$python not found; create .venv first"
 
 # read_settings VAR=section.key ...: sets each VAR to that setting's value, or
-# to "" when it is not set, as aiconman/config.py reads it: a secret left empty
+# to "" when it is not set, as lmconman/config.py reads it: a secret left empty
 # in config.yml comes from .env. A boolean reads as true or false.
 read_settings() {
   local assignments
-  assignments=$(AICONMAN_CONFIG_DIR=$config_dir "$python" -I "$root/aiconman/config.py" "$@") || exit 1
+  assignments=$(LMCONMAN_CONFIG_DIR=$config_dir "$python" -I "$root/lmconman/config.py" "$@") || exit 1
   eval "$assignments"
 }
 

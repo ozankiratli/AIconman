@@ -31,7 +31,7 @@ SELECT pg_temp.refused('a base URL with a space',
   $$SELECT admin_create_connection(pg_temp.t('alex'), 'box', 'http://box example.lan', NULL, NULL, 60, 300)$$, 'base_url_invalid');
 SELECT pg_temp.refused('no base URL',
   $$SELECT admin_create_connection(pg_temp.t('alex'), 'box', NULL, NULL, NULL, 60, 300)$$, 'base_url_invalid');
-SELECT pg_temp.refused('a protocol AIconman does not speak',
+SELECT pg_temp.refused('a protocol LMconman does not speak',
   $$SELECT admin_create_connection(pg_temp.t('alex'), 'box', 'http://box.example.lan', 'vllm', NULL, 60, 300)$$, 'protocol_invalid');
 SELECT pg_temp.refused('an empty key',
   $$SELECT admin_create_connection(pg_temp.t('alex'), 'box', 'http://box.example.lan', NULL, '\x'::bytea, 60, 300)$$, 'api_key_invalid');
@@ -136,7 +136,7 @@ SELECT pg_temp.refused('a context window that is not a whole number',
   format($$SELECT admin_record_check(pg_temp.t('alex'), %s, 'openai', NULL, '[{"name": "m", "context": 40.5}]')$$, :pi), 'models_invalid');
 SELECT pg_temp.refused('a reported context window below 1',
   format($$SELECT admin_record_check(pg_temp.t('alex'), %s, 'openai', NULL, '[{"name": "m", "context": -1}]')$$, :pi), 'context_invalid');
-SELECT pg_temp.refused('a protocol detected that AIconman does not speak',
+SELECT pg_temp.refused('a protocol detected that LMconman does not speak',
   format($$SELECT admin_record_check(pg_temp.t('alex'), %s, 'vllm', NULL, '[]')$$, :pi), 'detected_protocol_invalid');
 SELECT pg_temp.ok('  and a refused check changes nothing',
   (SELECT models_found = 2 AND check_error = 'unreachable' FROM admin_connections(pg_temp.t('alex')) WHERE connection_id = :pi));
