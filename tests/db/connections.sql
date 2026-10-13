@@ -100,9 +100,12 @@ SELECT pg_temp.ok('the newly reported value is kept, and the admin''s still wins
 SELECT pg_temp.refused('a model not found cannot be used',
   format('SELECT model_access(pg_temp.t(%L), %s)', 'sam', :whisper), 'model_unavailable');
 SELECT admin_record_check(pg_temp.t('alex'), :pi, 'openai', NULL,
-  '[{"name": "qwen3-4b", "chat": true, "context": 32768}, {"name": "whisper", "speech": true}]');
+  '[{"name": "qwen3-4b", "chat": true, "context": 32768, "counts": true}, {"name": "whisper", "speech": true}]');
 SELECT pg_temp.ok('a model found again comes back with the same id and the admin''s values',
   (SELECT context = 448 FROM models(pg_temp.t('sam')) WHERE model_id = :whisper));
+SELECT pg_temp.ok('whether a model''s server counts tokens is recorded, false where not reported',
+  (SELECT counts_tokens FROM model_access(pg_temp.t('sam'), :qwen))
+  AND NOT (SELECT counts_tokens FROM model_access(pg_temp.t('sam'), :whisper)));
 
 SELECT admin_record_check(pg_temp.t('alex'), :pi, NULL, 'unreachable', NULL);
 SELECT pg_temp.ok('a failed check records its error',
@@ -110,6 +113,8 @@ SELECT pg_temp.ok('a failed check records its error',
 SELECT pg_temp.ok('  and leaves the models and the protocol detected as they were',
   (SELECT detected_protocol = 'openai' AND models_found = 2
    FROM admin_connections(pg_temp.t('alex')) WHERE connection_id = :pi));
+SELECT pg_temp.ok('  and whether a model''s server counts tokens',
+  (SELECT counts_tokens FROM model_access(pg_temp.t('sam'), :qwen)));
 SELECT pg_temp.refused('an empty error',
   format($$SELECT admin_record_check(pg_temp.t('alex'), %s, NULL, '', NULL)$$, :pi), 'check_error_invalid');
 
@@ -125,6 +130,8 @@ SELECT pg_temp.refused('the same model twice',
   format($$SELECT admin_record_check(pg_temp.t('alex'), %s, 'openai', NULL, '[{"name": "m"}, {"name": "m"}]')$$, :pi), 'models_invalid');
 SELECT pg_temp.refused('a capability that is not true or false',
   format($$SELECT admin_record_check(pg_temp.t('alex'), %s, 'openai', NULL, '[{"name": "m", "chat": "maybe"}]')$$, :pi), 'models_invalid');
+SELECT pg_temp.refused('counting tokens that is not true or false',
+  format($$SELECT admin_record_check(pg_temp.t('alex'), %s, 'openai', NULL, '[{"name": "m", "counts": "maybe"}]')$$, :pi), 'models_invalid');
 SELECT pg_temp.refused('a context window that is not a whole number',
   format($$SELECT admin_record_check(pg_temp.t('alex'), %s, 'openai', NULL, '[{"name": "m", "context": 40.5}]')$$, :pi), 'models_invalid');
 SELECT pg_temp.refused('a reported context window below 1',
@@ -137,7 +144,7 @@ SELECT pg_temp.ok('  and a refused check changes nothing',
 -- Using a model -------------------------------------------------------------------------
 
 SELECT pg_temp.ok('a member gets what the backend needs to use a model',
-  (SELECT model_name = 'qwen3-4b' AND base_url = 'http://pi.example.lan:8080/v1'
+  (SELECT model_name = 'qwen3-4b' AND context = 8192 AND base_url = 'http://pi.example.lan:8080/v1'
           AND protocol = 'openai' AND api_key = '\x6b6579'::bytea
    FROM model_access(pg_temp.t('sam'), :qwen)));
 SELECT admin_update_connection(pg_temp.t('alex'), :pi, 'pi', 'http://pi.example.lan:8080/v1', 'ollama', 60, 300);
@@ -158,8 +165,10 @@ SELECT pg_temp.refused('no session',
   format('SELECT model_access(pg_temp.t(%L), %s)', 'nobody', :qwen), 'session_invalid');
 
 SELECT admin_create_connection(pg_temp.t('alex'), 'box', 'https://box.example.lan', NULL, NULL, 60, 300) AS box \gset
-SELECT admin_record_check(pg_temp.t('alex'), :box, NULL, NULL, '[{"name": "m"}]');
+SELECT admin_record_check(pg_temp.t('alex'), :box, NULL, NULL, '[{"name": "m", "counts": true}]');
 SELECT model_id AS box_model FROM models(pg_temp.t('sam')) WHERE connection_name = 'box' \gset
+SELECT pg_temp.ok('a new model whose server counts tokens is recorded so',
+  (SELECT counts_tokens FROM models WHERE model_id = :box_model));
 SELECT pg_temp.refused('a model whose protocol is neither chosen nor detected',
   format('SELECT model_access(pg_temp.t(%L), %s)', 'sam', :box_model), 'protocol_unknown');
 SELECT pg_temp.ok('a connection without a key gives none',
@@ -174,6 +183,8 @@ SELECT refresh_record_check(:box, 'ollama', NULL, '[{"name": "m"}, {"name": "n",
 SELECT pg_temp.ok('  and records a check as the admin''s check does',
   (SELECT detected_protocol = 'ollama' AND models_found = 2 AND check_error IS NULL
    FROM admin_connections(pg_temp.t('alex')) WHERE connection_id = :box));
+SELECT pg_temp.ok('  a model whose server no longer counts tokens among it',
+  NOT (SELECT counts_tokens FROM model_access(pg_temp.t('sam'), :box_model)));
 SELECT pg_temp.refused('  refusing what the admin''s check refuses',
   format($$SELECT refresh_record_check(%s, 'openai', NULL, '[{"name": ""}]')$$, :box), 'models_invalid');
 SELECT pg_temp.refused('  and a connection that does not exist',

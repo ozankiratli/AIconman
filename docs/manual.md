@@ -144,6 +144,10 @@ The admin adds the model servers AIconman uses. A connection has a name, a base 
 
 **What a model can do**, chat, read images, or transcribe speech, and its context window, come from the server where it says: Ollama reports what each model can do, and llama.cpp which models read images and the window of a server started with one model. The admin sets the rest, and can override anything the server reports.
 
+**The context meter** shows how many tokens the conversation and the message being written take, out of the model's window. The count is exact for a llama.cpp server started with one model, which counts a request before it is sent; AIconman finds this when it checks the connection. For any other server, and when the server does not answer the count, it is an estimate, a token for every four bytes of text, and is marked as one. For an Ollama model whose window the admin has not set, the meter assumes 4096 tokens and says so; a window the admin sets is sent to Ollama with every request, so that the meter and the server agree. For other servers, a window neither reported nor set is unknown, and the meter shows the count alone.
+
+**A model's reasoning** is kept with its reply and shown apart from the answer when the server sends it apart: Ollama's `thinking`, and llama.cpp's `reasoning_content`. AIconman sends no reasoning options, so the server's own settings decide.
+
 ## Configuration
 
 `config/config.yml` explains each setting where it is set. In short:

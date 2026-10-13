@@ -237,3 +237,11 @@ Z committed the connections, the refresh and the libraries as `3d1cca2`, and: *"
 ## Added 2026-10-12, against `fdd5bb8`: the connections' timeouts
 
 At Z's word, during the backend's connections (`the-backend.md`, 2026-10-12): each connection has two timeouts in seconds, `connect_timeout` and `answer_timeout`, which the admin sets, required and above 0, with no defaults in the database; the backend holds the defaults. `admin_create_connection` and `admin_update_connection` take both; `admin_connections`, `admin_connection_access`, `model_access` and `refresh_targets` give both. And `admin_confirm(token)` refuses anyone but an active admin, for an endpoint that acts as the admin outside the database. The app role now has 54 functions.
+
+**Added later on 2026-10-12, against `05038e0`:** `model_access` also gives the model's window, the admin's where set, as `models()` gives it, for the chat to send Ollama's `num_ctx` (`the-backend.md`). An Ollama model's window is only ever the admin's, since a check of an Ollama server reports none.
+
+## Added later on 2026-10-12, against `05038e0`: whether a model's server counts tokens
+
+For the context meter (`the-backend.md`, 2026-10-12): `models.counts_tokens`, true when the last successful check found the model's server counting a chat request's tokens before it is sent, false by default. It is kept only as reported: the admin cannot make a server count, so it has no `set_` twin. A check's models carry it as `"counts"`, false when absent; `_record_check` writes it on every successful check, and a failed check leaves it as it was, like the other reported values. `model_access` gives it. Checked by five schema checks, and by a copy of the schema whose check did not update it, which failed the check written for it (`tests/db/connections.sql`):
+
+    AICONMAN_CONFIG_DIR=.tmp/scratch/config tests/db/run.sh

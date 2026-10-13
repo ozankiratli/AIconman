@@ -11,12 +11,14 @@ Nothing here is a commitment to build. Each item is what Z decided, with the not
 - **The design is done**: the backbone, the interface and the palette (`the-backbone.md`, `the-interface.md`, `the-palette.md`). Z committed it as *"Design is done"* (`85b56d4`).
 - **The database is built**, in four stages (`the-database.md`, 2026-10-12): the rebuild, accounts, connections and models, and conversations, messages and files. Both databases exist: `aicm_db`, Z's, and `aicm_scratch_db`, the agent's for tests, configured in `.tmp/scratch/config/`.
 - **What exists**: `config.yml.template` and `.env.template` at the root; `config/config.yml` and `config/.env`, Z's, which the agent does not open; `install/common.sh`, shared by the install scripts; `install/create_database.sh`, which runs `db/create_database.sql`; `install/build_schema.sh`, which rebuilds the schema from `db/build_schema.sql` after a dump, and seeds it from `db/seed.sql`; the schema's three parts, `db/accounts.sql`, `db/connections.sql` and `db/conversations.sql`; `tests/install/`, the tests of both scripts, and `tests/db/`, the schema's; `.venv`, with PyYAML and the backend's libraries, from `install/requirements.txt`; `dev/.venv`, with ShellCheck, from `dev/requirements.txt`; `docs/manual.md`, covering setup so far; and `dev/palette/`, the palette's scripts.
-- **The backend's groundwork, password accounts and connections are built** (`the-backend.md`): `aiconman/`, with the configuration's only reader, the database access, refusals as HTTP answers, a health check, the account endpoints, the connection endpoints with checking and the scheduled refresh; `install/refresh_models.sh`; and `tests/backend/`.
-- **Nothing else of the application is built**: no chat, files or Nextcloud sign-in in the backend, and no frontend. Building goes only as far as Z names (`CLAUDE.md`, and the agent's memory).
+- **The backend's groundwork, password accounts, connections, chat and context meter are built** (`the-backend.md`): `aiconman/`, with the configuration's only reader, the database access, refusals as HTTP answers, a health check, the account endpoints, the connection endpoints with checking and the scheduled refresh, the conversations with streamed replies, and the count of a conversation and its draft against the model's window; `install/refresh_models.sh`; and `tests/backend/`. Z committed everything up to the connections (`05038e0`); the chat and the meter are not committed yet, and the meter changed the schema, which `aicm_db` takes through a rebuild that is Z's to run.
+- **Nothing else of the application is built**: no files, speech or Nextcloud sign-in in the backend, and no frontend. Building goes only as far as Z names (`CLAUDE.md`, and the agent's memory).
 
 ## Next, on Z's word
 
-1. **The rest of the backend**, on FastAPI, in the stages the agent proposed to Z on 2026-10-12 (`the-backend.md`): chat, then speech and files, then Nextcloud sign-in after the interface works, then export and import once designed. For the chat, the agent's proposal on Ollama's window waits for Z (`the-backbone.md`, 2026-10-12): `num_ctx` sent only for a window the admin set, and 4096 assumed otherwise. Its libraries are in `install/requirements.txt` and `.venv`, added at Z's word and under Z's review (`SOURCES.md`, `the-database.md`, 2026-10-12).
+1. **Finishing the chat** (`the-backend.md`, 2026-10-12): R-022 is read and applied, and the context meter is built; left is checking a browser going away under Uvicorn, on port 8644 (`CLAUDE.md`), which the chat's tests could not, and which starts a server, so it is asked first.
+2. **The rest of the backend**, in the stages the agent proposed to Z on 2026-10-12 (`the-backend.md`): speech and files, images in a message among them; then Nextcloud sign-in after the interface works; then export and import once designed. Its libraries are in `install/requirements.txt` and `.venv`, added at Z's word and under Z's review (`SOURCES.md`).
+3. **Serving streamed replies behind a reverse proxy**: the manual's part on deployment will need to say how the proxy passes a stream on as it comes, rather than holding it back.
 
 ## Deferred by Z to the polishing
 
@@ -27,7 +29,7 @@ Nothing here is a commitment to build. Each item is what Z decided, with the not
 
 ## Decided, and not built yet
 
-- **Six gaps in what the servers' documents say** (`the-backbone.md`): Ollama's window when `num_ctx` is not set; what llama.cpp's `n_ctx` is per request; how Ollama separates a stream's objects and reports errors; the values Ollama's capabilities take; the OpenAI protocol's error format; and vLLM, whose documentation could not be read. Z decides where each fact comes from when the work needs it.
+- **The gaps in what the servers' documents say** (`the-backbone.md`, 2026-10-12), after R-018 to R-021: Ollama's window is the admin's, or 4096 assumed (decided); llama.cpp's window is its slot's `n_ctx` (answered); Ollama's streams and errors (answered); the values of Ollama's `capabilities` (three known, the rest open); the OpenAI protocol's errors (fields known, shown as `error.message` or as sent, decided); and vLLM, whose documentation could not be read (open). After R-022 (`the-backbone.md`, 2026-10-12), three more are open: whether llama.cpp takes `max_completion_tokens`; where its `reasoning_content` sits in a streamed chunk, which the chat reads from each choice's `delta`; and how it reports an error. One request to a llama.cpp server could settle the first two, and Z's servers are Z's to allow. Z decides where a fact comes from when the work needs it.
 - **HTTPS on a local network**: the manual names the ways to get a certificate the household's devices trust (`the-backbone.md`), when deployment is written.
 - **Registering AIconman in Nextcloud**: the manual's step, when Nextcloud sign-in is built.
 - **A part of the manual on setting up and serving a model**, secondary to AIconman itself, possibly around a Raspberry Pi 5 with the AI HAT+ 2 (`product-brief.md`).
@@ -41,7 +43,6 @@ Nothing here is a commitment to build. Each item is what Z decided, with the not
 
 ## Raised by the agent, and not taken up
 
-Under Z's rule these are not pending. They are listed so that when the work reaches them, the agent asks again rather than assuming either way.
+Under Z's rule these are not pending. They are listed so that when the work reaches them, the agent asks again rather than assuming either way. Twice, on Ollama's window and on port 8644, Z said afterwards that silence had meant the proposal was plainly right; so when the work reaches one of these, the agent asks again plainly, rather than taking silence either way.
 
-- **A port for the agent's own test server**, 8644 proposed, since the agent may not drive Z's instance on 8642. Until Z answers, the agent starts no server without asking. Raised 2026-10-11.
 - **A line under the field of *Delete my account*** saying what enables the button, so that its disabled state does not rest on color in dark HC (`the-interface.md`). Raised 2026-10-11.

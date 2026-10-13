@@ -66,7 +66,8 @@ class ServersTest(unittest.IsolatedAsyncioTestCase):
         result = await self.check("http://ollama.example.lan:11434")
         self.assertEqual((result.detected, result.error), ("ollama", None))
         self.assertEqual(self.model(result, "gemma4"),
-                         {"name": "gemma4", "chat": True, "images": True, "speech": False, "context": None})
+                         {"name": "gemma4", "chat": True, "images": True, "speech": False, "context": None,
+                          "counts": False})
         self.assertEqual(self.model(result, "nomic-embed-text")["chat"], False)
         self.assertEqual((self.model(result, "old-model")["chat"], self.model(result, "old-model")["images"]),
                          (None, None))
@@ -80,19 +81,25 @@ class ServersTest(unittest.IsolatedAsyncioTestCase):
         result = await self.check("http://llama.example.lan:8080/v1/")
         self.assertEqual((result.detected, result.error), ("openai", None))
         self.assertEqual(result.models, [{"name": "../models/qwen3-4b-Q4_K_M.gguf", "chat": None,
-                                          "images": True, "speech": None, "context": 8192}])
-        self.assertEqual(self.fakes.paths("llama"), ["/v1/api/version", "/v1/models", "/v1/models", "/props"])
+                                          "images": True, "speech": None, "context": 8192, "counts": True}])
+        self.assertEqual(self.fakes.paths("llama"), ["/v1/api/version", "/v1/models", "/v1/models", "/props",
+                                                     "/v1/chat/completions/input_tokens"])
 
     async def test_a_plain_openai_server_gives_names_only(self):
         result = await self.check("http://openai.example.lan/v1")
         self.assertEqual([m["name"] for m in result.models], ["whisper-1", "qwen3-4b"])
         self.assertTrue(all(m["chat"] is None and m["images"] is None and m["context"] is None
-                            for m in result.models))
+                            and m["counts"] is False for m in result.models))
 
-    async def test_a_server_listing_several_models_is_not_asked_for_props(self):
+    async def test_a_single_model_that_does_not_count_tokens(self):
+        result = await self.check("http://crash.example.lan/v1")
+        self.assertEqual([(m["name"], m["counts"]) for m in result.models], [("broken-model", False)])
+        self.assertIn("/v1/chat/completions/input_tokens", self.fakes.paths("crash"))
+
+    async def test_a_server_listing_several_models_is_not_asked_for_props_or_a_count(self):
         result = await self.check("http://router.example.lan/v1")
         self.assertEqual([m["images"] for m in result.models], [False, True])
-        self.assertNotIn("/props", self.fakes.paths("router"))
+        self.assertEqual(self.fakes.paths("router"), ["/v1/api/version", "/v1/models", "/v1/models"])
 
     async def test_a_protocol_given_is_not_detected(self):
         result = await self.check("http://llama.example.lan:8080/v1", protocol="openai")

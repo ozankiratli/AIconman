@@ -156,3 +156,19 @@ Z cleared R-018, Ollama's documentation, R-019, llama.cpp's server README at com
 4. **The two slips in R-019.** Z: *"It is fine, you recorded them and it was close enough. Mishaps can happen, we still need to be careful."* Both came from printing more than the cleared lines: a search that matched a neighboring row, and a line range that ran past its section. Printing a section by its heading's own end, found first, as was done for the last two sections of that read, is the careful way.
 
 **R-021, read on 2026-10-12:** Ollama's API description gives `capabilities` as a list of strings with no fixed set of values, so gap 4 stays open; three values are known from its examples, `completion`, `thinking` and `vision`. Its list of running models gives a loaded model's `context_length`.
+
+## Added later on 2026-10-12, against `05038e0`: what R-022 found
+
+Z cleared R-022, the section on `POST /v1/chat/completions` of llama.cpp's server README, for the chat; it was read at commit `cbe28bb`, and `dev/READING-LOG.md` has what was read and the facts in their own words.
+
+- **Reasoning:** llama.cpp returns a model's reasoning in a field named `reasoning_content`. The section does not say where in a streamed chunk it sits. The options `reasoning_format`, `reasoning_effort`, `chat_template_kwargs` and `reasoning_control` change how it comes, or whether it comes at all.
+- **The length of a reply:** the section names no field. It defers its options to OpenAI's documentation, whose reference names `max_completion_tokens` (R-006), and says llama.cpp's own `/completion` features are supported too, without listing them.
+- **Errors:** not in the section.
+
+**The gaps, after this read, for Z:**
+
+1. **Whether llama.cpp takes `max_completion_tokens`.** The chat sends it, as the OpenAI reference names it. If llama.cpp ignored it, a conversation's output limit would not reach Z's own servers, and nothing would say so.
+2. **Where `reasoning_content` sits in a streamed chunk.** The chat reads it from each choice's `delta`, beside `content`, which is the agent's reading of a chunk as the OpenAI reference shapes it, not something the section says.
+3. **How llama.cpp reports an error**, in a stream and outside one. The chat shows an error's `message` where it has one, as for any OpenAI-compatible server (Z's answer on gap 5).
+
+Data could settle the first two: one streamed request with a small output limit, to a llama.cpp server running a model that reasons, shows whether the reply stops at the limit and where the reasoning comes. Z's own servers are llama.cpp; a request to one is Z's to allow, or to run.

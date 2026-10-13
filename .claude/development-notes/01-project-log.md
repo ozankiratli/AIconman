@@ -112,3 +112,10 @@ Rows `0001` to `0016` were written on 2026-10-11, after the fact, from `git log`
 | 005E | 2026-10-12 | 19:03 EDT | fdd5bb8 | Agent: adds `tests/backend/fake_servers.py` and `test_connections.py`; runs the backend's tests, and three copies with a rule broken; corrects a docstring on detection | |
 | 005F | 2026-10-12 | 19:33 EDT | fdd5bb8 | Agent: adds each connection's two timeouts and `admin_confirm` to the schema; adds the timeouts to the schema tests' calls by an announced `sed`, and checks of them | |
 | 0060 | 2026-10-12 | 19:35 EDT | fdd5bb8 | Agent: passes the timeouts in every request of a check; adds the defaults and the check of values not saved yet; runs every test, and two copies with a rule broken | |
+| 0061 | 2026-10-12 | 20:06 EDT | 05038e0 | Z: commits the connections ("API work: connections") | |
+| 0062 | 2026-10-12 | 20:11 EDT | 05038e0 | Agent: requests llama.cpp's current commit; writes R-022; adds the window to the schema's `model_access` | |
+| 0063 | 2026-10-12 | 20:13 EDT | 05038e0 | Agent: adds `aiconman/relay.py` and `aiconman/conversations.py`, the chat | |
+| 0064 | 2026-10-12 | 20:16 EDT | 05038e0 | Agent: adds chat to the made-up servers and `tests/backend/test_chat.py`; runs every test, and three copies with a rule broken | |
+| 0065 | 2026-10-12 | 20:34 EDT | 05038e0 | Agent: performs R-022, llama.cpp's server README on chat completions, at `cbe28bb` | |
+| 0066 | 2026-10-12 | 20:39 EDT | 05038e0 | Agent: adds `models.counts_tokens` to the schema and `model_access`; the check's count of a single model's server; `aiconman/meter.py` and the count endpoint; reads `reasoning_content` in `aiconman/relay.py` | |
+| 0067 | 2026-10-12 | 20:41 EDT | 05038e0 | Agent: adds the meter and an OpenAI-compatible server's reasoning to the made-up servers and the tests; runs every test, and seven copies with a rule broken | |

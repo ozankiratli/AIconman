@@ -332,3 +332,21 @@ These four entries share a task and a method, given once here; each entry names 
     - **The running models** (`/api/ps`, a GET, *"Models currently loaded into memory"*) give, in the example, each model's `name`, `model`, `size`, `digest`, `details`, `expires_at`, `size_vram` and `context_length`, 4096 there. So a loaded model's window is known; a model not loaded is not in the list.
     - **Left open:** the full set of values `capabilities` can take (gap 4). Three are known: `completion`, `thinking` and `vision`.
   - **Where it went:** `.claude/development-notes/the-backbone.md` and `SOURCES.md`.
+
+## R-022: llama.cpp's server README, on chat completions
+
+- **Named:** 2026-10-12
+- **Task:** the backend's chat, for llama.cpp: which field of a chat request limits the length of the reply, since the OpenAI reference (R-006) names `max_completion_tokens` and calls `max_tokens` deprecated; and how a streamed reply carries a model's reasoning, which the OpenAI reference does not give and the interface shows apart from the answer.
+- **Source:** `tools/server/README.md` in github.com/ggml-org/llama.cpp, on `master` on the day of the read, with the commit recorded under *Done* (`master` was at `cbe28bb3cb0758f0c566a9a3561766821aeb0748` when this entry was written): the section on `POST /v1/chat/completions`, found by its heading and printed only to its own end.
+- **Facts sought:** the fields that limit a reply's length, and which of them the server takes; the field a streamed chunk carries a model's reasoning in, and any option that controls it; and how an error is reported, in a stream and outside one, if the section says.
+- **Not read:** the rest of the README; the server's source code.
+- **Cleared:** 2026-10-12
+- **Done:** 2026-10-12.
+  - **What was read:** `tools/server/README.md` at commit `cbe28bb3cb0758f0c566a9a3561766821aeb0748`, `master` on 2026-10-12 and the same commit as when the entry was written, fetched raw. A script found the section's heading and the next heading of the same level, outside code blocks, and printed only those two lines, 1338 and 1471; the section was then printed from line 1338 to 1470, its own end, and nothing else of the file was printed.
+  - **What was found:**
+    - **The length of a reply:** the section names no field for it. For its options it points to OpenAI's Chat Completions documentation, and says that llama.cpp's own `/completion` features, *"such as `mirostat`"*, are also supported, without listing them.
+    - **Reasoning:** *"The server supports parsing and returning reasoning via the `reasoning_content` field, similar to Deepseek API."* The section does not say where in a streamed chunk the field sits. Four options bear on it: `reasoning_format`, *"If set to `none`, it will output the raw generated text."*; `reasoning_effort`, *"If `none`, reasoning/thinking is disabled. Otherwise, the value is made available to the jinja template."*; `chat_template_kwargs`, with `{"enable_thinking": false}` as its example; and `reasoning_control`, which arms ending the reasoning early through `/v1/chat/completions/control`, off by default. Reasoning sent back in the history is supported *"by some specific templates"*.
+    - **Errors:** the section says nothing of them.
+    - **Also in the section, not sought, and not used:** a response carries a `timings` object (`cache_n`, `prompt_n`, `predicted_n`, and durations) and a standard `usage` object (`completion_tokens`, `prompt_tokens`, `total_tokens`, and `prompt_tokens_details.cached_tokens`), and *"The total number of tokens in context is equal to `prompt_n + cache_n + predicted_n`"*. The multimodal input R-003 read now also lists `input_video`.
+  - **Left open:** whether llama.cpp takes `max_completion_tokens`, the field the OpenAI reference (R-006) names; where `reasoning_content` sits in a streamed chunk; and how an error is reported.
+  - **Where it went:** `.claude/development-notes/the-backbone.md`, `.claude/development-notes/the-backend.md` and `SOURCES.md`.

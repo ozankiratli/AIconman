@@ -18,13 +18,18 @@ import httpx
 CONNECT_TIMEOUT = 60
 ANSWER_TIMEOUT = 300
 
+# Where llama.cpp counts the tokens of a chat request before it is sent, under
+# an OpenAI-compatible base URL.
+INPUT_TOKENS_PATH = "/chat/completions/input_tokens"
+
 
 @dataclass(frozen=True)
 class Check:
     """What a check found: the protocol detected, or None when the protocol was
     given or none was found; the error's key, or None when it succeeded; and
     the models, as dictionaries with "name", and "chat", "images", "speech" and
-    "context", each None when the server did not say."""
+    "context", each None when the server did not say, and "counts", whether
+    the server counts a chat request's tokens before it is sent."""
 
     detected: str | None
     error: str | None
@@ -115,8 +120,10 @@ async def list_openai(request: _Request, base: str) -> list[dict]:
     """The models GET <base>/models lists. Whether a model reads images comes
     from llama.cpp's architecture.input_modalities, where the server gives it.
     On a server that lists exactly one model, the context window is the one
-    llama.cpp's GET /props gives for a slot, where it answers; a server that
-    lists several may be a router, which a request can make load a model."""
+    llama.cpp's GET /props gives for a slot, where it answers, and the model
+    counts tokens when llama.cpp's input_tokens counts a short chat request; a
+    server that lists several may be a router, which a request can make load a
+    model."""
     body = _json(await request.send("GET", f"{base}/models"))
     if not _is_model_list(body):
         raise CheckFailed("unexpected_answer")
@@ -127,10 +134,12 @@ async def list_openai(request: _Request, base: str) -> list[dict]:
         architecture = entry.get("architecture")
         modalities = architecture.get("input_modalities") if isinstance(architecture, dict) else None
         images = "image" in modalities if isinstance(modalities, list) else None
-        models.append({"name": entry["id"], "chat": None, "images": images, "speech": None, "context": None})
+        models.append({"name": entry["id"], "chat": None, "images": images, "speech": None, "context": None,
+                       "counts": False})
     if len(models) == 1:
         root = base[: -len("/v1")] if base.endswith("/v1") else base
         models[0]["context"] = await _slot_context(request, root)
+        models[0]["counts"] = await _counts_tokens(request, base, models[0]["name"])
     return models
 
 
@@ -153,7 +162,8 @@ async def list_ollama(request: _Request, base: str) -> list[dict]:
             chat, images = "completion" in capabilities, "vision" in capabilities
         else:
             chat = images = None
-        models.append({"name": entry["name"], "chat": chat, "images": images, "speech": False, "context": None})
+        models.append({"name": entry["name"], "chat": chat, "images": images, "speech": False, "context": None,
+                       "counts": False})
     return models
 
 
@@ -168,6 +178,24 @@ async def _slot_context(request: _Request, root: str) -> int | None:
     settings = body.get("default_generation_settings") if isinstance(body, dict) else None
     n_ctx = settings.get("n_ctx") if isinstance(settings, dict) else None
     return n_ctx if isinstance(n_ctx, int) and not isinstance(n_ctx, bool) and n_ctx > 0 else None
+
+
+async def _counts_tokens(request: _Request, base: str, name: str) -> bool:
+    """Whether POST <base>/chat/completions/input_tokens answers a count for a
+    short chat request to the model NAME."""
+    try:
+        response = await request.send("POST", f"{base}{INPUT_TOKENS_PATH}",
+                                      {"model": name, "messages": [{"role": "user", "content": "Hello"}]})
+    except CheckFailed:
+        return False
+    return response.status_code == 200 and input_tokens(_parse(response)) is not None
+
+
+def input_tokens(body: Any) -> int | None:
+    """The count in BODY, an answer of input_tokens, or None when it holds
+    none."""
+    count = body.get("input_tokens") if isinstance(body, dict) else None
+    return count if isinstance(count, int) and not isinstance(count, bool) and count >= 0 else None
 
 
 def _parse(response: httpx.Response) -> Any:

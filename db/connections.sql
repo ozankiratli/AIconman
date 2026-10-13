@@ -11,7 +11,8 @@
 --
 -- What a model can do and its context window are kept twice: as the server
 -- reported them at the last check, and as the admin set them. A value the admin
--- set wins; NULL in both means unknown.
+-- set wins; NULL in both means unknown. Whether a model's server counts a chat
+-- request's tokens before it is sent is kept only as the last check found it.
 --
 -- Each connection has two timeouts, in seconds, which the admin sets: how long
 -- to wait for its server to accept a connection, and how long for each answer.
@@ -48,6 +49,7 @@ CREATE TABLE models (
   reported_images boolean,
   reported_speech boolean,
   reported_context integer,
+  counts_tokens boolean NOT NULL DEFAULT false,
   set_chat boolean,
   set_images boolean,
   set_speech boolean,
@@ -97,13 +99,14 @@ $$;
 GRANT EXECUTE ON FUNCTION models(bytea) TO :"app_user";
 
 -- What the backend needs to send a request to a model: its name on the server,
--- its connection's base URL, protocol and timeouts, and the connection's key,
--- still encrypted. The protocol is the one the admin chose, or else the one
--- detected. Refuses a model the last check did not find, and one whose
--- protocol is not known yet.
+-- its window, as models() gives it, whether its server counts tokens, its
+-- connection's base URL, protocol and timeouts, and the connection's key, still
+-- encrypted. The protocol is the one the admin chose, or else the one detected.
+-- Refuses a model the last check did not find, and one whose protocol is not
+-- known yet.
 CREATE FUNCTION model_access(p_token_hash bytea, p_model_id bigint)
 RETURNS TABLE (
-  model_name text, base_url text, protocol text, api_key bytea,
+  model_name text, context integer, counts_tokens boolean, base_url text, protocol text, api_key bytea,
   connect_timeout integer, answer_timeout integer
 )
 LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp AS $$
@@ -124,7 +127,8 @@ BEGIN
     PERFORM _refuse('protocol_unknown');
   END IF;
   RETURN QUERY
-    SELECT v_model.name, v_connection.base_url,
+    SELECT v_model.name, coalesce(v_model.set_context, v_model.reported_context), v_model.counts_tokens,
+           v_connection.base_url,
            coalesce(v_connection.protocol, v_connection.detected_protocol), v_connection.api_key,
            v_connection.connect_timeout, v_connection.answer_timeout;
 END
@@ -308,8 +312,9 @@ GRANT EXECUTE ON FUNCTION admin_delete_connection(bytea, bigint) TO :"app_user";
 -- app role. With P_ERROR NULL the check succeeded: P_DETECTED is the protocol
 -- detected, NULL when none was, and P_MODELS is what the server reported, a
 -- JSON array of objects with "name", and optionally "chat", "images" and
--- "speech", true or false, and "context", a number of tokens. The models in it
--- are marked found, with what was reported; the connection's other models are
+-- "speech", true or false, "context", a number of tokens, and "counts", true
+-- when the server counts tokens, false when absent. The models in it are
+-- marked found, with what was reported; the connection's other models are
 -- marked not found, and keep what the admin set. With P_ERROR given, the check
 -- failed, and only the error is recorded.
 CREATE FUNCTION _record_check(
@@ -345,14 +350,15 @@ BEGIN
 
   BEGIN
     INSERT INTO models AS m (connection_id, name, reported_chat, reported_images, reported_speech,
-                             reported_context)
-      SELECT p_connection_id, r.name, r.chat, r.images, r.speech, r.context
+                             reported_context, counts_tokens)
+      SELECT p_connection_id, r.name, r.chat, r.images, r.speech, r.context, coalesce(r.counts, false)
       FROM jsonb_to_recordset(p_models) AS r(name text, chat boolean, images boolean, speech boolean,
-                                             context integer)
+                                             context integer, counts boolean)
     ON CONFLICT ON CONSTRAINT model_taken DO UPDATE
       SET present = true, last_seen_at = now(),
           reported_chat = excluded.reported_chat, reported_images = excluded.reported_images,
-          reported_speech = excluded.reported_speech, reported_context = excluded.reported_context;
+          reported_speech = excluded.reported_speech, reported_context = excluded.reported_context,
+          counts_tokens = excluded.counts_tokens;
   EXCEPTION
     WHEN invalid_text_representation OR numeric_value_out_of_range OR datatype_mismatch THEN
       PERFORM _refuse('models_invalid');
