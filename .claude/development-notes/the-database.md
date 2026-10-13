@@ -233,3 +233,7 @@ Z committed the connections, the refresh and the libraries as `3d1cca2`, and: *"
 **Found before the first run.** Reading the file back, the agent found that its check on a reply's model name let a NULL through, since a comparison with NULL is unknown and a check that is unknown passes. It was fixed before the tests ran; the fourth broken copy above puts it back, and fails. **A slip:** the first copy built to break the path rule did not change the file, since the `sed` pattern matched nothing, and its tests passed; it was caught by the count of changed lines, and rerun with a pattern that matched (`platform-traps.md`).
 
 **The database is built**, in four stages. Every function the app role may call is tested, as the owner role, and what the app role can reach is tested as the app role itself. Not checked, as before: what two sessions do at once, and PostgreSQL 16.
+
+## Added 2026-10-12, against `fdd5bb8`: the connections' timeouts
+
+At Z's word, during the backend's connections (`the-backend.md`, 2026-10-12): each connection has two timeouts in seconds, `connect_timeout` and `answer_timeout`, which the admin sets, required and above 0, with no defaults in the database; the backend holds the defaults. `admin_create_connection` and `admin_update_connection` take both; `admin_connections`, `admin_connection_access`, `model_access` and `refresh_targets` give both. And `admin_confirm(token)` refuses anyone but an active admin, for an endpoint that acts as the admin outside the database. The app role now has 54 functions.

@@ -11,8 +11,8 @@ SELECT sign_up_password('sam', NULL, 'salt-sam', pg_temp.pw('sam'), pg_temp.t('s
 -- Adding a connection ----------------------------------------------------------
 
 SELECT pg_temp.refused('a member cannot add a connection',
-  $$SELECT admin_create_connection(pg_temp.t('sam'), 'pi', 'http://pi.example.lan:8080/v1', NULL, NULL)$$, 'not_admin');
-SELECT admin_create_connection(pg_temp.t('alex'), '  pi  ', 'http://pi.example.lan:8080/v1', NULL, '\x6b6579'::bytea) AS pi \gset
+  $$SELECT admin_create_connection(pg_temp.t('sam'), 'pi', 'http://pi.example.lan:8080/v1', NULL, NULL, 60, 300)$$, 'not_admin');
+SELECT admin_create_connection(pg_temp.t('alex'), '  pi  ', 'http://pi.example.lan:8080/v1', NULL, '\x6b6579'::bytea, 60, 300) AS pi \gset
 SELECT pg_temp.ok('the admin adds a connection, its name trimmed',
   (SELECT name FROM admin_connections(pg_temp.t('alex')) WHERE connection_id = :pi) = 'pi');
 SELECT pg_temp.ok('  with a key, which the listing shows only as present',
@@ -20,21 +20,30 @@ SELECT pg_temp.ok('  with a key, which the listing shows only as present',
 SELECT pg_temp.ok('  not yet checked',
   (SELECT checked_at IS NULL AND models_found = 0 FROM admin_connections(pg_temp.t('alex')) WHERE connection_id = :pi));
 SELECT pg_temp.refused('a name already taken',
-  $$SELECT admin_create_connection(pg_temp.t('alex'), 'pi', 'http://other.example.lan', NULL, NULL)$$, 'name_taken');
+  $$SELECT admin_create_connection(pg_temp.t('alex'), 'pi', 'http://other.example.lan', NULL, NULL, 60, 300)$$, 'name_taken');
 SELECT pg_temp.refused('an empty name',
-  $$SELECT admin_create_connection(pg_temp.t('alex'), '  ', 'http://other.example.lan', NULL, NULL)$$, 'name_invalid');
+  $$SELECT admin_create_connection(pg_temp.t('alex'), '  ', 'http://other.example.lan', NULL, NULL, 60, 300)$$, 'name_invalid');
 SELECT pg_temp.refused('no name',
-  $$SELECT admin_create_connection(pg_temp.t('alex'), NULL, 'http://other.example.lan', NULL, NULL)$$, 'name_invalid');
+  $$SELECT admin_create_connection(pg_temp.t('alex'), NULL, 'http://other.example.lan', NULL, NULL, 60, 300)$$, 'name_invalid');
 SELECT pg_temp.refused('a base URL that is not http or https',
-  $$SELECT admin_create_connection(pg_temp.t('alex'), 'box', 'ftp://box.example.lan', NULL, NULL)$$, 'base_url_invalid');
+  $$SELECT admin_create_connection(pg_temp.t('alex'), 'box', 'ftp://box.example.lan', NULL, NULL, 60, 300)$$, 'base_url_invalid');
 SELECT pg_temp.refused('a base URL with a space',
-  $$SELECT admin_create_connection(pg_temp.t('alex'), 'box', 'http://box example.lan', NULL, NULL)$$, 'base_url_invalid');
+  $$SELECT admin_create_connection(pg_temp.t('alex'), 'box', 'http://box example.lan', NULL, NULL, 60, 300)$$, 'base_url_invalid');
 SELECT pg_temp.refused('no base URL',
-  $$SELECT admin_create_connection(pg_temp.t('alex'), 'box', NULL, NULL, NULL)$$, 'base_url_invalid');
+  $$SELECT admin_create_connection(pg_temp.t('alex'), 'box', NULL, NULL, NULL, 60, 300)$$, 'base_url_invalid');
 SELECT pg_temp.refused('a protocol AIconman does not speak',
-  $$SELECT admin_create_connection(pg_temp.t('alex'), 'box', 'http://box.example.lan', 'vllm', NULL)$$, 'protocol_invalid');
+  $$SELECT admin_create_connection(pg_temp.t('alex'), 'box', 'http://box.example.lan', 'vllm', NULL, 60, 300)$$, 'protocol_invalid');
 SELECT pg_temp.refused('an empty key',
-  $$SELECT admin_create_connection(pg_temp.t('alex'), 'box', 'http://box.example.lan', NULL, '\x'::bytea)$$, 'api_key_invalid');
+  $$SELECT admin_create_connection(pg_temp.t('alex'), 'box', 'http://box.example.lan', NULL, '\x'::bytea, 60, 300)$$, 'api_key_invalid');
+SELECT pg_temp.ok('  with its two timeouts, in seconds',
+  (SELECT connect_timeout = 60 AND answer_timeout = 300 FROM admin_connections(pg_temp.t('alex')) WHERE connection_id = :pi));
+SELECT pg_temp.refused('a timeout of 0 seconds',
+  $$SELECT admin_create_connection(pg_temp.t('alex'), 'box', 'http://box.example.lan', NULL, NULL, 0, 300)$$, 'connect_timeout_invalid');
+SELECT pg_temp.refused('no timeout for an answer',
+  $$SELECT admin_create_connection(pg_temp.t('alex'), 'box', 'http://box.example.lan', NULL, NULL, 60, NULL)$$, 'answer_timeout_invalid');
+SELECT pg_temp.refused('a member is not confirmed as the admin',
+  $$SELECT admin_confirm(pg_temp.t('sam'))$$, 'not_admin');
+SELECT pg_temp.passes('the admin is confirmed', $$SELECT admin_confirm(pg_temp.t('alex'))$$);
 SELECT pg_temp.ok('the members have no models before a check',
   NOT EXISTS (SELECT 1 FROM models(pg_temp.t('sam'))));
 
@@ -131,15 +140,24 @@ SELECT pg_temp.ok('a member gets what the backend needs to use a model',
   (SELECT model_name = 'qwen3-4b' AND base_url = 'http://pi.example.lan:8080/v1'
           AND protocol = 'openai' AND api_key = '\x6b6579'::bytea
    FROM model_access(pg_temp.t('sam'), :qwen)));
-SELECT admin_update_connection(pg_temp.t('alex'), :pi, 'pi', 'http://pi.example.lan:8080/v1', 'ollama');
+SELECT admin_update_connection(pg_temp.t('alex'), :pi, 'pi', 'http://pi.example.lan:8080/v1', 'ollama', 60, 300);
 SELECT pg_temp.ok('a protocol the admin chose wins over the one detected',
   (SELECT protocol FROM model_access(pg_temp.t('sam'), :qwen)) = 'ollama');
+SELECT admin_update_connection(pg_temp.t('alex'), :pi, 'pi', 'http://pi.example.lan:8080/v1', 'ollama', 120, 900);
+SELECT pg_temp.ok('the admin changes the timeouts, and the backend gets them to use a model',
+  (SELECT connect_timeout = 120 AND answer_timeout = 900 FROM model_access(pg_temp.t('sam'), :qwen)));
+SELECT pg_temp.ok('  to check the connection',
+  (SELECT connect_timeout = 120 AND answer_timeout = 900 FROM admin_connection_access(pg_temp.t('alex'), :pi)));
+SELECT pg_temp.ok('  and to refresh it',
+  (SELECT connect_timeout = 120 AND answer_timeout = 900 FROM refresh_targets() WHERE connection_id = :pi));
+SELECT pg_temp.refused('a negative timeout',
+  format($$SELECT admin_update_connection(pg_temp.t('alex'), %s, 'pi', 'http://pi.example.lan:8080/v1', NULL, 60, -1)$$, :pi), 'answer_timeout_invalid');
 SELECT pg_temp.refused('a model id that does not exist',
   $$SELECT model_access(pg_temp.t('sam'), -1)$$, 'no_such_model');
 SELECT pg_temp.refused('no session',
   format('SELECT model_access(pg_temp.t(%L), %s)', 'nobody', :qwen), 'session_invalid');
 
-SELECT admin_create_connection(pg_temp.t('alex'), 'box', 'https://box.example.lan', NULL, NULL) AS box \gset
+SELECT admin_create_connection(pg_temp.t('alex'), 'box', 'https://box.example.lan', NULL, NULL, 60, 300) AS box \gset
 SELECT admin_record_check(pg_temp.t('alex'), :box, NULL, NULL, '[{"name": "m"}]');
 SELECT model_id AS box_model FROM models(pg_temp.t('sam')) WHERE connection_name = 'box' \gset
 SELECT pg_temp.refused('a model whose protocol is neither chosen nor detected',
@@ -168,11 +186,11 @@ SELECT pg_temp.ok('  and a failed check',
 -- Changing and removing ------------------------------------------------------------------
 
 SELECT pg_temp.refused('renaming to a name already taken',
-  format($$SELECT admin_update_connection(pg_temp.t('alex'), %s, 'pi', 'https://box.example.lan', NULL)$$, :box), 'name_taken');
+  format($$SELECT admin_update_connection(pg_temp.t('alex'), %s, 'pi', 'https://box.example.lan', NULL, 60, 300)$$, :box), 'name_taken');
 SELECT pg_temp.refused('a member cannot change a connection',
-  format($$SELECT admin_update_connection(pg_temp.t('sam'), %s, 'box', 'https://box.example.lan', NULL)$$, :box), 'not_admin');
+  format($$SELECT admin_update_connection(pg_temp.t('sam'), %s, 'box', 'https://box.example.lan', NULL, 60, 300)$$, :box), 'not_admin');
 SELECT pg_temp.refused('a connection that does not exist',
-  $$SELECT admin_update_connection(pg_temp.t('alex'), -1, 'x', 'https://x.example.lan', NULL)$$, 'no_such_connection');
+  $$SELECT admin_update_connection(pg_temp.t('alex'), -1, 'x', 'https://x.example.lan', NULL, 60, 300)$$, 'no_such_connection');
 SELECT admin_set_connection_key(pg_temp.t('alex'), :pi, '\x6e6577'::bytea);
 SELECT pg_temp.ok('the admin replaces a key',
   (SELECT api_key FROM admin_connection_access(pg_temp.t('alex'), :pi)) = '\x6e6577'::bytea);

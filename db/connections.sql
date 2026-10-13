@@ -12,6 +12,9 @@
 -- What a model can do and its context window are kept twice: as the server
 -- reported them at the last check, and as the admin set them. A value the admin
 -- set wins; NULL in both means unknown.
+--
+-- Each connection has two timeouts, in seconds, which the admin sets: how long
+-- to wait for its server to accept a connection, and how long for each answer.
 
 
 -- Tables -------------------------------------------------------------------
@@ -29,6 +32,8 @@ CREATE TABLE connections (
   detected_protocol text
     CONSTRAINT detected_protocol_invalid CHECK (detected_protocol IN ('openai', 'ollama')),
   api_key bytea CONSTRAINT api_key_invalid CHECK (length(api_key) > 0),
+  connect_timeout integer NOT NULL CONSTRAINT connect_timeout_invalid CHECK (connect_timeout > 0),
+  answer_timeout integer NOT NULL CONSTRAINT answer_timeout_invalid CHECK (answer_timeout > 0),
   checked_at timestamptz,
   check_error text CONSTRAINT check_error_invalid CHECK (check_error <> '' AND length(check_error) <= 2000),
   created_at timestamptz NOT NULL DEFAULT now()
@@ -92,12 +97,15 @@ $$;
 GRANT EXECUTE ON FUNCTION models(bytea) TO :"app_user";
 
 -- What the backend needs to send a request to a model: its name on the server,
--- its connection's base URL and protocol, and the connection's key, still
--- encrypted. The protocol is the one the admin chose, or else the one
+-- its connection's base URL, protocol and timeouts, and the connection's key,
+-- still encrypted. The protocol is the one the admin chose, or else the one
 -- detected. Refuses a model the last check did not find, and one whose
 -- protocol is not known yet.
 CREATE FUNCTION model_access(p_token_hash bytea, p_model_id bigint)
-RETURNS TABLE (model_name text, base_url text, protocol text, api_key bytea)
+RETURNS TABLE (
+  model_name text, base_url text, protocol text, api_key bytea,
+  connect_timeout integer, answer_timeout integer
+)
 LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp AS $$
 DECLARE
   v_model models;
@@ -117,7 +125,8 @@ BEGIN
   END IF;
   RETURN QUERY
     SELECT v_model.name, v_connection.base_url,
-           coalesce(v_connection.protocol, v_connection.detected_protocol), v_connection.api_key;
+           coalesce(v_connection.protocol, v_connection.detected_protocol), v_connection.api_key,
+           v_connection.connect_timeout, v_connection.answer_timeout;
 END
 $$;
 GRANT EXECUTE ON FUNCTION model_access(bytea, bigint) TO :"app_user";
@@ -125,20 +134,30 @@ GRANT EXECUTE ON FUNCTION model_access(bytea, bigint) TO :"app_user";
 
 -- Administration ------------------------------------------------------------------
 
--- Every connection, by name, with whether it has a key, the result of its last
--- check, and how many models that check found.
+-- Refuses anyone but an active admin. Used by an endpoint that acts as the
+-- admin outside the database, such as checking a connection not saved yet.
+CREATE FUNCTION admin_confirm(p_token_hash bytea) RETURNS void
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp AS $$
+BEGIN
+  PERFORM _acting_admin(p_token_hash);
+END
+$$;
+GRANT EXECUTE ON FUNCTION admin_confirm(bytea) TO :"app_user";
+
+-- Every connection, by name, with whether it has a key, its timeouts, the
+-- result of its last check, and how many models that check found.
 CREATE FUNCTION admin_connections(p_token_hash bytea)
 RETURNS TABLE (
   connection_id bigint, name text, base_url text, protocol text, detected_protocol text,
-  has_key boolean, checked_at timestamptz, check_error text, models_found bigint,
-  created_at timestamptz
+  has_key boolean, connect_timeout integer, answer_timeout integer,
+  checked_at timestamptz, check_error text, models_found bigint, created_at timestamptz
 )
 LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp AS $$
 BEGIN
   PERFORM _acting_admin(p_token_hash);
   RETURN QUERY
     SELECT c.connection_id, c.name, c.base_url, c.protocol, c.detected_protocol,
-           c.api_key IS NOT NULL, c.checked_at, c.check_error,
+           c.api_key IS NOT NULL, c.connect_timeout, c.answer_timeout, c.checked_at, c.check_error,
            (SELECT count(*) FROM models m WHERE m.connection_id = c.connection_id AND m.present),
            c.created_at
     FROM connections c
@@ -173,15 +192,19 @@ $$;
 GRANT EXECUTE ON FUNCTION admin_models(bytea, bigint) TO :"app_user";
 
 -- What the backend needs to check a connection: its base URL, the protocol the
--- admin chose and the one detected, and its key, still encrypted.
+-- admin chose and the one detected, its key, still encrypted, and its
+-- timeouts.
 CREATE FUNCTION admin_connection_access(p_token_hash bytea, p_connection_id bigint)
-RETURNS TABLE (base_url text, protocol text, detected_protocol text, api_key bytea)
+RETURNS TABLE (
+  base_url text, protocol text, detected_protocol text, api_key bytea,
+  connect_timeout integer, answer_timeout integer
+)
 LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp AS $$
 BEGIN
   PERFORM _acting_admin(p_token_hash);
   PERFORM _connection_exists(p_connection_id);
   RETURN QUERY
-    SELECT c.base_url, c.protocol, c.detected_protocol, c.api_key
+    SELECT c.base_url, c.protocol, c.detected_protocol, c.api_key, c.connect_timeout, c.answer_timeout
     FROM connections c
     WHERE c.connection_id = p_connection_id;
 END
@@ -191,7 +214,8 @@ GRANT EXECUTE ON FUNCTION admin_connection_access(bytea, bigint) TO :"app_user";
 -- Adds a connection. A protocol of NULL is detected at the check; a key of NULL
 -- means the server takes none. Returns the connection's id.
 CREATE FUNCTION admin_create_connection(
-  p_token_hash bytea, p_name text, p_base_url text, p_protocol text, p_api_key bytea
+  p_token_hash bytea, p_name text, p_base_url text, p_protocol text, p_api_key bytea,
+  p_connect_timeout integer, p_answer_timeout integer
 ) RETURNS bigint
 LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp AS $$
 DECLARE
@@ -201,8 +225,8 @@ DECLARE
 BEGIN
   PERFORM _acting_admin(p_token_hash);
   BEGIN
-    INSERT INTO connections (name, base_url, protocol, api_key)
-      VALUES (btrim(p_name), p_base_url, p_protocol, p_api_key)
+    INSERT INTO connections (name, base_url, protocol, api_key, connect_timeout, answer_timeout)
+      VALUES (btrim(p_name), p_base_url, p_protocol, p_api_key, p_connect_timeout, p_answer_timeout)
       RETURNING connection_id INTO v_id;
   EXCEPTION
     WHEN unique_violation OR check_violation THEN
@@ -215,12 +239,14 @@ BEGIN
   RETURN v_id;
 END
 $$;
-GRANT EXECUTE ON FUNCTION admin_create_connection(bytea, text, text, text, bytea) TO :"app_user";
+GRANT EXECUTE ON FUNCTION admin_create_connection(bytea, text, text, text, bytea, integer, integer)
+  TO :"app_user";
 
--- Changes a connection's name, base URL and protocol. Its key is changed with
--- admin_set_connection_key.
+-- Changes a connection's name, base URL, protocol and timeouts. Its key is
+-- changed with admin_set_connection_key.
 CREATE FUNCTION admin_update_connection(
-  p_token_hash bytea, p_connection_id bigint, p_name text, p_base_url text, p_protocol text
+  p_token_hash bytea, p_connection_id bigint, p_name text, p_base_url text, p_protocol text,
+  p_connect_timeout integer, p_answer_timeout integer
 ) RETURNS void
 LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp AS $$
 DECLARE
@@ -231,7 +257,8 @@ BEGIN
   PERFORM _connection_exists(p_connection_id);
   BEGIN
     UPDATE connections c
-      SET name = btrim(p_name), base_url = p_base_url, protocol = p_protocol
+      SET name = btrim(p_name), base_url = p_base_url, protocol = p_protocol,
+          connect_timeout = p_connect_timeout, answer_timeout = p_answer_timeout
       WHERE c.connection_id = p_connection_id;
   EXCEPTION
     WHEN unique_violation OR check_violation THEN
@@ -243,7 +270,8 @@ BEGIN
   END;
 END
 $$;
-GRANT EXECUTE ON FUNCTION admin_update_connection(bytea, bigint, text, text, text) TO :"app_user";
+GRANT EXECUTE ON FUNCTION admin_update_connection(bytea, bigint, text, text, text, integer, integer)
+  TO :"app_user";
 
 -- Replaces a connection's key, encrypted; NULL removes it.
 CREATE FUNCTION admin_set_connection_key(p_token_hash bytea, p_connection_id bigint, p_api_key bytea)
@@ -382,12 +410,16 @@ GRANT EXECUTE ON FUNCTION admin_set_model(bytea, bigint, boolean, boolean, boole
 -- The scheduled refresh -----------------------------------------------------------------
 
 -- Every connection, by id, with what the scheduled refresh needs to check it:
--- its base URL, the protocol the admin chose and the one detected, and its
--- key, still encrypted.
+-- its base URL, the protocol the admin chose and the one detected, its key,
+-- still encrypted, and its timeouts.
 CREATE FUNCTION refresh_targets()
-RETURNS TABLE (connection_id bigint, base_url text, protocol text, detected_protocol text, api_key bytea)
+RETURNS TABLE (
+  connection_id bigint, base_url text, protocol text, detected_protocol text, api_key bytea,
+  connect_timeout integer, answer_timeout integer
+)
 LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public, pg_temp AS $$
-  SELECT c.connection_id, c.base_url, c.protocol, c.detected_protocol, c.api_key
+  SELECT c.connection_id, c.base_url, c.protocol, c.detected_protocol, c.api_key,
+         c.connect_timeout, c.answer_timeout
   FROM connections c
   ORDER BY c.connection_id
 $$;

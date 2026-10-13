@@ -106,3 +106,9 @@ Rows `0001` to `0016` were written on 2026-10-11, after the fact, from `git log`
 | 0058 | 2026-10-12 | 18:06 EDT | 1974f52 | Agent: performs R-019, with two slips: a row and a section not cleared, reported to Z | |
 | 0059 | 2026-10-12 | 18:07 EDT | 1974f52 | Agent: performs R-020 | |
 | 005A | 2026-10-12 | 18:52 EDT | 1974f52 | Agent: requests the names in Ollama's `docs/` and the headers of two of its files; writes R-021 | |
+| 005B | 2026-10-12 | 18:56 EDT | fdd5bb8 | Z: commits the password accounts ("API work: passwords, sessions, accounts"); clears R-021 | |
+| 005C | 2026-10-12 | 18:58 EDT | fdd5bb8 | Agent: performs R-021 | |
+| 005D | 2026-10-12 | 19:01 EDT | fdd5bb8 | Agent: adds `aiconman/keys.py`, `servers.py`, `connections.py` and `refresh.py`, and `install/refresh_models.sh`, the connections | |
+| 005E | 2026-10-12 | 19:03 EDT | fdd5bb8 | Agent: adds `tests/backend/fake_servers.py` and `test_connections.py`; runs the backend's tests, and three copies with a rule broken; corrects a docstring on detection | |
+| 005F | 2026-10-12 | 19:33 EDT | fdd5bb8 | Agent: adds each connection's two timeouts and `admin_confirm` to the schema; adds the timeouts to the schema tests' calls by an announced `sed`, and checks of them | |
+| 0060 | 2026-10-12 | 19:35 EDT | fdd5bb8 | Agent: passes the timeouts in every request of a check; adds the defaults and the check of values not saved yet; runs every test, and two copies with a rule broken | |

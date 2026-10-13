@@ -17,12 +17,12 @@ $$;
 
 SELECT sign_up_password('alex', NULL, 'salt-alex', pg_temp.pw('alex'), pg_temp.t('alex'), '1 hour', '1 day') AS alex_id \gset
 SELECT sign_up_password('sam', NULL, 'salt-sam', pg_temp.pw('sam'), pg_temp.t('sam'), '1 hour', '1 day') AS sam_id \gset
-SELECT admin_create_connection(pg_temp.t('alex'), 'pi', 'http://pi.example.lan:8080/v1', NULL, NULL) AS pi \gset
+SELECT admin_create_connection(pg_temp.t('alex'), 'pi', 'http://pi.example.lan:8080/v1', NULL, NULL, 60, 300) AS pi \gset
 SELECT admin_record_check(pg_temp.t('alex'), :pi, 'openai', NULL, '[{"name": "qwen3-4b", "chat": true}, {"name": "gone"}]');
 SELECT admin_record_check(pg_temp.t('alex'), :pi, 'openai', NULL, '[{"name": "qwen3-4b", "chat": true}]');
 SELECT model_id AS qwen FROM admin_models(pg_temp.t('alex'), :pi) WHERE name = 'qwen3-4b' \gset
 SELECT model_id AS gone FROM admin_models(pg_temp.t('alex'), :pi) WHERE name = 'gone' \gset
-SELECT admin_create_connection(pg_temp.t('alex'), 'box', 'http://box.example.lan', 'ollama', NULL) AS box \gset
+SELECT admin_create_connection(pg_temp.t('alex'), 'box', 'http://box.example.lan', 'ollama', NULL, 60, 300) AS box \gset
 SELECT admin_record_check(pg_temp.t('alex'), :box, NULL, NULL, '[{"name": "llama3"}]');
 SELECT model_id AS llama FROM admin_models(pg_temp.t('alex'), :box) WHERE name = 'llama3' \gset
 

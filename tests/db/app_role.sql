@@ -39,7 +39,7 @@ DECLARE
     'sign_in_password', 'sign_out', 'sign_out_others', 'sign_up_identity', 'sign_up_open',
     'sign_up_password', 'unlink_identity',
     -- connections
-    'admin_connection_access', 'admin_connections', 'admin_create_connection',
+    'admin_confirm', 'admin_connection_access', 'admin_connections', 'admin_create_connection',
     'admin_delete_connection', 'admin_models', 'admin_record_check', 'admin_set_connection_key',
     'admin_set_model', 'admin_update_connection', 'model_access', 'models',
     'refresh_record_check', 'refresh_targets',

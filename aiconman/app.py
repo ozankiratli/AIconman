@@ -11,7 +11,7 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
-from aiconman import accounts
+from aiconman import accounts, connections
 from aiconman import config as configuration
 from aiconman.db import Refused, call, connect
 
@@ -75,6 +75,7 @@ def create_app(config: configuration.Config | None = None) -> FastAPI:
         return JSONResponse({"error": "request_invalid", "fields": fields}, status_code=400)
 
     app.include_router(accounts.router)
+    app.include_router(connections.router)
 
     @app.get("/api/health")
     async def health() -> dict:

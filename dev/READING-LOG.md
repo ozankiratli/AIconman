@@ -323,4 +323,12 @@ These four entries share a task and a method, given once here; each entry names 
 - **Facts sought:** the values of `capabilities`; where a model's context length appears in its details; the fields of the model list; and whether the list of loaded models gives the context a loaded model runs with.
 - **Not read:** the rest of `docs/openapi.yaml` and `docs/api.md`; Ollama's source code.
 - **Cleared:** 2026-10-12
-- **Done:**
+- **Done:** 2026-10-12.
+  - **What was read:** `docs/openapi.yaml` at the commit named, fetched raw: the entries for `/api/tags`, `/api/ps` and `/api/show`, each printed from its first line to the line before the next entry, found first; and the four schemas they name, `ListResponse`, `PsResponse`, `ShowRequest` and `ShowResponse`, printed the same way. The schemas these name in turn, `ModelSummary`, `Ps` and `Thinking`, were not read. Since the description does not list the values of `capabilities`, the section *Show Model Information* of `docs/api.md` at the same commit was searched for them, within its own bounds, found first.
+  - **What was found:**
+    - **`capabilities`** is `type: array`, `items: type: string`, *"List of supported features"*, with no list of values. The description's example has `completion`, `thinking` and `vision`; `docs/api.md`'s has `completion` and `vision`.
+    - **A model's details** (`/api/show`, a POST with `model`, and `verbose` for *"large verbose fields"*) give `capabilities`, `parameters` (*"Model parameter settings serialized as text"*, `"temperature 0.7\nnum_ctx 2048"` in the example), `model_info` (*"Additional model metadata"*, with `gemma4.context_length: 131072` beside `general.architecture: "gemma4"` in the example), `details`, `template`, `license`, `modified_at`, and `thinking`, which in the example has `values: [false, true]` and `default: true`.
+    - **The model list** (`/api/tags`, a GET) gives `models`, each, in the example, with `name`, `model`, `modified_at`, `size`, `digest` and `details` (`format`, `family`, `families`, `parameter_size`, `quantization_level`), as R-002 found.
+    - **The running models** (`/api/ps`, a GET, *"Models currently loaded into memory"*) give, in the example, each model's `name`, `model`, `size`, `digest`, `details`, `expires_at`, `size_vram` and `context_length`, 4096 there. So a loaded model's window is known; a model not loaded is not in the list.
+    - **Left open:** the full set of values `capabilities` can take (gap 4). Three are known: `completion`, `thinking` and `vision`.
+  - **Where it went:** `.claude/development-notes/the-backbone.md` and `SOURCES.md`.

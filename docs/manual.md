@@ -4,7 +4,7 @@ AIconman, the AI Connection Manager, is a web interface for the language models 
 
 **AIconman is for a local network or a VPN, and nothing else.** Do not expose it, or the model servers it talks to, to the internet.
 
-This manual grows with AIconman. So far it covers setting up the Python environment, the configuration, the database and its schema; installing and running AIconman come when there is something to run.
+This manual grows with AIconman. So far it covers setting up the Python environment, the configuration, the database and its schema, the scheduled refresh, and what a connection to a model server needs; installing and running AIconman come when there is something to run.
 
 ## What you need
 
@@ -118,6 +118,31 @@ It destroys everything in the database's schema before building it again, so it 
 Seeding adds what an installation needs: Nextcloud as a way to sign in, and the switch for self sign-up, starting from `auth.allow_auto_signup`. To add what is missing without rebuilding, run `install/build_schema.sh --seed`; it leaves everything already there as it is, so a setting the admin has changed keeps its value.
 
 The owner's password is `db.adminpw` in `config/config.yml`, or `AICONMAN_DB_ADMINPW` in `config/.env`.
+
+### 6. The scheduled refresh
+
+AIconman checks every connection every 30 minutes, to keep each server's list of models up to date; the admin can also refresh them at once. The check runs from cron, as the user AIconman runs as. Add this line with `crontab -e`, with AIconman's folder in place of `/path/to/AIconman`:
+
+```
+*/30 * * * * /path/to/AIconman/install/refresh_models.sh
+```
+
+It prints nothing when all goes well. A server that does not answer is not an error of the refresh: it is recorded as that connection's last check, for the admin to see.
+
+## Connections
+
+The admin adds the model servers AIconman uses. A connection has a name, a base URL, a key if the server takes one, and a protocol, which AIconman detects when it is left empty.
+
+**The base URL** is what the protocol's paths are added to:
+
+- **an OpenAI-compatible server**, llama.cpp's among them: the address its API is under, which usually ends in `/v1`, such as `http://pi.example.lan:8080/v1`;
+- **Ollama**: the server's own address, without `/v1`, such as `http://box.example.lan:11434`. Ollama also serves the OpenAI-compatible API under `/v1`, and an address ending in `/v1` works too, but then AIconman cannot read what each model can do from Ollama's own reports.
+
+**Two timeouts**, in seconds, which the admin sets for each connection: how long AIconman waits for the server to accept a connection, 60 by default, and how long it waits for each answer, 300 by default. A server on a small machine, or one that loads a model before it answers, may need more.
+
+**The key** is sent to the server as a bearer token. AIconman stores it encrypted with `connections.encryption_key`, and never shows it again; it can be replaced or removed. If that secret changes, every saved key has to be entered again.
+
+**What a model can do**, chat, read images, or transcribe speech, and its context window, come from the server where it says: Ollama reports what each model can do, and llama.cpp which models read images and the window of a server started with one model. The admin sets the rest, and can override anything the server reports.
 
 ## Configuration
 

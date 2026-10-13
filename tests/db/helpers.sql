@@ -31,6 +31,16 @@ BEGIN
 END
 $$;
 
+-- Runs P_STATEMENT, and reports P_LABEL as passed when it is not refused; a
+-- refusal or any other error stops the file.
+CREATE FUNCTION pg_temp.passes(p_label text, p_statement text) RETURNS void
+LANGUAGE plpgsql AS $$
+BEGIN
+  EXECUTE p_statement;
+  RAISE NOTICE 'ok    %', p_label;
+END
+$$;
+
 -- The SHA-256 of a made-up session token named P_NAME.
 CREATE FUNCTION pg_temp.t(p_name text) RETURNS bytea
 LANGUAGE sql IMMUTABLE AS $$
