@@ -52,4 +52,6 @@ One file per subject, not per source file: the reasoning crosses file boundaries
 | `the-palette.md` | the third part of the design: how the four themes are derived from Z's colors, the first proposal, Z's changes, the values, and what was measured for Z to decide |
 | `the-database.md` | the fourth part of the design: what the database holds and the rules it enforces, Z's answers, what was read of Z's other project's accounts schema, and the draft |
 | `the-backend.md` | the fifth part: the backend, how it is built and tested, and what Z decided for it |
+| `llama-serve.md` | the framework that runs a llama.cpp server as a service for the network, built before AIconman continues: Z's decision, what was read of Z's Hailo gateway, and the agent's proposal |
+| `the-rename.md` | the project's new name, LMconman: Z's decision, where the old name was, what changes and what stays as history, the brand in three tones, and the order of the steps |
 | `platform-traps.md` | **kept current**: the shell and tooling traps that produced a wrong result once |

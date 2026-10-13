@@ -350,3 +350,13 @@ These four entries share a task and a method, given once here; each entry names 
     - **Also in the section, not sought, and not used:** a response carries a `timings` object (`cache_n`, `prompt_n`, `predicted_n`, and durations) and a standard `usage` object (`completion_tokens`, `prompt_tokens`, `total_tokens`, and `prompt_tokens_details.cached_tokens`), and *"The total number of tokens in context is equal to `prompt_n + cache_n + predicted_n`"*. The multimodal input R-003 read now also lists `input_video`.
   - **Left open:** whether llama.cpp takes `max_completion_tokens`, the field the OpenAI reference (R-006) names; where `reasoning_content` sits in a streamed chunk; and how an error is reported.
   - **Where it went:** `.claude/development-notes/the-backbone.md`, `.claude/development-notes/the-backend.md` and `SOURCES.md`.
+
+## R-023: llama.cpp's server README, on its options, at the build Z runs
+
+- **Named:** 2026-10-12
+- **Task:** llama-serve, the framework that runs llama.cpp's server as a service serving models to the network (`.claude/development-notes/llama-serve.md`): its environment file and systemd unit, and what its manual says about them.
+- **Source:** `tools/server/README.md` in github.com/ggml-org/llama.cpp at commit `f072b1037`, the commit Z's `llama-server --version` reports (build 11058), with the full hash recorded under *Done*: the rows of its table of options for the options named below, and its section on serving several models from one server, if it has one; each found first by its heading or its option, and printed only to its own end. On 2026-10-12 only the headers of the file's address at that commit were requested; it answered HTTP 200. If Z prefers, the source is instead the output of `llama-server --help` on that build, which Z runs and pastes.
+- **Facts sought:** for each option, its name, what it takes, its default, and the environment variable that sets it, where the table gives one: the address and port the server listens on; the model it serves, or, for several, where it finds them, how it names them, and how many it keeps loaded; the API key and a file holding it; the context size and the number of slots (R-019 read these at another commit); the threads; the chat template and the reasoning format; turning off the server's own web page; and what it logs, and whether that includes prompts.
+- **Not read:** the rest of the README; the server's source code.
+- **Cleared:**
+- **Done:**
